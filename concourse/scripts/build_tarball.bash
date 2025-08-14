@@ -21,7 +21,7 @@ if [ ! -d "/var/crash" ]; then sudo mkdir -p /var/crash; fi
 sudo chmod 777 /var/crash
 
 ulimit -c unlimited
-echo '/var/crash/core.%t.%e.%p' | sudo tee /proc/sys/kernel/core_pattern
+# echo '/var/crash/core.%t.%e.%p' | sudo tee /proc/sys/kernel/core_pattern
 
 # Ensure workspace ownership
 sudo chown -R $current_user $HOME/workspace 2>/dev/null || true
