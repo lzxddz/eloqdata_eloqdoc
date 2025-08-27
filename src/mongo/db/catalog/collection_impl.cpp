@@ -153,6 +153,38 @@ CollectionImpl::CollectionImpl(Collection* _this_init,
     : _ns(fullNS),
       _uuid(uuid),
       _details(details),
+      _detailsSptr(nullptr),
+      _recordStore(recordStore),
+      _dbce(dbce),
+      _needCappedLock(supportsDocLocking() && _recordStore->isCapped() && _ns.db() != "local"),
+      _infoCache(_this_init, _ns),
+      _indexCatalog(_this_init, this->getCatalogEntry()->getMaxAllowedIndexes()),
+      _collator(parseCollation(opCtx, _ns, _details->getCollectionOptions(opCtx).collation)),
+      _validatorDoc(_details->getCollectionOptions(opCtx).validator.getOwned()),
+      _validator(uassertStatusOK(
+          parseValidator(opCtx, _validatorDoc, MatchExpressionParser::kAllowAllSpecialFeatures))),
+      _validationAction(uassertStatusOK(
+          parseValidationAction(_details->getCollectionOptions(opCtx).validationAction))),
+      _validationLevel(uassertStatusOK(
+          parseValidationLevel(_details->getCollectionOptions(opCtx).validationLevel))),
+      _cursorManager(_ns),
+      _cappedNotifier(_recordStore->isCapped() ? stdx::make_unique<CappedInsertNotifier>()
+                                               : nullptr),
+      _this(_this_init) {
+    assert(false);
+}
+
+CollectionImpl::CollectionImpl(Collection* _this_init,
+                               OperationContext* opCtx,
+                               StringData fullNS,
+                               OptionalCollectionUUID uuid,
+                               std::shared_ptr<CollectionCatalogEntry> detailsSptr,
+                               RecordStore* recordStore,
+                               DatabaseCatalogEntry* dbce)
+    : _ns(fullNS),
+      _uuid(uuid),
+      _details(detailsSptr.get()),
+      _detailsSptr(detailsSptr),
       _recordStore(recordStore),
       _dbce(dbce),
       _needCappedLock(supportsDocLocking() && _recordStore->isCapped() && _ns.db() != "local"),

@@ -88,6 +88,16 @@ MONGO_REGISTER_SHIM(Database::makeImpl)
     return stdx::make_unique<DatabaseImpl>(this_, opCtx, name, dbEntry);
 }
 
+MONGO_REGISTER_SHIM(Database::makeImplSptr)
+(Database* const this_,
+ OperationContext* const opCtx,
+ const StringData name,
+ std::shared_ptr<DatabaseCatalogEntry> dbEntry,
+ PrivateTo<Database>)
+    ->std::unique_ptr<Database::Impl> {
+    return stdx::make_unique<DatabaseImpl>(this_, opCtx, name, dbEntry);
+}
+
 namespace {
 MONGO_FAIL_POINT_DEFINE(hangBeforeLoggingCreateCollection);
 }  // namespace
@@ -260,7 +270,7 @@ Collection* DatabaseImpl::_createCollectionHandler(OperationContext* opCtx,
             return iter->second.get();
         }
     }
-    auto cce = _dbEntry->getCollectionCatalogEntry(opCtx, nss.toStringData());
+    auto cce = _dbEntry->getCollectionCatalogEntrySptr(opCtx, nss.toStringData());
     if (!cce) {
         // The collection not exists in the Eloq
         return nullptr;
@@ -352,6 +362,23 @@ DatabaseImpl::DatabaseImpl(Database* const this_,
                            DatabaseCatalogEntry* const dbEntry)
     : _name(name.toString()),
       _dbEntry(dbEntry),
+      _dbEntry_sptr(nullptr),
+      _profileName(_name + ".system.profile"),
+      _indexesName(_name + ".system.indexes"),
+      _viewsName(_name + "." + DurableViewCatalog::viewsCollectionName().toString()),
+      _durableViews(DurableViewCatalogImpl(this_)),
+      _views(&_durableViews),
+      _this(this_) {
+    assert(false);
+}
+
+DatabaseImpl::DatabaseImpl(Database* const this_,
+                           OperationContext* const opCtx,
+                           const StringData name,
+                           std::shared_ptr<DatabaseCatalogEntry> dbEntry)
+    : _name(name.toString()),
+      _dbEntry(dbEntry.get()),
+      _dbEntry_sptr(dbEntry),
       _profileName(_name + ".system.profile"),
       _indexesName(_name + ".system.indexes"),
       _viewsName(_name + "." + DurableViewCatalog::viewsCollectionName().toString()),

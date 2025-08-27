@@ -54,6 +54,7 @@ public:
      * locked in at least IS-mode.
      */
     Database* get(OperationContext* opCtx, StringData ns)  override;
+    std::shared_ptr<Database> getSptr(OperationContext* opCtx, StringData ns) override;
 
     /**
      * Retrieves a database reference if it is already opened, or opens it if it hasn't been
@@ -63,6 +64,9 @@ public:
      *          existed (false). Can be NULL if this information is not necessary.
      */
     Database* openDb(OperationContext* opCtx, StringData ns, bool* justCreated = nullptr) override;
+    std::shared_ptr<Database> openDbSptr(OperationContext* opCtx,
+                                         StringData ns,
+                                         bool* justCreated = nullptr) override;
 
     /**
      * Closes the specified database. Must be called with the database locked in X-mode.
@@ -85,7 +89,8 @@ public:
 
 private:
     std::set<std::string> _getNamesWithConflictingCasing_inlock(StringData name) const;
-    using DBMap = std::map<std::string, std::unique_ptr<Database>, std::less<void>>;
+    // using DBMap = std::map<std::string, std::unique_ptr<Database>, std::less<void>>;
+    using DBMap = std::map<std::string, std::shared_ptr<Database>, std::less<void>>;
 
     // mutable std::vector<std::mutex> _dbMapMutexVector{serverGlobalParams.reservedThreadNum + 1};
     std::vector<DBMap> _dbMapVector{

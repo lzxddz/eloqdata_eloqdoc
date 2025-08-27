@@ -52,6 +52,14 @@ public:
                             RecordStore* recordStore,         // does not own
                             DatabaseCatalogEntry* dbce);      // does not own
 
+    explicit CollectionImpl(Collection* _this,
+                            OperationContext* opCtx,
+                            StringData fullNS,
+                            OptionalCollectionUUID uuid,
+                            std::shared_ptr<CollectionCatalogEntry> details,
+                            RecordStore* recordStore,     // does not own
+                            DatabaseCatalogEntry* dbce);  // does not own
+
     ~CollectionImpl();
 
     void init(OperationContext* opCtx) final;
@@ -380,8 +388,12 @@ private:
         return this->_dbce;
     }
 
-    inline CollectionCatalogEntry* details() const final {
-        return this->_details;
+    // inline CollectionCatalogEntry* details() const final {
+    //     return this->_details;
+    // }
+
+    inline std::shared_ptr<CollectionCatalogEntry> detailsSptr() const final {
+        return this->_detailsSptr;
     }
 
     /**
@@ -431,6 +443,7 @@ private:
     std::string _catalogVersion;
 
     CollectionCatalogEntry* const _details;
+    std::shared_ptr<CollectionCatalogEntry> const _detailsSptr;
     RecordStore* const _recordStore;
     DatabaseCatalogEntry* const _dbce;
     const bool _needCappedLock;

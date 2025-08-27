@@ -200,6 +200,10 @@ public:
      */
     virtual DatabaseCatalogEntry* getDatabaseCatalogEntry(OperationContext* opCtx,
                                                           StringData db) = 0;
+    virtual std::shared_ptr<DatabaseCatalogEntry> getDatabaseCatalogEntrySptr(
+        OperationContext* opCtx, StringData db) {
+        assert(false);
+    }
 
     /**
      * Returns whether the storage engine supports its own locking locking below the collection

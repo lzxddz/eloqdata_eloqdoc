@@ -53,8 +53,15 @@ public:
         virtual ~Impl() = 0;
 
         virtual Database* get(OperationContext* opCtx, StringData ns)  = 0;
+        virtual std::shared_ptr<Database> getSptr(OperationContext* opCtx, StringData ns) = 0;
 
         virtual Database* openDb(OperationContext* opCtx, StringData ns, bool* justCreated) = 0;
+        virtual std::shared_ptr<Database> openDbSptr(OperationContext* opCtx,
+                                                     StringData ns,
+                                                     bool* justCreated) {
+            assert(false);
+            return nullptr;
+        }
 
         virtual void close(OperationContext* opCtx, StringData ns, const std::string& reason) = 0;
 
@@ -83,7 +90,9 @@ public:
     inline Database* get(OperationContext* const opCtx, const StringData ns)  {
         return this->_impl().get(opCtx, ns);
     }
-
+    inline std::shared_ptr<Database> getSptr(OperationContext* const opCtx, const StringData ns) {
+        return this->_impl().getSptr(opCtx, ns);
+    }
     /**
      * Retrieves a database reference if it is already opened, or opens it if it hasn't been
      * opened/created yet. Must be called with the database locked in X-mode.
@@ -95,6 +104,11 @@ public:
                             const StringData ns,
                             bool* const justCreated = nullptr) {
         return this->_impl().openDb(opCtx, ns, justCreated);
+    }
+    inline std::shared_ptr<Database> openDbSptr(OperationContext* const opCtx,
+                                                const StringData ns,
+                                                bool* const justCreated = nullptr) {
+        return this->_impl().openDbSptr(opCtx, ns, justCreated);
     }
 
     /**

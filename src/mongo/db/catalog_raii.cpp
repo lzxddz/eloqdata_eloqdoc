@@ -59,7 +59,7 @@ AutoGetDb::AutoGetDb(OperationContext* opCtx, StringData dbName, LockMode mode, 
     : _dbLock(opCtx, dbName, mode, deadline), _db([&] {
           uassertLockTimeout(
               str::stream() << "database " << dbName, mode, deadline, _dbLock.isLocked());
-          return DatabaseHolder::getDatabaseHolder().get(opCtx, dbName);
+          return DatabaseHolder::getDatabaseHolder().getSptr(opCtx, dbName);
       }()) {
     if (_db) {
         // DatabaseShardingState::get(_db).checkDbVersion(opCtx);
@@ -170,7 +170,8 @@ AutoGetOrCreateDb::AutoGetOrCreateDb(OperationContext* opCtx,
     invariant(mode == MODE_IX || mode == MODE_X);
 
     _autoDb.emplace(opCtx, dbName, mode, deadline);
-    _db = _autoDb->getDb();
+    // _db = _autoDb->getDb();
+    _db = _autoDb->getSharedDb();
 
     // If the database didn't exist, relock in MODE_X
     if (!_db) {
@@ -178,10 +179,11 @@ AutoGetOrCreateDb::AutoGetOrCreateDb(OperationContext* opCtx,
             _autoDb.emplace(opCtx, dbName, MODE_X, deadline);
         }
 
-        _db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName, &_justCreated);
+        // _db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName, &_justCreated);
+        _db = DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, dbName, &_justCreated);
     }
 
-    DatabaseShardingState::get(_db).checkDbVersion(opCtx);
+    DatabaseShardingState::get(_db.get()).checkDbVersion(opCtx);
 }
 
 ConcealUUIDCatalogChangesBlock::ConcealUUIDCatalogChangesBlock(OperationContext* opCtx)

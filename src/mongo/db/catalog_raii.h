@@ -62,12 +62,20 @@ public:
      * Returns nullptr if the database didn't exist.
      */
     Database* getDb() const {
+        // return _db;
+        return _db.get();
+    }
+
+    // only used in AutoGetOrCreateDb::AutoGetOrCreateDb
+    std::shared_ptr<Database> getSharedDb() const {
+        // return _db;
         return _db;
     }
 
 private:
     const Lock::DBLock _dbLock;
-    Database* const _db;
+    // Database* const _db;
+    const std::shared_ptr<Database> _db;
 };
 
 /**
@@ -173,7 +181,8 @@ public:
                       Date_t deadline = Date_t::max());
 
     Database* getDb() const {
-        return _db;
+        // return _db;
+        return _db.get();
     }
 
     bool justCreated() const {
@@ -183,7 +192,8 @@ public:
 private:
     boost::optional<AutoGetDb> _autoDb;
 
-    Database* _db;
+    // Database* _db;
+    std::shared_ptr<Database> _db;
     bool _justCreated{false};
 };
 

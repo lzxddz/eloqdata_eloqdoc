@@ -68,6 +68,9 @@ public:
     CollectionCatalogEntry* getCollectionCatalogEntry(OperationContext* opCtx,
                                                       StringData ns) override;
 
+    std::shared_ptr<CollectionCatalogEntry> getCollectionCatalogEntrySptr(OperationContext* opCtx,
+                                                                          StringData ns) override;
+
     RecordStore* getRecordStore(StringData ns) const override;
 
     IndexAccessMethod* getIndex(OperationContext* opCtx,
@@ -88,6 +91,8 @@ public:
      */
     CollectionCatalogEntry* createKVCollectionCatalogEntry(OperationContext* opCtx,
                                                            StringData ns) override;
+    std::shared_ptr<CollectionCatalogEntry> createKVCollectionCatalogEntrySptr(
+        OperationContext* opCtx, StringData ns) override;
 
     Status renameCollection(OperationContext* opCtx,
                             StringData fromNS,
@@ -109,8 +114,10 @@ protected:
 
 
     KVStorageEngine* const _engine;  // not owned here
+    // using CollectionCatalogMap =
+    //     std::map<std::string, std::unique_ptr<KVCollectionCatalogEntry>, std::less<void>>;
     using CollectionCatalogMap =
-        std::map<std::string, std::unique_ptr<KVCollectionCatalogEntry>, std::less<void>>;
+        std::map<std::string, std::shared_ptr<KVCollectionCatalogEntry>, std::less<void>>;
     CollectionCatalogMap _collections;
     // mutable std::mutex _collectionsMutex;
 };

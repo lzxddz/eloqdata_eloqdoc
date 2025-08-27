@@ -116,6 +116,11 @@ public:
                           StringData name,
                           DatabaseCatalogEntry* dbEntry);
 
+    explicit DatabaseImpl(Database* this_,
+                          OperationContext* opCtx,
+                          StringData name,
+                          std::shared_ptr<DatabaseCatalogEntry> dbEntry);
+
     // must call close first
     ~DatabaseImpl();
 
@@ -298,6 +303,7 @@ private:
     const std::string _name;  // "dbname"
 
     DatabaseCatalogEntry* _dbEntry;  // not owned here
+    std::shared_ptr<DatabaseCatalogEntry> _dbEntry_sptr{nullptr};
 
     const std::string _profileName;      // "dbname.system.profile"
     const NamespaceString _indexesName;  // "dbname.system.indexes"

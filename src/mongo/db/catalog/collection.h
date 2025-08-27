@@ -174,7 +174,9 @@ public:
         friend Collection;
         virtual DatabaseCatalogEntry* dbce() const = 0;
 
-        virtual CollectionCatalogEntry* details() const = 0;
+        // virtual CollectionCatalogEntry* details() const = 0;
+        virtual std::shared_ptr<CollectionCatalogEntry> detailsSptr() const = 0;
+
 
         virtual Status aboutToDeleteCapped(OperationContext* opCtx,
                                            const RecordId& loc,
@@ -344,6 +346,16 @@ public:
                                PrivateTo<Collection>)
                                   ->std::unique_ptr<Impl>) makeImpl;
 
+    static MONGO_DECLARE_SHIM((Collection * _this,
+                               OperationContext* opCtx,
+                               StringData fullNS,
+                               OptionalCollectionUUID uuid,
+                               std::shared_ptr<CollectionCatalogEntry> details,
+                               RecordStore* recordStore,
+                               DatabaseCatalogEntry* dbce,
+                               PrivateTo<Collection>)
+                                  ->std::unique_ptr<Impl>) makeImplSptr;
+
     explicit inline Collection(OperationContext* const opCtx,
                                const StringData fullNS,
                                OptionalCollectionUUID uuid,
@@ -355,6 +367,17 @@ public:
         this->_impl().init(opCtx);
     }
 
+    explicit inline Collection(OperationContext* const opCtx,
+                               const StringData fullNS,
+                               OptionalCollectionUUID uuid,
+                               std::shared_ptr<CollectionCatalogEntry> details,
+                               RecordStore* const recordStore,    // does not own
+                               DatabaseCatalogEntry* const dbce)  // does not own
+        : _pimpl(makeImplSptr(
+              this, opCtx, fullNS, uuid, details, recordStore, dbce, PrivateCall<Collection>{})) {
+        this->_impl().init(opCtx);
+    }
+
     // Use this constructor only for testing/mocks
     explicit inline Collection(std::unique_ptr<Impl> mock) : _pimpl(std::move(mock)) {}
 
@@ -362,7 +385,7 @@ public:
 
     inline Collection::Uptr clone(OperationContext* const opCtx) {
         return std::make_unique<Collection>(
-            opCtx, ns().toStringData(), uuid(), details(), getRecordStore(), dbce());
+            opCtx, ns().toStringData(), uuid(), detailsSptr(), getRecordStore(), dbce());
     }
 
     inline bool ok() const {
@@ -750,8 +773,11 @@ private:
         return this->_impl().dbce();
     }
 
-    inline CollectionCatalogEntry* details() const {
-        return this->_impl().details();
+    // inline CollectionCatalogEntry* details() const {
+    //     return this->_impl().details();
+    // }
+    inline std::shared_ptr<CollectionCatalogEntry> detailsSptr() {
+        return this->_impl().detailsSptr();
     }
 
     inline Status aboutToDeleteCapped(OperationContext* const opCtx,

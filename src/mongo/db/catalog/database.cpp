@@ -37,6 +37,7 @@ namespace mongo {
 Database::Impl::~Impl() = default;
 
 MONGO_DEFINE_SHIM(Database::makeImpl);
+MONGO_DEFINE_SHIM(Database::makeImplSptr);
 
 void Database::TUHook::hook() noexcept {}
 

@@ -96,6 +96,11 @@ StringData _todb(StringData ns) {
 }  // namespace
 
 Database* DatabaseHolderImpl::get(OperationContext* opCtx, StringData ns) {
+    assert(false);
+    return getSptr(opCtx, ns).get();
+}
+
+std::shared_ptr<Database> DatabaseHolderImpl::getSptr(OperationContext* opCtx, StringData ns) {
     const StringData db = _todb(ns);
     invariant(opCtx->lockState()->isDbLockedForMode(db, MODE_IS));
 
@@ -103,7 +108,8 @@ Database* DatabaseHolderImpl::get(OperationContext* opCtx, StringData ns) {
     // std::scoped_lock<std::mutex> lock{_dbMapMutexVector[id]};
     const auto& dbMap = _dbMapVector[id];
     if (auto iter = dbMap.find(db); iter != dbMap.end()) {
-        return iter->second.get();
+        // return iter->second.get();
+        return iter->second;
     }
 
     // https://www.mongodb.com/docs/manual/core/databases-and-collections/#create-a-database
@@ -115,7 +121,7 @@ Database* DatabaseHolderImpl::get(OperationContext* opCtx, StringData ns) {
     bool existInStorageEngine =
         opCtx->getServiceContext()->getStorageEngine()->databaseExists(ns.toStringView());
     if (existInStorageEngine) {
-        return openDb(opCtx, ns);
+        return openDbSptr(opCtx, ns);
     } else {
         return nullptr;
     }
@@ -140,6 +146,14 @@ std::set<std::string> DatabaseHolderImpl::getNamesWithConflictingCasing(StringDa
 }
 
 Database* DatabaseHolderImpl::openDb(OperationContext* opCtx, StringData ns, bool* justCreated) {
+    assert(false);
+    return openDbSptr(opCtx, ns, justCreated).get();
+}
+
+
+std::shared_ptr<Database> DatabaseHolderImpl::openDbSptr(OperationContext* opCtx,
+                                                         StringData ns,
+                                                         bool* justCreated) {
     MONGO_LOG(1) << "DatabaseHolderImpl::openDb"
                  << ". ns: " << ns;
     const StringData dbName = _todb(ns);
@@ -158,7 +172,8 @@ Database* DatabaseHolderImpl::openDb(OperationContext* opCtx, StringData ns, boo
     if (auto iter = dbMap.find(dbName); iter != dbMap.end()) {
         MONGO_LOG(1) << "DatabaseHolderImpl::openDb"
                      << ". ns: " << ns << " exists";
-        return iter->second.get();
+        // return iter->second.get();
+        return iter->second;
     }
 
     // Check casing in lock to avoid transient duplicates.
@@ -186,7 +201,10 @@ Database* DatabaseHolderImpl::openDb(OperationContext* opCtx, StringData ns, boo
                  << ". ns: " << ns << " create start";
 
     StorageEngine* storageEngine = getGlobalServiceContext()->getStorageEngine();
-    DatabaseCatalogEntry* entry = storageEngine->getDatabaseCatalogEntry(opCtx, dbName);
+    // DatabaseCatalogEntry* entry = storageEngine->getDatabaseCatalogEntry(opCtx, dbName);
+    std::shared_ptr<DatabaseCatalogEntry> entry =
+        storageEngine->getDatabaseCatalogEntrySptr(opCtx, dbName);
+
 
     // if (!entry->exists()) {
     //     audit::logCreateDatabase(&cc(), dbName);
@@ -198,7 +216,8 @@ Database* DatabaseHolderImpl::openDb(OperationContext* opCtx, StringData ns, boo
     auto [iter, success] = dbMap.try_emplace(dbName.toString(), std::move(newDb));
     if (!success) {
         MONGO_LOG(1) << "Another coroutine created Database handler on this thread";
-        return iter->second.get();
+        // return iter->second.get();
+        return iter->second;
     }
 
     if (justCreated) {
@@ -206,7 +225,8 @@ Database* DatabaseHolderImpl::openDb(OperationContext* opCtx, StringData ns, boo
     }
     MONGO_LOG(1) << "DatabaseHolderImpl::openDb"
                  << ". ns: " << ns << " done.";
-    return iter->second.get();
+    // return iter->second.get();
+    return iter->second;
 }
 
 namespace {

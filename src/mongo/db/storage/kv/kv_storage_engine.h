@@ -100,6 +100,8 @@ public:
     void listCollections(std::string_view dbName, std::set<std::string>& out) const override;
     KVDatabaseCatalogEntryBase* getDatabaseCatalogEntry(OperationContext* opCtx,
                                                         StringData db) override;
+    std::shared_ptr<DatabaseCatalogEntry> getDatabaseCatalogEntrySptr(OperationContext* opCtx,
+                                                                      StringData db) override;
 
     bool supportsDocLocking() const override {
         return _supportsDocLocking;
@@ -238,8 +240,10 @@ private:
     std::unique_ptr<RecordStore> _catalogRecordStore;
     std::unique_ptr<KVCatalog> _catalog;
 
+    // using DBMap =
+    //     std::map<std::string, std::unique_ptr<KVDatabaseCatalogEntryBase>, std::less<void>>;
     using DBMap =
-        std::map<std::string, std::unique_ptr<KVDatabaseCatalogEntryBase>, std::less<void>>;
+        std::map<std::string, std::shared_ptr<KVDatabaseCatalogEntryBase>, std::less<void>>;
     std::vector<DBMap> _dbMapVector{1 + serverGlobalParams.reservedThreadNum};
     // mutable stdx::mutex _dbsLock;
 

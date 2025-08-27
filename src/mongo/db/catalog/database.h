@@ -161,6 +161,13 @@ public:
                                PrivateTo<Database>)
                                   ->std::unique_ptr<Impl>) makeImpl;
 
+    static MONGO_DECLARE_SHIM((Database * this_,
+                               OperationContext* opCtx,
+                               StringData name,
+                               std::shared_ptr<DatabaseCatalogEntry>,
+                               PrivateTo<Database>)
+                                  ->std::unique_ptr<Impl>) makeImplSptr;
+
     /**
      * Iterating over a Database yields Collection* pointers.
      */
@@ -210,6 +217,13 @@ public:
                              const StringData name,
                              DatabaseCatalogEntry* const dbEntry)
         : _pimpl(makeImpl(this, opCtx, name, dbEntry, PrivateCall<Database>{})) {
+        this->_impl().init(opCtx);
+    }
+
+    explicit inline Database(OperationContext* const opCtx,
+                             const StringData name,
+                             std::shared_ptr<DatabaseCatalogEntry> dbEntry)
+        : _pimpl(makeImplSptr(this, opCtx, name, dbEntry, PrivateCall<Database>{})) {
         this->_impl().init(opCtx);
     }
 

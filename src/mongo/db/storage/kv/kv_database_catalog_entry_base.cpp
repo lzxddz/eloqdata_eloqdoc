@@ -197,10 +197,16 @@ void KVDatabaseCatalogEntryBase::getCollectionNamespaces(std::vector<std::string
 
 CollectionCatalogEntry* KVDatabaseCatalogEntryBase::getCollectionCatalogEntry(
     OperationContext* opCtx, StringData ns) {
+    assert(false);
+    return getCollectionCatalogEntrySptr(opCtx, ns).get();
+}
+
+std::shared_ptr<CollectionCatalogEntry> KVDatabaseCatalogEntryBase::getCollectionCatalogEntrySptr(
+    OperationContext* opCtx, StringData ns) {
     if (auto iter = _collections.find(ns.toString()); iter != _collections.end()) {
-        return iter->second.get();
+        return iter->second;
     } else {
-        return createKVCollectionCatalogEntry(opCtx, ns);
+        return createKVCollectionCatalogEntrySptr(opCtx, ns);
     }
 }
 
@@ -283,7 +289,7 @@ Status KVDatabaseCatalogEntryBase::createCollection(OperationContext* opCtx,
                 opCtx, nss.toStringData(), nss.toStringData(), options, prefix);
             _collections.try_emplace(
                 nss.toString(),
-                std::make_unique<KVCollectionCatalogEntry>(_engine->getEngine(),
+                std::make_shared<KVCollectionCatalogEntry>(_engine->getEngine(),
                                                            _engine->getCatalog(),
                                                            nss.toStringData(),
                                                            nss.toStringData(),
@@ -296,9 +302,15 @@ Status KVDatabaseCatalogEntryBase::createCollection(OperationContext* opCtx,
 
 CollectionCatalogEntry* KVDatabaseCatalogEntryBase::createKVCollectionCatalogEntry(
     OperationContext* opCtx, StringData ns) {
+    return createKVCollectionCatalogEntrySptr(opCtx, ns).get();
+}
+
+std::shared_ptr<CollectionCatalogEntry>
+KVDatabaseCatalogEntryBase::createKVCollectionCatalogEntrySptr(OperationContext* opCtx,
+                                                               StringData ns) {
     MONGO_LOG(1) << "KVDatabaseCatalogEntryBase::createKVCollectionCatalogEntry";
     if (auto iter = _collections.find(ns); iter != _collections.end()) {
-        return iter->second.get();
+        return iter->second;
     }
 
     BSONObj obj = _engine->getCatalog()->findEntry(opCtx, ns);
@@ -323,10 +335,10 @@ CollectionCatalogEntry* KVDatabaseCatalogEntryBase::createKVCollectionCatalogEnt
 
     auto [iter, success] = _collections.try_emplace(
         ns.toString(),
-        std::make_unique<KVCollectionCatalogEntry>(
+        std::make_shared<KVCollectionCatalogEntry>(
             _engine->getEngine(), _engine->getCatalog(), ns, ns, std::move(rs)));
 
-    return iter->second.get();
+    return iter->second;
 }
 
 void KVDatabaseCatalogEntryBase::initCollection(OperationContext* opCtx,
@@ -345,7 +357,7 @@ void KVDatabaseCatalogEntryBase::initCollection(OperationContext* opCtx,
     invariant(!_collections.count(ns));
     _collections.try_emplace(
         ns,
-        std::make_unique<KVCollectionCatalogEntry>(
+        std::make_shared<KVCollectionCatalogEntry>(
             _engine->getEngine(), _engine->getCatalog(), ns, ident, std::move(rs)));
 }
 
@@ -412,7 +424,7 @@ Status KVDatabaseCatalogEntryBase::renameCollection(OperationContext* opCtx,
     // _collections as a rename is taking place.
     _collections.try_emplace(
         toNS.toString(),
-        std::make_unique<KVCollectionCatalogEntry>(
+        std::make_shared<KVCollectionCatalogEntry>(
             _engine->getEngine(), _engine->getCatalog(), toNS, identTo, std::move(rs)));
 
     const CollectionCatalogMap::iterator itFrom = _collections.find(fromNS.toString());

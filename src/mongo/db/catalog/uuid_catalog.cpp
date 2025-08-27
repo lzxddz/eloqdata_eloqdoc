@@ -278,6 +278,7 @@ void UUIDCatalog::_registerUUIDCatalogEntry_inlock(CollectionUUID uuid,
         std::pair<CollectionUUID, std::shared_ptr<Collection>> entry =
             std::make_pair(uuid, std::move(coll));
         invariant(_catalog.insert(std::move(entry)).second == true);
+        /// 这里怎么没有把uuid更新到_orderedCollections中？
     }
 }
 std::shared_ptr<Collection> UUIDCatalog::_removeUUIDCatalogEntry_inlock(CollectionUUID uuid) {
