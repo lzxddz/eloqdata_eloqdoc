@@ -154,7 +154,9 @@ struct Cloner::Fun {
                 repl::ReplicationCoordinator::get(opCtx)->canAcceptWritesFor(opCtx, to_collection));
 
         // Make sure database still exists after we resume from the temp release
-        Database* db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, _dbName);
+        // Database* db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, _dbName);
+        std::shared_ptr<Database> db =
+            DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, _dbName);
 
         bool createdCollection = false;
         Collection* collection = NULL;
@@ -175,7 +177,7 @@ struct Cloner::Fun {
                     from_options, CollectionOptions::ParseKind::parseForCommand));
                 Status s = Database::userCreateNS(
                     opCtx,
-                    db,
+                    db.get(),
                     to_collection.toString(),
                     collectionOptions,
                     createDefaultIndexes,
@@ -215,7 +217,8 @@ struct Cloner::Fun {
                 }
 
                 // TODO: SERVER-16598 abort if original db or collection is gone.
-                db = DatabaseHolder::getDatabaseHolder().get(opCtx, _dbName);
+                // db = DatabaseHolder::getDatabaseHolder().get(opCtx, _dbName);
+                db = DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, _dbName);
                 uassert(28593,
                         str::stream() << "Database " << _dbName << " dropped while cloning",
                         db != NULL);
@@ -373,7 +376,8 @@ void Cloner::copyIndexes(OperationContext* opCtx,
 
     // We are under lock here again, so reload the database in case it may have disappeared
     // during the temp release
-    Database* db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, toDBName);
+    // Database* db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, toDBName);
+    std::shared_ptr<Database> db = DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, toDBName);
 
     Collection* collection = db->getCollection(opCtx, to_collection);
     if (!collection) {
@@ -387,7 +391,7 @@ void Cloner::copyIndexes(OperationContext* opCtx,
             const bool createDefaultIndexes = true;
             Status s = Database::userCreateNS(
                 opCtx,
-                db,
+                db.get(),
                 to_collection.toString(),
                 collectionOptions,
                 createDefaultIndexes,
@@ -482,7 +486,8 @@ bool Cloner::copyCollection(OperationContext* opCtx,
             !opCtx->writesAreReplicated() ||
                 repl::ReplicationCoordinator::get(opCtx)->canAcceptWritesFor(opCtx, nss));
 
-    Database* db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbname);
+    // Database* db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbname);
+    std::shared_ptr<Database> db = DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, dbname);
 
     if (shouldCreateCollection) {
         bool result = writeConflictRetry(opCtx, "createCollection", ns, [&] {
@@ -493,7 +498,7 @@ bool Cloner::copyCollection(OperationContext* opCtx,
             uassertStatusOK(collectionOptions.parse(options, optionsParser));
             const bool createDefaultIndexes = true;
             Status status = Database::userCreateNS(
-                opCtx, db, ns, collectionOptions, createDefaultIndexes, idIndexSpec);
+                opCtx, db.get(), ns, collectionOptions, createDefaultIndexes, idIndexSpec);
             if (!status.isOK()) {
                 errmsg = status.toString();
                 // abort write unit of work
@@ -572,7 +577,8 @@ Status Cloner::createCollectionsForDb(
     const std::vector<CreateCollectionParams>& createCollectionParams,
     const std::string& dbName,
     const CloneOptions& opts) {
-    Database* db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
+    // Database* db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
+    std::shared_ptr<Database> db = DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, dbName);
     invariant(opCtx->lockState()->isDbLockedForMode(dbName, MODE_X));
 
     auto collCount = 0;
@@ -648,7 +654,7 @@ Status Cloner::createCollectionsForDb(
                     options, CollectionOptions::ParseKind::parseForStorage));
                 Status createStatus =
                     Database::userCreateNS(opCtx,
-                                           db,
+                                           db.get(),
                                            nss.ns(),
                                            collectionOptions,
                                            createDefaultIndexes,

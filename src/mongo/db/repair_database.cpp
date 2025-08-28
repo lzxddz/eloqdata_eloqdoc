@@ -249,7 +249,11 @@ Status repairCollections(OperationContext* opCtx,
         if (!status.isOK())
             return status;
 
-        CollectionCatalogEntry* cce = dbce->getCollectionCatalogEntry(opCtx, *it);
+        // CollectionCatalogEntry* cce = dbce->getCollectionCatalogEntry(opCtx, *it);
+        std::shared_ptr<CollectionCatalogEntry> cceSptr =
+            dbce->getCollectionCatalogEntrySptr(opCtx, *it);
+        CollectionCatalogEntry* cce = cceSptr.get();
+
         auto swIndexNameObjs = getIndexNameObjs(opCtx, dbce, cce);
         if (!swIndexNameObjs.isOK())
             return swIndexNameObjs.getStatus();
@@ -305,7 +309,9 @@ Status repairDatabase(OperationContext* opCtx,
             UninterruptibleLockGuard noInterrupt(opCtx->lockState());
 
             // Open the db after everything finishes.
-            auto db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
+            // auto db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
+            std::shared_ptr<Database> db =
+                DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, dbName);
 
             // Set the minimum snapshot for all Collections in this db. This ensures that readers
             // using majority readConcern level can only use the collections after their repaired

@@ -262,7 +262,9 @@ public:
                 opCtx, engine, dbname, preserveClonedFilesOnFailure, backupOriginalFiles);
 
             // Open database before returning
-            DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbname);
+            // DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbname);
+            DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, dbname);
+
             uassertStatusOK(status);
         }
 

@@ -847,7 +847,8 @@ void rollbackRenameCollection(OperationContext* opCtx, UUID uuid, RenameCollecti
     log() << "Attempting to rename collection with UUID: " << uuid << ", from: " << info.renameFrom
           << ", to: " << info.renameTo;
     Lock::DBLock dbLock(opCtx, dbName, MODE_X);
-    auto db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
+    // auto db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
+    auto db = DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, dbName);
     invariant(db);
 
     auto status = renameCollectionForRollback(opCtx, info.renameTo, uuid);
@@ -857,7 +858,7 @@ void rollbackRenameCollection(OperationContext* opCtx, UUID uuid, RenameCollecti
     // we temporarily rename the conflicting collection.
     if (status == ErrorCodes::NamespaceExists) {
 
-        renameOutOfTheWay(opCtx, info, db);
+        renameOutOfTheWay(opCtx, info, db.get());
 
         // Retrying to renameCollection command again now that the conflicting
         // collection has been renamed out of the way.
@@ -1146,7 +1147,8 @@ void rollback_internal::syncFixUp(OperationContext* opCtx,
 
             Lock::DBLock dbLock(opCtx, nss.db(), MODE_X);
 
-            auto db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, nss.db().toString());
+            // auto db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, nss.db().toString());
+            auto db = DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, nss.db().toString());
             invariant(db);
 
             std::shared_ptr<Collection> collection =

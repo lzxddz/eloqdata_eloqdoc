@@ -898,8 +898,9 @@ void RollbackImpl::_resetDropPendingState(OperationContext* opCtx) {
     opCtx->getServiceContext()->getStorageEngine()->listDatabases(&dbNames);
     for (const auto& dbName : dbNames) {
         Lock::DBLock dbLock(opCtx, dbName, MODE_X);
-        Database* db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
-        checkForIdIndexesAndDropPendingCollections(opCtx, db);
+        // Database* db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
+        auto db = DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, dbName);
+        checkForIdIndexesAndDropPendingCollections(opCtx, db.get());
     }
 }
 

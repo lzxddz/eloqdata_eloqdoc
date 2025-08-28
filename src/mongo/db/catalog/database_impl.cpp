@@ -430,7 +430,10 @@ void DatabaseImpl::clearTmpCollections(OperationContext* opCtx) {
     for (const auto& ns : collections) {
         invariant(NamespaceString::normal(ns));
 
-        CollectionCatalogEntry* coll = _dbEntry->getCollectionCatalogEntry(opCtx, ns);
+        // CollectionCatalogEntry* coll = _dbEntry->getCollectionCatalogEntry(opCtx, ns);
+        std::shared_ptr<CollectionCatalogEntry> coll =
+            _dbEntry->getCollectionCatalogEntrySptr(opCtx, ns);
+
 
         CollectionOptions options = coll->getCollectionOptions(opCtx);
 

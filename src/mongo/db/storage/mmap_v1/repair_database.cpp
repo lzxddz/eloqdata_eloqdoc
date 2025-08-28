@@ -310,7 +310,10 @@ Status MMAPV1Engine::repairDatabase(OperationContext* opCtx,
             new RepairFileDeleter(opCtx, dbName, reservedPathString, reservedPath));
 
     {
-        Database* originalDatabase = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
+        // Database* originalDatabase = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
+        std::shared_ptr<Database> originalDatabase =
+            DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, dbName);
+
         if (originalDatabase == NULL) {
             return Status(ErrorCodes::NamespaceNotFound, "database does not exist to repair");
         }
@@ -389,7 +392,7 @@ Status MMAPV1Engine::repairDatabase(OperationContext* opCtx,
                 wunit.commit();
             }
 
-            OldClientContext readContext(opCtx, ns, originalDatabase);
+            OldClientContext readContext(opCtx, ns, originalDatabase.get());
             Collection* originalCollection = originalDatabase->getCollection(opCtx, nss);
             invariant(originalCollection);
 
@@ -478,7 +481,8 @@ Status MMAPV1Engine::repairDatabase(OperationContext* opCtx,
     }
 
     // Reopen the database so it's discoverable
-    DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
+    // DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
+    DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, dbName);
 
     return Status::OK();
 }

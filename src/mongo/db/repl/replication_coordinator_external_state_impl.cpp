@@ -394,7 +394,8 @@ Status ReplicationCoordinatorExternalStateImpl::runRepairOnLocalDB(OperationCont
         Status status = repairDatabase(opCtx, engine, localDbName, false, false);
 
         // Open database before returning
-        DatabaseHolder::getDatabaseHolder().openDb(opCtx, localDbName);
+        // DatabaseHolder::getDatabaseHolder().openDb(opCtx, localDbName);
+        DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, localDbName);
     } catch (const DBException& ex) {
         return ex.toStatus();
     }

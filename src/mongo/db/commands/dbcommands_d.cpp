@@ -126,7 +126,8 @@ protected:
         const LockMode dbMode = readOnly ? MODE_S : MODE_X;
 
         AutoGetDb ctx(opCtx, dbName, dbMode);
-        Database* db = ctx.getDb();
+        // Database* db = ctx.getDb();
+        std::shared_ptr<Database> db = ctx.getDbSptr();
 
         auto oldLevel = (db ? db->getProfilingLevel() : serverGlobalParams.defaultProfile);
 
@@ -134,7 +135,8 @@ protected:
             if (!db) {
                 // When setting the profiling level, create the database if it didn't already exist.
                 // When just reading the profiling level, we do not create the database.
-                db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
+                // db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
+                db = DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, dbName);
             }
             uassertStatusOK(db->setProfilingLevel(opCtx, profilingLevel));
         }

@@ -67,7 +67,7 @@ public:
     }
 
     // only used in AutoGetOrCreateDb::AutoGetOrCreateDb
-    std::shared_ptr<Database> getSharedDb() const {
+    std::shared_ptr<Database> getDbSptr() const {
         // return _db;
         return _db;
     }
@@ -183,6 +183,11 @@ public:
     Database* getDb() const {
         // return _db;
         return _db.get();
+    }
+
+    std::shared_ptr<Database> getDbSptr() const {
+        // return _db;
+        return _db;
     }
 
     bool justCreated() const {

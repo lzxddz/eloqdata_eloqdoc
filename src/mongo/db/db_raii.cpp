@@ -271,15 +271,19 @@ AutoGetCollectionForReadCommand::AutoGetCollectionForReadCommand(
 
 OldClientContext::OldClientContext(OperationContext* opCtx, const std::string& ns, bool doVersion)
     : OldClientContext(
-          opCtx, ns, doVersion, DatabaseHolder::getDatabaseHolder().get(opCtx, ns), false) {}
+          opCtx, ns, doVersion, DatabaseHolder::getDatabaseHolder().getSptr(opCtx, ns), false) {}
 
-OldClientContext::OldClientContext(
-    OperationContext* opCtx, const std::string& ns, bool doVersion, Database* db, bool justCreated)
+OldClientContext::OldClientContext(OperationContext* opCtx,
+                                   const std::string& ns,
+                                   bool doVersion,
+                                   std::shared_ptr<Database> db,
+                                   bool justCreated)
     : _opCtx(opCtx), _db(db), _justCreated(justCreated) {
     if (!_db) {
         const auto dbName = nsToDatabaseSubstring(ns);
         invariant(_opCtx->lockState()->isDbLockedForMode(dbName, MODE_X));
-        _db = DatabaseHolder::getDatabaseHolder().openDb(_opCtx, dbName, &_justCreated);
+        // _db = DatabaseHolder::getDatabaseHolder().openDb(_opCtx, dbName, &_justCreated);
+        _db = DatabaseHolder::getDatabaseHolder().openDbSptr(_opCtx, dbName, &_justCreated);
         invariant(_db);
     }
 
@@ -334,7 +338,8 @@ OldClientWriteContext::OldClientWriteContext(OperationContext* opCtx, StringData
     _clientContext.emplace(opCtx,
                            _nss.ns(),
                            doShardVersionCheck,
-                           _autoCreateDb->getDb(),
+                           //    _autoCreateDb->getDb(),
+                           _autoCreateDb->getDbSptr(),
                            _autoCreateDb->justCreated());
     invariant(_autoCreateDb->getDb() == _clientContext->db());
 
@@ -359,7 +364,8 @@ OldClientWriteContext::OldClientWriteContext(OperationContext* opCtx, StringData
     _clientContext.emplace(opCtx,
                            _nss.ns(),
                            doShardVersionCheck,
-                           _autoCreateDb->getDb(),
+                           //    _autoCreateDb->getDb(),
+                           _autoCreateDb->getDbSptr(),
                            _autoCreateDb->justCreated());
     invariant(_autoCreateDb->getDb() == _clientContext->db());
 }

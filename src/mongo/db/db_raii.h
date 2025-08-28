@@ -176,7 +176,7 @@ public:
     ~OldClientContext();
 
     Database* db() const {
-        return _db;
+        return _db.get();
     }
 
     /** @return if the db was created by this OldClientContext */
@@ -191,7 +191,8 @@ public:
     OldClientContext(OperationContext* opCtx,
                      const std::string& ns,
                      bool doVersion,
-                     Database* db,
+                     //  Database* db,
+                     std::shared_ptr<Database> db,
                      bool justCreated);
 
 private:
@@ -201,7 +202,8 @@ private:
 
     OperationContext* const _opCtx;
 
-    Database* _db;
+    // Database* _db;
+    std::shared_ptr<Database> _db;
     bool _justCreated;
 };
 

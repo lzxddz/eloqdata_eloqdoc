@@ -145,9 +145,11 @@ Status renameCollectionCommon(OperationContext* opCtx,
                                     << " to " << target.ns());
     }
 
-    Database* const sourceDB = DatabaseHolder::getDatabaseHolder().get(opCtx, source.db());
+    // Database* const sourceDB = DatabaseHolder::getDatabaseHolder().get(opCtx, source.db());
+    std::shared_ptr<mongo::Database> sourceDB =
+        DatabaseHolder::getDatabaseHolder().getSptr(opCtx, source.db());
     if (sourceDB) {
-        DatabaseShardingState::get(sourceDB).checkDbVersion(opCtx);
+        DatabaseShardingState::get(sourceDB.get()).checkDbVersion(opCtx);
     }
     Collection* const sourceColl = sourceDB ? sourceDB->getCollection(opCtx, source) : nullptr;
     if (!sourceColl) {
@@ -176,7 +178,9 @@ Status renameCollectionCommon(OperationContext* opCtx,
 
     BackgroundOperation::assertNoBgOpInProgForNs(source.ns());
 
-    Database* const targetDB = DatabaseHolder::getDatabaseHolder().openDb(opCtx, target.db());
+    // Database* const targetDB = DatabaseHolder::getDatabaseHolder().openDb(opCtx, target.db());
+    std::shared_ptr<Database> targetDB =
+        DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, target.db());
 
     // Check if the target namespace exists and if dropTarget is true.
     // Return a non-OK status if target exists and dropTarget is not true or if the collection
@@ -207,7 +211,7 @@ Status renameCollectionCommon(OperationContext* opCtx,
             auto dropTargetNssFromUUID = getNamespaceFromUUID(opCtx, options.dropTargetUUID.get());
             // We need to rename the targetColl to a temporary name.
             auto status = renameTargetCollectionToTmp(
-                opCtx, source, targetUUID.get(), targetDB, target, targetColl->uuid().get());
+                opCtx, source, targetUUID.get(), targetDB.get(), target, targetColl->uuid().get());
             if (!status.isOK())
                 return status;
             targetColl = nullptr;
@@ -231,7 +235,7 @@ Status renameCollectionCommon(OperationContext* opCtx,
 
     auto sourceUUID = sourceColl->uuid();
     // If we are renaming in the same database, just rename the namespace and we're done.
-    if (sourceDB == targetDB) {
+    if (sourceDB.get() == targetDB.get()) {
         return writeConflictRetry(opCtx, "renameCollection", target.ns(), [&] {
             WriteUnitOfWork wunit(opCtx);
             auto opObserver = getGlobalServiceContext()->getOpObserver();

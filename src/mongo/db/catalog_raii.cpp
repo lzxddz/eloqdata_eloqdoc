@@ -171,7 +171,7 @@ AutoGetOrCreateDb::AutoGetOrCreateDb(OperationContext* opCtx,
 
     _autoDb.emplace(opCtx, dbName, mode, deadline);
     // _db = _autoDb->getDb();
-    _db = _autoDb->getSharedDb();
+    _db = _autoDb->getDbSptr();
 
     // If the database didn't exist, relock in MODE_X
     if (!_db) {
