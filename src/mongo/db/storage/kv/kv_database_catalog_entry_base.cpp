@@ -444,7 +444,7 @@ Status KVDatabaseCatalogEntryBase::dropCollection(OperationContext* opCtx, Strin
     // "_engine->getCatalog()->dropCollection(opCtx, ns)". Because there is no lock on
     // (txservice)catalog and the collection may be the new-created by another transcation.
 
-    // _collections.erase(ns.toString());
+    _collections.erase(ns.toString());
 
     Status status = _engine->getCatalog()->dropCollection(opCtx, ns);
     // always Status::OK();
