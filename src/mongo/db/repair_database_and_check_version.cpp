@@ -357,7 +357,9 @@ StatusWith<bool> repairDatabasesAndCheckVersion(OperationContext* opCtx) {
         // Attempt to restore the featureCompatibilityVersion document if it is missing.
         NamespaceString fcvNSS(NamespaceString::kServerConfigurationNamespace);
 
-        Database* db = DatabaseHolder::getDatabaseHolder().get(opCtx, fcvNSS.db());
+        // Database* db = DatabaseHolder::getDatabaseHolder().get(opCtx, fcvNSS.db());
+        std::shared_ptr<Database> db =
+            DatabaseHolder::getDatabaseHolder().getSptr(opCtx, fcvNSS.db());
         Collection* versionColl;
         BSONObj featureCompatibilityVersion;
         if (!db || !(versionColl = db->getCollection(opCtx, fcvNSS)) ||

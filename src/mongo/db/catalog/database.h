@@ -332,7 +332,8 @@ public:
                                         const CollectionOptions& options = CollectionOptions(),
                                         const bool createDefaultIndexes = true,
                                         const BSONObj& idIndex = BSONObj()) {
-        return this->_impl().createCollection(opCtx, ns, options, createDefaultIndexes, idIndex);
+        assert(false) return this->_impl().createCollection(
+            opCtx, ns, options, createDefaultIndexes, idIndex);
     }
 
     inline Status createView(OperationContext* const opCtx,

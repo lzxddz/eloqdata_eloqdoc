@@ -224,14 +224,15 @@ void forceDatabaseRefresh(OperationContext* opCtx, const StringData dbName) {
         // Take the DBLock directly rather than using AutoGetDb, to prevent a recursive call
         // into checkDbVersion().
         Lock::DBLock dbLock(opCtx, dbName, MODE_IS);
-        const auto db = DatabaseHolder::getDatabaseHolder().get(opCtx, dbName);
+        // const auto db = DatabaseHolder::getDatabaseHolder().get(opCtx, dbName);
+        auto db = DatabaseHolder::getDatabaseHolder().getSptr(opCtx, dbName);
         if (!db) {
             log() << "Database " << dbName
                   << " has been dropped; not caching the refreshed databaseVersion";
             return;
         }
 
-        const auto cachedDbVersion = DatabaseShardingState::get(db).getDbVersion(opCtx);
+        const auto cachedDbVersion = DatabaseShardingState::get(db.get()).getDbVersion(opCtx);
         if (cachedDbVersion && refreshedDbVersion &&
             cachedDbVersion->getUuid() == refreshedDbVersion->getUuid() &&
             cachedDbVersion->getLastMod() >= refreshedDbVersion->getLastMod()) {
@@ -245,14 +246,15 @@ void forceDatabaseRefresh(OperationContext* opCtx, const StringData dbName) {
 
     // The cached version is older than the refreshed version; update the cached version.
     Lock::DBLock dbLock(opCtx, dbName, MODE_X);
-    const auto db = DatabaseHolder::getDatabaseHolder().get(opCtx, dbName);
+    // const auto db = DatabaseHolder::getDatabaseHolder().get(opCtx, dbName);
+    auto db = DatabaseHolder::getDatabaseHolder().getSptr(opCtx, dbName);
     if (!db) {
         log() << "Database " << dbName
               << " has been dropped; not caching the refreshed databaseVersion";
         return;
     }
 
-    DatabaseShardingState::get(db).setDbVersion(opCtx, std::move(refreshedDbVersion));
+    DatabaseShardingState::get(db.get()).setDbVersion(opCtx, std::move(refreshedDbVersion));
 }
 
 }  // namespace mongo

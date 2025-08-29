@@ -87,7 +87,9 @@ public:
              BSONObjBuilder& result) {
         const NamespaceString nss("local", "oplog.rs");
         Lock::GlobalWrite global(opCtx);
-        Database* database = DatabaseHolder::getDatabaseHolder().get(opCtx, nss.db());
+        // Database* database = DatabaseHolder::getDatabaseHolder().get(opCtx, nss.db());
+        std::shared_ptr<Database> database =
+            DatabaseHolder::getDatabaseHolder().getSptr(opCtx, nss.db());
         if (!database) {
             uasserted(ErrorCodes::NamespaceNotFound, "database local does not exist");
         }

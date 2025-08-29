@@ -1704,7 +1704,10 @@ MONGO_REGISTER_SHIM(Database::dropAllDatabasesExceptLocal)(OperationContext* opC
     for (const auto& dbName : dbs) {
         if (dbName != "local") {
             writeConflictRetry(opCtx, "dropAllDatabasesExceptLocal", dbName, [&opCtx, &dbName] {
-                Database* db = DatabaseHolder::getDatabaseHolder().get(opCtx, dbName);
+                // Database* db = DatabaseHolder::getDatabaseHolder().get(opCtx, dbName);
+                std::shared_ptr<Database> dbSptr =
+                    DatabaseHolder::getDatabaseHolder().getSptr(opCtx, dbName);
+                auto* db = dbSptr.get();
 
                 // This is needed since dropDatabase can't be rolled back.
                 // This is safe be replaced by "invariant(db);dropDatabase(opCtx, db);" once fixed

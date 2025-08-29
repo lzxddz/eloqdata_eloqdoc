@@ -88,6 +88,7 @@ public:
      * locked in at least IS-mode.
      */
     inline Database* get(OperationContext* const opCtx, const StringData ns)  {
+        assert(false);
         return this->_impl().get(opCtx, ns);
     }
     inline std::shared_ptr<Database> getSptr(OperationContext* const opCtx, const StringData ns) {
@@ -103,6 +104,7 @@ public:
     inline Database* openDb(OperationContext* const opCtx,
                             const StringData ns,
                             bool* const justCreated = nullptr) {
+        assert(false);
         return this->_impl().openDb(opCtx, ns, justCreated);
     }
     inline std::shared_ptr<Database> openDbSptr(OperationContext* const opCtx,

@@ -212,7 +212,8 @@ public:
 
         // Closing a database requires a global lock.
         Lock::GlobalWrite lk(opCtx);
-        auto db = DatabaseHolder::getDatabaseHolder().get(opCtx, dbname);
+        // auto db = DatabaseHolder::getDatabaseHolder().get(opCtx, dbname);
+        auto db = DatabaseHolder::getDatabaseHolder().getSptr(opCtx, dbname);
         if (db) {
             if (db->isDropPending(opCtx)) {
                 uasserted(ErrorCodes::DatabaseDropPending,

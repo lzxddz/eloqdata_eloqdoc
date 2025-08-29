@@ -397,8 +397,8 @@ void State::dropTempCollections() {
     if (_useIncremental && !_config.incLong.isEmpty()) {
         writeConflictRetry(_opCtx, "M/R dropTempCollections", _config.incLong.ns(), [this] {
             Lock::DBLock lk(_opCtx, _config.incLong.db(), MODE_X);
-            if (Database* db =
-                    DatabaseHolder::getDatabaseHolder().get(_opCtx, _config.incLong.ns())) {
+            if (auto db =
+                    DatabaseHolder::getDatabaseHolder().getSptr(_opCtx, _config.incLong.ns())) {
                 WriteUnitOfWork wunit(_opCtx);
                 uassertStatusOK(db->dropCollection(_opCtx, _config.incLong.ns()));
                 wunit.commit();
@@ -640,7 +640,7 @@ unsigned long long _collectionCount(OperationContext* opCtx,
     // If the global write lock is held, we must avoid using AutoGetCollectionForReadCommand as it
     // may lead to deadlock when waiting for a majority snapshot to be committed. See SERVER-24596.
     if (callerHoldsGlobalLock) {
-        Database* db = DatabaseHolder::getDatabaseHolder().get(opCtx, nss.ns());
+        auto db = DatabaseHolder::getDatabaseHolder().getSptr(opCtx, nss.ns());
         if (db) {
             coll = db->getCollection(opCtx, nss);
         }

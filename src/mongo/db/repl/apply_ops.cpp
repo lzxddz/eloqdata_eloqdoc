@@ -137,7 +137,8 @@ Status _applyOps(OperationContext* opCtx,
             invariant(opCtx->lockState()->isW());
             invariant(*opType != 'c');
 
-            auto db = DatabaseHolder::getDatabaseHolder().get(opCtx, nss.ns());
+            // auto db = DatabaseHolder::getDatabaseHolder().get(opCtx, nss.ns());
+            auto db = DatabaseHolder::getDatabaseHolder().getSptr(opCtx, nss.ns());
             if (!db) {
                 // Retry in non-atomic mode, since MMAP cannot implicitly create a new database
                 // within an active WriteUnitOfWork.
@@ -317,7 +318,9 @@ Status _checkPrecondition(OperationContext* opCtx,
         BSONObj realres = db.findOne(nss.ns(), preCondition["q"].Obj());
 
         // Get collection default collation.
-        Database* database = DatabaseHolder::getDatabaseHolder().get(opCtx, nss.db());
+        // Database* database = DatabaseHolder::getDatabaseHolder().get(opCtx, nss.db());
+        std::shared_ptr<Database> database =
+            DatabaseHolder::getDatabaseHolder().getSptr(opCtx, nss.db());
         if (!database) {
             return {ErrorCodes::NamespaceNotFound, "database in ns does not exist: " + nss.ns()};
         }

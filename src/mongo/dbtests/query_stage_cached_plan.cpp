@@ -78,7 +78,9 @@ public:
 
     void dropCollection() {
         Lock::DBLock dbLock(&_opCtx, nss.db(), MODE_X);
-        Database* database = DatabaseHolder::getDatabaseHolder().get(&_opCtx, nss.db());
+        // Database* database = DatabaseHolder::getDatabaseHolder().get(&_opCtx, nss.db());
+        std::shared_ptr<Database> database =
+            DatabaseHolder::getDatabaseHolder().getSptr(&_opCtx, nss.db());
         if (!database) {
             return;
         }
