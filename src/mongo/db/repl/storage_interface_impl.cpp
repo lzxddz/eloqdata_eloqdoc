@@ -226,7 +226,8 @@ StorageInterfaceImpl::createCollectionForBulkLoading(
         {
             // Create the collection.
             WriteUnitOfWork wunit(opCtx.get());
-            fassert(40332, db.getDb()->createCollection(opCtx.get(), nss.ns(), options, false));
+            fassert(40332,
+                    db.getDb()->createCollection(opCtx.get(), nss.ns(), options, false).get());
             wunit.commit();
         }
 
@@ -1071,16 +1072,18 @@ Status StorageInterfaceImpl::isAdminDbValid(OperationContext* opCtx) {
         return Status::OK();
     }
 
-    Collection* const usersCollection =
+    // Collection* const usersCollection =
+    auto usersCollection =
         adminDb->getCollection(opCtx, AuthorizationManager::usersCollectionNamespace);
-    const bool hasUsers =
-        usersCollection && !Helpers::findOne(opCtx, usersCollection, BSONObj(), false).isNull();
-    Collection* const adminVersionCollection =
+    const bool hasUsers = usersCollection &&
+        !Helpers::findOne(opCtx, usersCollection.get(), BSONObj(), false).isNull();
+    // Collection* const adminVersionCollection =
+    auto adminVersionCollection =
         adminDb->getCollection(opCtx, AuthorizationManager::versionCollectionNamespace);
     BSONObj authSchemaVersionDocument;
     if (!adminVersionCollection ||
         !Helpers::findOne(opCtx,
-                          adminVersionCollection,
+                          adminVersionCollection.get(),
                           AuthorizationManager::versionDocumentQuery,
                           authSchemaVersionDocument)) {
         if (!hasUsers) {

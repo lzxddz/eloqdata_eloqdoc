@@ -310,9 +310,9 @@ public:
                             continue;
                         }
 
-                        Collection* collection = db->getCollection(opCtx, nss);
-                        BSONObj collBson =
-                            buildCollectionBson(opCtx, collection, includePendingDrops, nameOnly);
+                        auto collection = db->getCollection(opCtx, nss);
+                        BSONObj collBson = buildCollectionBson(
+                            opCtx, collection.get(), includePendingDrops, nameOnly);
                         if (!collBson.isEmpty()) {
                             _addWorkingSetMember(
                                 opCtx, collBson, matcher.get(), ws.get(), root.get());

@@ -463,7 +463,7 @@ public:
 
                 assertCanWrite(opCtx, nsString);
 
-                Collection* collection = autoColl->getCollection();
+                std::shared_ptr<Collection> collection = autoColl->getCollectionSptr();
 
                 // Create the collection if it does not exist when performing an upsert because the
                 // update stage does not create its own collection
@@ -499,8 +499,8 @@ public:
                     invariant(collection);
                 }
 
-                const auto exec =
-                    uassertStatusOK(getExecutorUpdate(opCtx, opDebug, collection, &parsedUpdate));
+                const auto exec = uassertStatusOK(
+                    getExecutorUpdate(opCtx, opDebug, collection.get(), &parsedUpdate));
 
                 {
                     stdx::lock_guard<Client> lk(*opCtx->getClient());

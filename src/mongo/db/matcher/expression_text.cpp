@@ -67,7 +67,7 @@ TextMatchExpression::TextMatchExpression(OperationContext* opCtx,
                               << "')",
                 db);
 
-        Collection* collection = db->getCollection(opCtx, nss);
+        auto collection = db->getCollection(opCtx, nss);
 
         uassert(ErrorCodes::IndexNotFound,
                 str::stream() << "text index required for $text query (no such collection '"

@@ -284,8 +284,7 @@ std::size_t GlobalCursorIdCache::timeoutCursors(OperationContext* opCtx, Date_t 
         if (!dbLock.getDb()) {
             continue;
         }
-
-        Collection* const collection = dbLock.getDb()->getCollection(opCtx, nsTodo);
+        std::shared_ptr<Collection> collection = dbLock.getDb()->getCollection(opCtx, nsTodo);
         if (!collection) {
             // The 'nsTodo' collection has been dropped since we held _mutex. We can safely skip it.
             continue;

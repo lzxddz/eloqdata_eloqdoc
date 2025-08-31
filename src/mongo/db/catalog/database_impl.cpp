@@ -218,12 +218,12 @@ Status DatabaseImpl::validateDBName(StringData dbname) {
     return Status::OK();
 }
 
-Collection* DatabaseImpl::_getOrCreateCollectionInstance(OperationContext* opCtx,
-                                                         const NamespaceString& nss) {
+std::shared_ptr<Collection> DatabaseImpl::_getOrCreateCollectionInstance(
+    OperationContext* opCtx, const NamespaceString& nss) {
     MONGO_UNREACHABLE;
     // this function is used to construct Collection handler for Mongo
     //
-    Collection* collection = getCollection(opCtx, nss, true);
+    auto collection = getCollection(opCtx, nss, true);
 
     if (collection) {
         return collection;
@@ -244,7 +244,8 @@ Collection* DatabaseImpl::_getOrCreateCollectionInstance(OperationContext* opCtx
     }
 
     // Not registering AddCollectionChange since this is for collections that already exist.
-    Collection* coll = new Collection(opCtx, nss.ns(), uuid, cce.release(), rs.release(), _dbEntry);
+    auto coll =
+        std::make_shared<Collection>(opCtx, nss.ns(), uuid, cce.release(), rs.release(), _dbEntry);
     if (uuid) {
         // We are not in a WUOW only when we are called from Database::init(). There is no need
         // to rollback UUIDCatalog changes because we are initializing existing collections.
@@ -259,15 +260,15 @@ Collection* DatabaseImpl::_getOrCreateCollectionInstance(OperationContext* opCtx
     return coll;
 }
 
-Collection* DatabaseImpl::_createCollectionHandler(OperationContext* opCtx,
-                                                   const NamespaceString& nss,
-                                                   bool createIdIndex,
-                                                   const BSONObj& idIndexSpec,
-                                                   bool forView) {
+std::shared_ptr<Collection> DatabaseImpl::_createCollectionHandler(OperationContext* opCtx,
+                                                                   const NamespaceString& nss,
+                                                                   bool createIdIndex,
+                                                                   const BSONObj& idIndexSpec,
+                                                                   bool forView) {
     MONGO_LOG(1) << "DatabaseImpl::_createCollectionHandler";
     if (!forView) {
         if (auto iter = _collections.find(nss.toString()); iter != _collections.end()) {
-            return iter->second.get();
+            return iter->second;
         }
     }
     auto cce = _dbEntry->getCollectionCatalogEntrySptr(opCtx, nss.toStringData());
@@ -353,7 +354,7 @@ Collection* DatabaseImpl::_createCollectionHandler(OperationContext* opCtx,
 
     MONGO_LOG(1) << "[opID]=" << opCtx->getOpID() << "DatabaseImpl::createCollection"
                  << ". create done and handler to collection is available";
-    return iter->second.get();
+    return iter->second;
 }
 
 DatabaseImpl::DatabaseImpl(Database* const this_,
@@ -524,7 +525,7 @@ void DatabaseImpl::getStats(OperationContext* opCtx, BSONObjBuilder* output, dou
     for (auto it = collections.begin(); it != collections.end(); ++it) {
         const string ns = *it;
 
-        Collection* collection = getCollection(opCtx, ns, false);
+        auto collection = getCollection(opCtx, ns, false);
 
         if (!collection)
             continue;
@@ -630,7 +631,7 @@ Status DatabaseImpl::dropCollectionEvenIfSystem(OperationContext* opCtx,
             "dropCollection() cannot accept a valid drop optime when writes are replicated.");
     }
 
-    Collection* collection = getCollection(opCtx, fullns, true);
+    auto collection = getCollection(opCtx, fullns, true);
 
     if (!collection) {
         return Status::OK();  // Post condition already met.
@@ -657,7 +658,7 @@ Status DatabaseImpl::dropCollectionEvenIfSystem(OperationContext* opCtx,
 
     auto opObserver = opCtx->getServiceContext()->getOpObserver();
     opObserver->onDropCollection(opCtx, fullns, uuid);
-    auto status = _finishDropCollection(opCtx, fullns, collection);
+    auto status = _finishDropCollection(opCtx, fullns, collection.get());
     if (!status.isOK()) {
         return status;
     }
@@ -814,14 +815,16 @@ void DatabaseImpl::_clearCollectionCache(OperationContext* opCtx,
     _collections.erase(it);
 }
 
-Collection* DatabaseImpl::getCollection(OperationContext* opCtx, StringData ns, bool isForWrite) {
+std::shared_ptr<Collection> DatabaseImpl::getCollection(OperationContext* opCtx,
+                                                        StringData ns,
+                                                        bool isForWrite) {
     NamespaceString nss{ns};
     return getCollection(opCtx, nss, isForWrite);
 }
 
-Collection* DatabaseImpl::getCollection(OperationContext* opCtx,
-                                        const NamespaceString& nss,
-                                        bool isForWrite) {
+std::shared_ptr<Collection> DatabaseImpl::getCollection(OperationContext* opCtx,
+                                                        const NamespaceString& nss,
+                                                        bool isForWrite) {
     MONGO_LOG(1) << "DatabaseImpl::getCollection"
                  << ", nss: " << nss.toStringData();
     invariant(_name == nss.db());
@@ -838,7 +841,7 @@ Collection* DatabaseImpl::getCollection(OperationContext* opCtx,
     }
 
     if (auto it = _collections.find(nss.ns()); it != _collections.end() && it->second) {
-        auto found = it->second.get();
+        auto& found = it->second;
 
         if (found->catalogVersion() == version) {
             NamespaceUUIDCache& cache = NamespaceUUIDCache::get(opCtx);
@@ -872,7 +875,7 @@ Status DatabaseImpl::renameCollection(OperationContext* opCtx,
     NamespaceString fromNSS(fromNS);
     NamespaceString toNSS(toNS);
     {  // remove anything cached
-        Collection* coll = getCollection(opCtx, fromNS, true);
+        auto coll = getCollection(opCtx, fromNS, true);
 
         if (!coll)
             return Status(ErrorCodes::NamespaceNotFound, "collection not found to rename");
@@ -903,9 +906,9 @@ Status DatabaseImpl::renameCollection(OperationContext* opCtx,
     return s;
 }
 
-Collection* DatabaseImpl::getOrCreateCollection(OperationContext* opCtx,
-                                                const NamespaceString& nss) {
-    Collection* c = getCollection(opCtx, nss, true);
+std::shared_ptr<Collection> DatabaseImpl::getOrCreateCollection(OperationContext* opCtx,
+                                                                const NamespaceString& nss) {
+    auto c = getCollection(opCtx, nss, true);
 
     if (!c) {
         c = createCollection(opCtx, nss.ns());
@@ -1381,11 +1384,11 @@ StatusWith<BSONObj> prepareSpecForCreate(OperationContext* opCtx,
 
 }  // namespace index_check
 
-Collection* DatabaseImpl::createCollection(OperationContext* opCtx,
-                                           StringData ns,
-                                           const CollectionOptions& options,
-                                           bool createIdIndex,
-                                           const BSONObj& idIndex) {
+std::shared_ptr<Collection> DatabaseImpl::createCollection(OperationContext* opCtx,
+                                                           StringData ns,
+                                                           const CollectionOptions& options,
+                                                           bool createIdIndex,
+                                                           const BSONObj& idIndex) {
     MONGO_LOG(1) << "[opID]=" << opCtx->getOpID() << " DatabaseImpl::createCollection"
                  << ". ns: " << ns << ". createIdIndex: " << createIdIndex;
     NamespaceString nss{ns};
@@ -1448,7 +1451,7 @@ Collection* DatabaseImpl::createCollection(OperationContext* opCtx,
 
     // opCtx->recoveryUnit()->registerChange(new AddCollectionChange(opCtx, this, ns));
 
-    Collection* collection = _createCollectionHandler(opCtx, nss, createIdIndex, specAfterCheck);
+    auto collection = _createCollectionHandler(opCtx, nss, createIdIndex, specAfterCheck);
     invariant(collection);
     return collection;
 }
@@ -1583,7 +1586,7 @@ MONGO_REGISTER_SHIM(Database::userCreateNS)
     if (!NamespaceString::validCollectionComponent(ns))
         return Status(ErrorCodes::InvalidNamespace, str::stream() << "invalid ns: " << ns);
 
-    Collection* collection = db->getCollection(opCtx, ns, true);
+    auto collection = db->getCollection(opCtx, ns, true);
 
     if (collection)
         return Status(ErrorCodes::NamespaceExists,

@@ -572,7 +572,8 @@ void OpObserverImpl::onInternalOpMessage(OperationContext* opCtx,
 }
 
 void OpObserverImpl::onCreateCollection(OperationContext* opCtx,
-                                        Collection::Uptr coll,
+                                        // Collection::Uptr coll,
+                                        Collection::Sptr coll,
                                         const NamespaceString& collectionName,
                                         const CollectionOptions& options,
                                         const BSONObj& idIndex,
@@ -676,7 +677,7 @@ void OpObserverImpl::onCollMod(OperationContext* opCtx,
     if (!db) {
         return;
     }
-    Collection* coll = db->getCollection(opCtx, nss.ns());
+    std::shared_ptr<Collection> coll = db->getCollection(opCtx, nss.ns());
 
     invariant(coll->uuid() || nss.coll() == "system.indexes" || nss.coll() == "system.namespaces");
     invariant(coll->uuid() == uuid);

@@ -343,8 +343,8 @@ private:
         auto next = UUIDCatalog::get(opCtx).next(_dbName, *uuid);
 
         // Find and report collection metadata.
-        auto indices = collectionIndexInfo(opCtx, collection);
-        auto options = collectionOptions(opCtx, collection);
+        auto indices = collectionIndexInfo(opCtx, collection.get());
+        auto options = collectionOptions(opCtx, collection.get());
 
         DbCheckOplogCollection entry;
         entry.setNss(collection->ns());

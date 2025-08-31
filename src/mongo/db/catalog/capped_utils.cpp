@@ -67,7 +67,7 @@ mongo::Status mongo::emptyCapped(OperationContext* opCtx, const NamespaceString&
     Database* db = autoDb.getDb();
     uassert(ErrorCodes::NamespaceNotFound, "no such database", db);
 
-    Collection* collection = db->getCollection(opCtx, collectionName);
+    std::shared_ptr<Collection> collection = db->getCollection(opCtx, collectionName);
     uassert(ErrorCodes::CommandNotSupportedOnView,
             str::stream() << "emptycapped not supported on view: " << collectionName.ns(),
             collection || !db->getViewCatalog()->lookup(opCtx, collectionName.ns()));
@@ -119,7 +119,7 @@ mongo::Status mongo::cloneCollectionAsCapped(OperationContext* opCtx,
     NamespaceString fromNss(db->name(), shortFrom);
     NamespaceString toNss(db->name(), shortTo);
 
-    Collection* fromCollection = db->getCollection(opCtx, fromNss);
+    std::shared_ptr<Collection> fromCollection = db->getCollection(opCtx, fromNss);
     if (!fromCollection) {
         if (db->getViewCatalog()->lookup(opCtx, fromNss.ns())) {
             return Status(ErrorCodes::CommandNotSupportedOnView,
@@ -162,7 +162,7 @@ mongo::Status mongo::cloneCollectionAsCapped(OperationContext* opCtx,
             return status;
     }
 
-    Collection* toCollection = db->getCollection(opCtx, toNss);
+    std::shared_ptr<Collection> toCollection = db->getCollection(opCtx, toNss);
     invariant(toCollection);  // we created above
 
     // how much data to ignore because it won't fit anyway
@@ -182,7 +182,7 @@ mongo::Status mongo::cloneCollectionAsCapped(OperationContext* opCtx,
     //                                             InternalPlanner::FORWARD);
     auto exec = InternalPlanner::collectionScan(opCtx,
                                                 fromNss.ns(),
-                                                fromCollection,
+                                                fromCollection.get(),
                                                 PlanExecutor::INTERRUPT_ONLY,
                                                 InternalPlanner::FORWARD);
 

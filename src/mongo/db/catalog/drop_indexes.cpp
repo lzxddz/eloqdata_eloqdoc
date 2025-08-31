@@ -165,7 +165,8 @@ Status dropIndexes(OperationContext* opCtx,
 
             // If db/collection does not exist, short circuit and return.
             Database* db = autoDb.getDb();
-            Collection* collection = db ? db->getCollection(opCtx, nss, true) : nullptr;
+            std::shared_ptr<Collection> collection =
+                db ? db->getCollection(opCtx, nss, true) : nullptr;
             if (!db || !collection) {
                 if (db && db->getViewCatalog()->lookup(opCtx, nss.ns())) {
                     return Status(ErrorCodes::CommandNotSupportedOnView,
@@ -179,7 +180,7 @@ Status dropIndexes(OperationContext* opCtx,
             OldClientContext ctx(opCtx, nss.ns());
             BackgroundOperation::assertNoBgOpInProgForNs(nss);
 
-            Status status = wrappedRun(opCtx, collection, idxDescriptor, result);
+            Status status = wrappedRun(opCtx, collection.get(), idxDescriptor, result);
             if (!status.isOK()) {
                 return status;
             }

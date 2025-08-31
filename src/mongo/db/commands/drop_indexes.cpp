@@ -138,7 +138,7 @@ public:
         Lock::GlobalWrite lk(opCtx);
         AutoGetOrCreateDb autoDb(opCtx, dbname, MODE_X);
 
-        Collection* collection = autoDb.getDb()->getCollection(opCtx, toReIndexNss);
+        auto collection = autoDb.getDb()->getCollection(opCtx, toReIndexNss);
         if (!collection) {
             if (autoDb.getDb()->getViewCatalog()->lookup(opCtx, toReIndexNss.ns()))
                 uasserted(ErrorCodes::CommandNotSupportedOnView, "can't re-index a view");
@@ -203,7 +203,7 @@ public:
             WriteUnitOfWork wunit(opCtx);
             collection->getIndexCatalog()->dropAllIndexes(opCtx, true);
 
-            indexer = stdx::make_unique<MultiIndexBlock>(opCtx, collection);
+            indexer = stdx::make_unique<MultiIndexBlock>(opCtx, collection.get());
 
             swIndexesToRebuild = indexer->init(all);
             uassertStatusOK(swIndexesToRebuild.getStatus());

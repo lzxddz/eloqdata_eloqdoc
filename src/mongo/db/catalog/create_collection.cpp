@@ -151,7 +151,8 @@ Status createCollectionForApplyOps(OperationContext* opCtx,
     auto newCmd = cmdObj;
 
     auto* const serviceContext = opCtx->getServiceContext();
-    auto* const db = DatabaseHolder::getDatabaseHolder().get(opCtx, dbName);
+    // auto* const db = DatabaseHolder::getDatabaseHolder().get(opCtx, dbName);
+    std::shared_ptr<Database> db = DatabaseHolder::getDatabaseHolder().getSptr(opCtx, dbName);
 
     // If a UUID is given, see if we need to rename a collection out of the way, and whether the
     // collection already exists under a different name. If so, rename it into place. As this is

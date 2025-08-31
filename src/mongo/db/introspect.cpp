@@ -147,7 +147,7 @@ void profile(OperationContext* opCtx, NetworkOp op) {
 
             Lock::CollectionLock collLock(opCtx->lockState(), db->getProfilingNS(), MODE_IX);
 
-            Collection* const coll = db->getCollection(opCtx, db->getProfilingNS());
+            std::shared_ptr<Collection> coll = db->getCollection(opCtx, db->getProfilingNS());
             if (coll) {
                 WriteUnitOfWork wuow(opCtx);
                 OpDebug* const nullOpDebug = nullptr;
@@ -179,8 +179,8 @@ Status createProfileCollection(OperationContext* opCtx, Database* db) {
 
     const std::string dbProfilingNS(db->getProfilingNS());
 
-    Collection* const collection = db->getCollection(opCtx, dbProfilingNS);
-    if (collection) {
+    std::shared_ptr<Collection> collection = db->getCollection(opCtx, dbProfilingNS);
+    if (collection.get()) {
         if (!collection->isCapped()) {
             return Status(ErrorCodes::NamespaceExists,
                           str::stream() << dbProfilingNS << " exists but isn't capped");

@@ -248,7 +248,7 @@ void createIndexForApplyOps(OperationContext* opCtx,
             LOG(3) << "apply op: building background index " << indexSpec
                    << " in the foreground because the node is in recovery";
             IndexBuilder builder(indexSpec, relaxIndexConstraints);
-            Status status = builder.buildInForeground(opCtx, db);
+            Status status = builder.buildInForeground(opCtx, db.get());
             uassertStatusOK(status);
         } else {
             Lock::TempRelease release(opCtx->lockState());
@@ -257,7 +257,7 @@ void createIndexForApplyOps(OperationContext* opCtx,
                 LOG(3) << "apply op: building background index " << indexSpec
                        << " in the foreground because temp release failed";
                 IndexBuilder builder(indexSpec, relaxIndexConstraints);
-                Status status = builder.buildInForeground(opCtx, db);
+                Status status = builder.buildInForeground(opCtx, db.get());
                 uassertStatusOK(status);
             } else {
                 IndexBuilder* builder = new IndexBuilder(
@@ -272,7 +272,7 @@ void createIndexForApplyOps(OperationContext* opCtx,
         opCtx->recoveryUnit()->abandonSnapshot();
     } else {
         IndexBuilder builder(indexSpec, relaxIndexConstraints);
-        Status status = builder.buildInForeground(opCtx, db);
+        Status status = builder.buildInForeground(opCtx, db.get());
         uassertStatusOK(status);
     }
     if (incrementOpsAppliedStats) {
@@ -610,7 +610,7 @@ void createOplog(OperationContext* opCtx, const std::string& oplogCollectionName
     const ReplSettings& replSettings = ReplicationCoordinator::get(opCtx)->getSettings();
 
     OldClientContext ctx(opCtx, oplogCollectionName);
-    Collection* collection = ctx.db()->getCollection(opCtx, oplogCollectionName);
+    auto collection = ctx.db()->getCollection(opCtx, oplogCollectionName);
 
     if (collection) {
         if (replSettings.getOplogSizeBytes() != 0) {
@@ -1068,12 +1068,12 @@ Status applyOperation_inlock(OperationContext* opCtx,
 
     NamespaceString requestNss;
     Collection* collection = nullptr;
-    std::shared_ptr<Collection> uuidIndexedCollection;
+    std::shared_ptr<Collection> collectionSptr;
     if (fieldUI) {
         UUIDCatalog& catalog = UUIDCatalog::get(opCtx);
         auto uuid = uassertStatusOK(UUID::parse(fieldUI));
-        uuidIndexedCollection = catalog.lookupCollectionByUUID(uuid);
-        collection = uuidIndexedCollection.get();
+        collectionSptr = catalog.lookupCollectionByUUID(uuid);
+        collection = collectionSptr.get();
         uassert(ErrorCodes::NamespaceNotFound,
                 str::stream() << "Failed to apply operation due to missing collection (" << uuid
                               << "): " << redact(op.toString()),
@@ -1100,7 +1100,8 @@ Status applyOperation_inlock(OperationContext* opCtx,
                 dassert(opCtx->lockState()->isCollectionLockedForMode(ns, MODE_X), requestNss.ns());
             }
         }
-        collection = db->getCollection(opCtx, requestNss);
+        collectionSptr = db->getCollection(opCtx, requestNss);
+        collection = collectionSptr.get();
     }
 
     // The feature compatibility version in the server configuration collection must not change

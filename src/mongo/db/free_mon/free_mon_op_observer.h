@@ -77,7 +77,8 @@ public:
                              const boost::optional<BSONObj> o2MsgObj) final {}
 
     void onCreateCollection(OperationContext* opCtx,
-                            Collection::Uptr coll,
+                            // Collection::Uptr coll,
+                            Collection::Sptr coll,
                             const NamespaceString& collectionName,
                             const CollectionOptions& options,
                             const BSONObj& idIndex,

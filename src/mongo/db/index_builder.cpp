@@ -190,9 +190,9 @@ Status IndexBuilder::_build(OperationContext* opCtx,
                             Lock::DBLock* dbLock) const try {
     const NamespaceString ns(_index["ns"].String());
 
-    Collection* coll = db->getCollection(opCtx, ns);
+    std::shared_ptr<Collection> coll = db->getCollection(opCtx, ns);
     // Collections should not be implicitly created by the index builder.
-    fassert(40409, coll);
+    fassert(40409, coll.get());
 
     {
         stdx::lock_guard<Client> lk(*opCtx->getClient());
@@ -200,7 +200,7 @@ Status IndexBuilder::_build(OperationContext* opCtx,
         CurOp::get(opCtx)->setOpDescription_inlock(_index);
     }
 
-    MultiIndexBlock indexer(opCtx, coll);
+    MultiIndexBlock indexer(opCtx, coll.get());
     indexer.allowInterruption();
     if (allowBackgroundBuilding)
         indexer.allowBackgroundBuilding();
@@ -277,7 +277,7 @@ Status IndexBuilder::_build(OperationContext* opCtx,
             DatabaseHolder::getDatabaseHolder().getSptr(opCtx, ns.db());
 
         fassert(28553, reloadDb.get());
-        fassert(28554, reloadDb->getCollection(opCtx, ns));
+        fassert(28554, reloadDb->getCollection(opCtx, ns).get());
     }
 
     return Status::OK();

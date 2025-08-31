@@ -45,7 +45,8 @@ const ServiceContext::Decoration<UUIDCatalog> getCatalog =
 }  // namespace
 
 void UUIDCatalogObserver::onCreateCollection(OperationContext* opCtx,
-                                             Collection::Uptr coll,
+                                             //  Collection::Uptr coll,
+                                             Collection::Sptr coll,
                                              const NamespaceString& collectionName,
                                              const CollectionOptions& options,
                                              const BSONObj& idIndex,
@@ -128,7 +129,8 @@ UUIDCatalog& UUIDCatalog::get(OperationContext* opCtx) {
 }
 
 void UUIDCatalog::onCreateCollection(OperationContext* opCtx,
-                                     Collection::Uptr coll,
+                                     //  Collection::Uptr coll,
+                                     Collection::Sptr coll,
                                      CollectionUUID uuid) {
 
     stdx::lock_guard<stdx::recursive_mutex> lock(_catalogLock);
@@ -145,7 +147,8 @@ void UUIDCatalog::onDropCollection(OperationContext* opCtx, CollectionUUID uuid)
 }
 
 void UUIDCatalog::onRenameCollection(OperationContext* opCtx,
-                                     Collection::Uptr coll,
+                                     //  Collection::Uptr coll,
+                                     Collection::Sptr coll,
                                      CollectionUUID uuid) {
     invariant(coll);
     std::shared_ptr<Collection> oldColl = replaceUUIDCatalogEntry(uuid, std::move(coll));

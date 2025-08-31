@@ -61,7 +61,8 @@ Status dropCollection(OperationContext* opCtx,
     return writeConflictRetry(opCtx, "drop", collectionName.ns(), [&] {
         AutoGetDb autoDb(opCtx, dbname, MODE_X);
         Database* const db = autoDb.getDb();
-        Collection* coll = db ? db->getCollection(opCtx, collectionName, true) : nullptr;
+        std::shared_ptr<Collection> coll =
+            db ? db->getCollection(opCtx, collectionName, true) : nullptr;
         auto view =
             db && !coll ? db->getViewCatalog()->lookup(opCtx, collectionName.ns()) : nullptr;
 

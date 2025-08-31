@@ -158,7 +158,7 @@ Status verifySystemIndexes(OperationContext* opCtx) {
             return Status::OK();
         }
 
-        Collection* collection = autoDb.getDb()->getCollection(opCtx, systemUsers);
+        std::shared_ptr<Collection> collection = autoDb.getDb()->getCollection(opCtx, systemUsers);
         if (collection) {
             IndexCatalog* indexCatalog = collection->getIndexCatalog();
             invariant(indexCatalog);
@@ -180,7 +180,7 @@ Status verifySystemIndexes(OperationContext* opCtx) {
             if (indexes.empty()) {
                 try {
                     generateSystemIndexForExistingCollection(
-                        opCtx, collection, systemUsers, v3SystemUsersIndexSpec);
+                        opCtx, collection.get(), systemUsers, v3SystemUsersIndexSpec);
                 } catch (...) {
                     return exceptionToStatus();
                 }
@@ -198,7 +198,7 @@ Status verifySystemIndexes(OperationContext* opCtx) {
             if (indexes.empty()) {
                 try {
                     generateSystemIndexForExistingCollection(
-                        opCtx, collection, systemRoles, v3SystemRolesIndexSpec);
+                        opCtx, collection.get(), systemRoles, v3SystemRolesIndexSpec);
                 } catch (...) {
                     return exceptionToStatus();
                 }

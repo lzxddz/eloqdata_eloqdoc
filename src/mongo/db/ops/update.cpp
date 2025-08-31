@@ -64,7 +64,7 @@ UpdateResult update(OperationContext* opCtx, Database* db, const UpdateRequest& 
     invariant(!request.isExplain());
 
     const NamespaceString& nsString = request.getNamespaceString();
-    Collection* collection = db->getCollection(opCtx, nsString);
+    std::shared_ptr<Collection> collection = db->getCollection(opCtx, nsString);
 
     // The update stage does not create its own collection.  As such, if the update is
     // an upsert, create the collection that the update stage inserts into beforehand.
@@ -98,7 +98,8 @@ UpdateResult update(OperationContext* opCtx, Database* db, const UpdateRequest& 
     uassertStatusOK(parsedUpdate.parseRequest());
 
     OpDebug* const nullOpDebug = nullptr;
-    auto exec = uassertStatusOK(getExecutorUpdate(opCtx, nullOpDebug, collection, &parsedUpdate));
+    auto exec =
+        uassertStatusOK(getExecutorUpdate(opCtx, nullOpDebug, collection.get(), &parsedUpdate));
 
     uassertStatusOK(exec->executePlan());
 

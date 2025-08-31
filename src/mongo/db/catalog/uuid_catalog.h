@@ -70,7 +70,8 @@ public:
                              const BSONObj& msgObj,
                              const boost::optional<BSONObj> o2MsgObj) override {}
     void onCreateCollection(OperationContext* opCtx,
-                            Collection::Uptr coll,
+                            // Collection::Uptr coll,
+                            Collection::Sptr coll,
                             const NamespaceString& collectionName,
                             const CollectionOptions& options,
                             const BSONObj& idIndex,
@@ -140,7 +141,7 @@ public:
      * This function inserts the entry for uuid, coll into the UUID Collection. It is called by
      * the op observer when a collection is created.
      */
-    void onCreateCollection(OperationContext* opCtx, Collection::Uptr coll, CollectionUUID uuid);
+    void onCreateCollection(OperationContext* opCtx, Collection::Sptr coll, CollectionUUID uuid);
 
     /**
      * This function removes the entry for uuid from the UUID catalog. It is called by the op
@@ -153,7 +154,7 @@ public:
      * a new entry for uuid associated with the Collection coll. It is called by the op observer
      * when a collection is renamed.
      */
-    void onRenameCollection(OperationContext* opCtx, Collection::Uptr coll, CollectionUUID uuid);
+    void onRenameCollection(OperationContext* opCtx, Collection::Sptr coll, CollectionUUID uuid);
 
     /**
      * Implies onDropCollection for all collections in db, but is not transactional.

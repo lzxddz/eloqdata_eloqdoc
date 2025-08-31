@@ -106,7 +106,8 @@ Status restoreMissingFeatureCompatibilityVersionDocument(OperationContext* opCtx
             createCollection(opCtx, fcvNss.db().toString(), BSON("create" << fcvNss.coll())));
     }
 
-    Collection* fcvColl = db->getCollection(opCtx, NamespaceString::kServerConfigurationNamespace);
+    auto fcvCollSptr = db->getCollection(opCtx, NamespaceString::kServerConfigurationNamespace);
+    Collection* fcvColl = fcvCollSptr.get();
     invariant(fcvColl);
 
     // Restore the featureCompatibilityVersion document if it is missing.
@@ -237,7 +238,7 @@ bool hasReplSetConfigDoc(OperationContext* opCtx) {
 void checkForCappedOplog(OperationContext* opCtx, Database* db) {
     const NamespaceString oplogNss(NamespaceString::kRsOplogNamespace);
     invariant(opCtx->lockState()->isDbLockedForMode(oplogNss.db(), MODE_IS));
-    Collection* oplogCollection = db->getCollection(opCtx, oplogNss);
+    Collection* oplogCollection = db->getCollection(opCtx, oplogNss).get();
     if (oplogCollection && !oplogCollection->isCapped()) {
         severe() << "The oplog collection " << oplogNss
                  << " is not capped; a capped oplog is a requirement for replication to function.";
@@ -360,11 +361,11 @@ StatusWith<bool> repairDatabasesAndCheckVersion(OperationContext* opCtx) {
         // Database* db = DatabaseHolder::getDatabaseHolder().get(opCtx, fcvNSS.db());
         std::shared_ptr<Database> db =
             DatabaseHolder::getDatabaseHolder().getSptr(opCtx, fcvNSS.db());
-        Collection* versionColl;
+        std::shared_ptr<Collection> versionColl;
         BSONObj featureCompatibilityVersion;
         if (!db || !(versionColl = db->getCollection(opCtx, fcvNSS)) ||
             !Helpers::findOne(opCtx,
-                              versionColl,
+                              versionColl.get(),
                               BSON("_id" << FeatureCompatibilityVersionParser::kParameterName),
                               featureCompatibilityVersion)) {
             auto status = restoreMissingFeatureCompatibilityVersionDocument(opCtx, dbNames);
@@ -472,12 +473,12 @@ StatusWith<bool> repairDatabasesAndCheckVersion(OperationContext* opCtx) {
         // If the server configuration collection already contains a valid
         // featureCompatibilityVersion document, cache it in-memory as a server parameter.
         if (dbName == "admin") {
-            if (Collection* versionColl =
+            if (std::shared_ptr<Collection> versionColl =
                     db->getCollection(opCtx, NamespaceString::kServerConfigurationNamespace)) {
                 BSONObj featureCompatibilityVersion;
                 if (Helpers::findOne(
                         opCtx,
-                        versionColl,
+                        versionColl.get(),
                         BSON("_id" << FeatureCompatibilityVersionParser::kParameterName),
                         featureCompatibilityVersion)) {
                     auto swVersion =
@@ -530,9 +531,9 @@ StatusWith<bool> repairDatabasesAndCheckVersion(OperationContext* opCtx) {
         // Major versions match, check indexes
         const NamespaceString systemIndexes(db->name(), "system.indexes");
 
-        Collection* coll = db->getCollection(opCtx, systemIndexes);
+        std::shared_ptr<Collection> coll = db->getCollection(opCtx, systemIndexes);
         auto exec = InternalPlanner::collectionScan(
-            opCtx, systemIndexes.ns(), coll, PlanExecutor::NO_YIELD);
+            opCtx, systemIndexes.ns(), coll.get(), PlanExecutor::NO_YIELD);
 
         BSONObj index;
         PlanExecutor::ExecState state;
@@ -627,7 +628,7 @@ void checkForIdIndexesAndDropPendingCollections(OperationContext* opCtx, Databas
         if (ns.isSystem())
             continue;
 
-        Collection* coll = db->getCollection(opCtx, collectionName);
+        std::shared_ptr<Collection> coll = db->getCollection(opCtx, collectionName);
         if (!coll)
             continue;
 

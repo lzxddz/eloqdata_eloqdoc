@@ -431,8 +431,9 @@ void State::prepTempCollection() {
             options.temp = true;
             options.uuid.emplace(UUID::gen());
 
-            incColl = incCtx.db()->createCollection(
+            auto incCollSptr = incCtx.db()->createCollection(
                 _opCtx, _config.incLong.ns(), options, false /* force no _id index */);
+            incColl = incCollSptr.get();
             invariant(incColl);
 
             auto rawIndexSpec =
@@ -511,8 +512,9 @@ void State::prepTempCollection() {
         bool buildIdIndex = (options.autoIndexId == CollectionOptions::YES ||
                              options.autoIndexId == CollectionOptions::DEFAULT);
 
-        tempColl = tempCtx.db()->createCollection(
+        auto tempCollSptr = tempCtx.db()->createCollection(
             _opCtx, _config.tempNamespace.ns(), options, buildIdIndex);
+        tempColl = tempCollSptr.get();
 
         for (vector<BSONObj>::iterator it = indexesToInsert.begin(); it != indexesToInsert.end();
              ++it) {
@@ -634,7 +636,7 @@ namespace {
 unsigned long long _collectionCount(OperationContext* opCtx,
                                     const NamespaceString& nss,
                                     bool callerHoldsGlobalLock) {
-    Collection* coll = nullptr;
+    std::shared_ptr<Collection> coll = nullptr;
     boost::optional<AutoGetCollectionForReadCommand> ctx;
 
     // If the global write lock is held, we must avoid using AutoGetCollectionForReadCommand as it
@@ -646,7 +648,7 @@ unsigned long long _collectionCount(OperationContext* opCtx,
         }
     } else {
         ctx.emplace(opCtx, nss);
-        coll = ctx->getCollection();
+        coll = ctx->getCollectionSptr();
     }
 
     return coll ? coll->numRecords(opCtx) : 0;
@@ -1001,7 +1003,7 @@ Collection* State::getCollectionOrUassert(OperationContext* opCtx,
                                           Database* db,
                                           const NamespaceString& nss) {
     UninterruptibleLockGuard noInterrupt(opCtx->lockState());
-    Collection* out = db ? db->getCollection(opCtx, nss) : NULL;
+    Collection* out = db ? db->getCollection(opCtx, nss).get() : NULL;
     uassert(18697, "Collection unexpectedly disappeared: " + nss.ns(), out);
     return out;
 }
@@ -1601,7 +1603,7 @@ public:
                 // metrics. There is no harm adding here for the time being.
                 curOp->debug().setPlanSummaryMetrics(stats);
 
-                Collection* coll = scopedAutoDb->getDb()->getCollection(opCtx, config.nss);
+                auto coll = scopedAutoDb->getDb()->getCollection(opCtx, config.nss);
                 invariant(coll);  // 'exec' hasn't been killed, so collection must be alive.
                 coll->infoCache()->notifyOfQuery(opCtx, stats.indexesUsed);
 

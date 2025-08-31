@@ -117,7 +117,7 @@ void FeatureCompatibilityVersion::setIfCleanStartup(OperationContext* opCtx,
     // EloqDoc should discover table first.
     AutoGetOrCreateDb autoDb(opCtx, nss.db(), mongo::MODE_X);
     Database* db = autoDb.getDb();
-    Collection* collection = db->getCollection(opCtx, nss);
+    auto collection = db->getCollection(opCtx, nss);
     if (!collection) {
         uasserted(ErrorCodes::NamespaceNotFound,
                   str::stream() << "lock " << nss.toString() << " failed");

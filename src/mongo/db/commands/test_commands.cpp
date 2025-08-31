@@ -90,7 +90,7 @@ public:
 
         WriteUnitOfWork wunit(opCtx);
         UnreplicatedWritesBlock unreplicatedWritesBlock(opCtx);
-        Collection* collection = db->getCollection(opCtx, nss);
+        auto collection = db->getCollection(opCtx, nss);
         if (!collection) {
             collection = db->createCollection(opCtx, nss.ns());
             if (!collection) {

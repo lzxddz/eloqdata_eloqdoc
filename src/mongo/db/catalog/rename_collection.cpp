@@ -151,7 +151,8 @@ Status renameCollectionCommon(OperationContext* opCtx,
     if (sourceDB) {
         DatabaseShardingState::get(sourceDB.get()).checkDbVersion(opCtx);
     }
-    Collection* const sourceColl = sourceDB ? sourceDB->getCollection(opCtx, source) : nullptr;
+    std::shared_ptr<Collection> sourceColl =
+        sourceDB ? sourceDB->getCollection(opCtx, source) : nullptr;
     if (!sourceColl) {
         if (sourceDB && sourceDB->getViewCatalog()->lookup(opCtx, source.ns()))
             return Status(ErrorCodes::CommandNotSupportedOnView,
@@ -185,7 +186,7 @@ Status renameCollectionCommon(OperationContext* opCtx,
     // Check if the target namespace exists and if dropTarget is true.
     // Return a non-OK status if target exists and dropTarget is not true or if the collection
     // is sharded.
-    Collection* targetColl = targetDB->getCollection(opCtx, target);
+    std::shared_ptr<Collection> targetColl = targetDB->getCollection(opCtx, target);
     if (targetColl) {
         // If we already have the collection with the target UUID, we found our future selves,
         // so nothing left to do.
@@ -363,7 +364,8 @@ Status renameCollectionCommon(OperationContext* opCtx,
         return status;
     }
 
-    Collection* tmpColl = nullptr;
+    // Collection* tmpColl = nullptr;
+    std::shared_ptr<Collection> tmpColl;
     OptionalCollectionUUID newUUID;
     {
         auto collectionOptions = sourceColl->getCatalogEntry()->getCollectionOptions(opCtx);
@@ -406,7 +408,7 @@ Status renameCollectionCommon(OperationContext* opCtx,
 
     // Copy the index descriptions from the source collection, adjusting the ns field.
     {
-        MultiIndexBlock indexer(opCtx, tmpColl);
+        MultiIndexBlock indexer(opCtx, tmpColl.get());
         indexer.allowInterruption();
 
         std::vector<BSONObj> indexesToCopy;

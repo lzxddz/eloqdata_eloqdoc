@@ -175,7 +175,7 @@ public:
             if (collNss.isDropPendingNamespace())
                 continue;
 
-            if (Collection* collection = db->getCollection(opCtx, collectionName)) {
+            if (auto collection = db->getCollection(opCtx, collectionName)) {
                 if (collection->isCapped()) {
                     cappedCollections.append(collNss.coll());
                 }
@@ -213,7 +213,7 @@ private:
 
         NamespaceString ns(fullCollectionName);
 
-        Collection* collection = db->getCollection(opCtx, ns);
+        auto collection = db->getCollection(opCtx, ns);
         if (!collection)
             return "";
 
@@ -249,7 +249,7 @@ private:
         std::unique_ptr<PlanExecutor, PlanExecutor::Deleter> exec;
         if (desc) {
             exec = InternalPlanner::indexScan(opCtx,
-                                              collection,
+                                              collection.get(),
                                               desc,
                                               BSONObj(),
                                               BSONObj(),
@@ -259,7 +259,7 @@ private:
                                               InternalPlanner::IXSCAN_FETCH);
         } else if (collection->isCapped()) {
             exec = InternalPlanner::collectionScan(
-                opCtx, fullCollectionName, collection, PlanExecutor::NO_YIELD);
+                opCtx, fullCollectionName, collection.get(), PlanExecutor::NO_YIELD);
         } else {
             log() << "can't find _id index for: " << fullCollectionName;
             return "no _id _index";

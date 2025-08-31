@@ -209,7 +209,7 @@ Value DocumentSourceCursor::serialize(boost::optional<ExplainOptions::Verbosity>
             dbLock.getDb() ? dbLock.getDb()->getCollection(opCtx, _exec->nss()) : nullptr;
 
         Explain::explainStages(_exec.get(),
-                               collection,
+                               collection.get(),
                                verbosity.get(),
                                _execStatus,
                                _winningPlanTrialStats.get(),

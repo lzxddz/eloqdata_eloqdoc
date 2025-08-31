@@ -182,11 +182,12 @@ public:
 
     Status dropView(OperationContext* opCtx, StringData fullns) final;
 
-    Collection* createCollection(OperationContext* opCtx,
-                                 StringData ns,
-                                 const CollectionOptions& options = CollectionOptions(),
-                                 bool createDefaultIndexes = true,
-                                 const BSONObj& idIndex = BSONObj()) final;
+    std::shared_ptr<Collection> createCollection(
+        OperationContext* opCtx,
+        StringData ns,
+        const CollectionOptions& options = CollectionOptions(),
+        bool createDefaultIndexes = true,
+        const BSONObj& idIndex = BSONObj()) final;
 
     Status createView(OperationContext* opCtx,
                       StringData viewName,
@@ -195,11 +196,17 @@ public:
     /**
      * @param ns - this is fully qualified, which is maybe not ideal ???
      */
-    Collection* getCollection(OperationContext* opCtx, StringData ns, bool isForWrite) final;
+    // Collection* getCollection(OperationContext* opCtx, StringData ns, bool isForWrite) final;
+    std::shared_ptr<Collection> getCollection(OperationContext* opCtx,
+                                              StringData ns,
+                                              bool isForWrite) final;
 
-    Collection* getCollection(OperationContext* opCtx,
-                              const NamespaceString& ns,
-                              bool isForWrite) override;
+    // Collection* getCollection(OperationContext* opCtx,
+    //                           const NamespaceString& ns,
+    //                           bool isForWrite) override;
+    std::shared_ptr<Collection> getCollection(OperationContext* opCtx,
+                                              const NamespaceString& ns,
+                                              bool isForWrite) override;
 
     /**
      * Get the view catalog, which holds the definition for all views created on this database. You
@@ -209,7 +216,8 @@ public:
         return &_views;
     }
 
-    Collection* getOrCreateCollection(OperationContext* opCtx, const NamespaceString& nss) final;
+    std::shared_ptr<Collection> getOrCreateCollection(OperationContext* opCtx,
+                                                      const NamespaceString& nss) final;
 
     Status renameCollection(OperationContext* opCtx,
                             StringData fromNS,
@@ -261,13 +269,14 @@ private:
      * Note: This does not add the collection to _collections map, that must be done
      * by the caller, who takes onership of the Collection*
      */
-    Collection* _getOrCreateCollectionInstance(OperationContext* opCtx, const NamespaceString& nss);
+    std::shared_ptr<Collection> _getOrCreateCollectionInstance(OperationContext* opCtx,
+                                                               const NamespaceString& nss);
 
-    Collection* _createCollectionHandler(OperationContext* opCtx,
-                                         const NamespaceString& nss,
-                                         bool createIdIndex,
-                                         const BSONObj& idIndexSpec = BSONObj{},
-                                         bool forView = false);
+    std::shared_ptr<Collection> _createCollectionHandler(OperationContext* opCtx,
+                                                         const NamespaceString& nss,
+                                                         bool createIdIndex,
+                                                         const BSONObj& idIndexSpec = BSONObj{},
+                                                         bool forView = false);
 
     /**
      * Throws if there is a reason 'ns' cannot be created as a user collection.

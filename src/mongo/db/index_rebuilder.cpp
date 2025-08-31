@@ -67,8 +67,8 @@ void checkNS(OperationContext* opCtx, const std::vector<std::string>& nsToCheck)
         Lock::DBLock lk(opCtx, nss.db(), MODE_X);
         OldClientContext ctx(opCtx, nss.ns());
 
-        Collection* collection = ctx.db()->getCollection(opCtx, nss);
-        if (collection == NULL)
+        std::shared_ptr<Collection> collection = ctx.db()->getCollection(opCtx, nss);
+        if (collection.get() == NULL)
             continue;
 
         IndexCatalog* indexCatalog = collection->getIndexCatalog();
@@ -80,7 +80,7 @@ void checkNS(OperationContext* opCtx, const std::vector<std::string>& nsToCheck)
         }
 
 
-        MultiIndexBlock indexer(opCtx, collection);
+        MultiIndexBlock indexer(opCtx, collection.get());
 
         {
             WriteUnitOfWork wunit(opCtx);

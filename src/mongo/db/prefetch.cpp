@@ -167,7 +167,7 @@ void prefetchPagesForReplicatedOp(OperationContext* opCtx,
     const auto& nss = oplogEntry.getNamespace();
     Lock::CollectionLock collLock(opCtx->lockState(), nss.ns(), MODE_S);
 
-    Collection* collection = db->getCollection(opCtx, nss);
+    std::shared_ptr<Collection> collection = db->getCollection(opCtx, nss);
     if (!collection) {
         return;
     }
@@ -192,7 +192,7 @@ void prefetchPagesForReplicatedOp(OperationContext* opCtx,
     //
     auto obj = oplogEntry.getOperationToApply();
     invariant(!obj.isEmpty());
-    prefetchIndexPages(opCtx, collection, prefetchConfig, obj);
+    prefetchIndexPages(opCtx, collection.get(), prefetchConfig, obj);
 
     // do not prefetch the data for inserts; it doesn't exist yet
     //

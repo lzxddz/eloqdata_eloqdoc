@@ -158,7 +158,8 @@ private:
  */
 class Collection final : CappedCallback, UpdateNotifier {
 public:
-    using Uptr = std::unique_ptr<Collection>;
+    // using Uptr = std::unique_ptr<Collection>;
+    using Sptr = std::shared_ptr<Collection>;
 
     enum ValidationAction { WARN, ERROR_V };
     enum ValidationLevel { OFF, MODERATE, STRICT_V };
@@ -383,8 +384,12 @@ public:
 
     inline ~Collection() = default;
 
-    inline Collection::Uptr clone(OperationContext* const opCtx) {
-        return std::make_unique<Collection>(
+    // inline Collection::Uptr clone(OperationContext* const opCtx) {
+    //     return std::make_unique<Collection>(
+    //         opCtx, ns().toStringData(), uuid(), detailsSptr(), getRecordStore(), dbce());
+    // }
+    inline Collection::Sptr clone(OperationContext* const opCtx) {
+        return std::make_shared<Collection>(
             opCtx, ns().toStringData(), uuid(), detailsSptr(), getRecordStore(), dbce());
     }
 

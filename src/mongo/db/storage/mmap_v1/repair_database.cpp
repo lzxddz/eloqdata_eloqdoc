@@ -344,7 +344,7 @@ Status MMAPV1Engine::repairDatabase(OperationContext* opCtx,
         {
             NamespaceString nss(dbName, "system.namespaces");
             OldClientContext ctx(opCtx, nss.ns());
-            Collection* coll = originalDatabase->getCollection(opCtx, nss);
+            auto coll = originalDatabase->getCollection(opCtx, nss);
             if (coll) {
                 auto cursor = coll->getCursor(opCtx);
                 while (auto record = cursor->next()) {
@@ -382,7 +382,7 @@ Status MMAPV1Engine::repairDatabase(OperationContext* opCtx,
             NamespaceString nss(ns);
             CollectionOptions options = i->second;
 
-            Collection* tempCollection = NULL;
+            std::shared_ptr<Collection> tempCollection = NULL;
             {
                 WriteUnitOfWork wunit(opCtx);
                 if (options.uuid) {
@@ -393,13 +393,13 @@ Status MMAPV1Engine::repairDatabase(OperationContext* opCtx,
             }
 
             OldClientContext readContext(opCtx, ns, originalDatabase.get());
-            Collection* originalCollection = originalDatabase->getCollection(opCtx, nss);
+            auto originalCollection = originalDatabase->getCollection(opCtx, nss);
             invariant(originalCollection);
 
             // data
 
             // TODO SERVER-14812 add a mode that drops duplicates rather than failing
-            MultiIndexBlock indexer(opCtx, tempCollection);
+            MultiIndexBlock indexer(opCtx, tempCollection.get());
             {
                 vector<BSONObj> indexes;
                 IndexCatalog::IndexIterator ii =

@@ -96,6 +96,10 @@ public:
         return _autoColl->getCollection();
     }
 
+    std::shared_ptr<Collection> getCollectionSptr() const {
+        return _autoColl->getCollectionSptr();
+    }
+
     ViewDefinition* getView() const {
         return _autoColl->getView();
     }
@@ -149,6 +153,10 @@ public:
 
     Collection* getCollection() const {
         return _autoCollForRead.getCollection();
+    }
+
+    std::shared_ptr<Collection> getCollectionSptr() const {
+        return _autoCollForRead.getCollectionSptr();
     }
 
     ViewDefinition* getView() const {
@@ -228,7 +236,7 @@ public:
     }
 
     Collection* getCollection() const {
-        return db()->getCollection(_opCtx, _nss);
+        return db()->getCollection(_opCtx, _nss).get();
     }
 
 private:

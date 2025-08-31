@@ -159,7 +159,8 @@ struct Cloner::Fun {
             DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, _dbName);
 
         bool createdCollection = false;
-        Collection* collection = NULL;
+        // Collection* collection = NULL;
+        std::shared_ptr<Collection> collection;
 
         collection = db->getCollection(opCtx, to_collection);
         if (!collection) {
@@ -379,7 +380,7 @@ void Cloner::copyIndexes(OperationContext* opCtx,
     // Database* db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, toDBName);
     std::shared_ptr<Database> db = DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, toDBName);
 
-    Collection* collection = db->getCollection(opCtx, to_collection);
+    std::shared_ptr<Collection> collection = db->getCollection(opCtx, to_collection);
     if (!collection) {
         writeConflictRetry(opCtx, "createCollection", to_collection.ns(), [&] {
             opCtx->checkForInterrupt();
@@ -408,7 +409,7 @@ void Cloner::copyIndexes(OperationContext* opCtx,
     // from creation to completion without yielding to ensure the index and the collection
     // matches. It also wouldn't work on non-empty collections so we would need both
     // implementations anyway as long as that is supported.
-    MultiIndexBlock indexer(opCtx, collection);
+    MultiIndexBlock indexer(opCtx, collection.get());
     indexer.allowInterruption();
 
     indexer.removeExistingIndexes(&indexesToBuild);
@@ -599,7 +600,7 @@ Status Cloner::createCollectionsForDb(
                 opCtx->checkForInterrupt();
                 WriteUnitOfWork wunit(opCtx);
 
-                Collection* collection = db->getCollection(opCtx, nss.ns());
+                std::shared_ptr<Collection> collection = db->getCollection(opCtx, nss.ns());
                 if (collection) {
                     if (!params.shardedColl) {
                         // If the collection is unsharded then we want to fail when a collection

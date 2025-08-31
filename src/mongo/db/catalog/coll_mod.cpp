@@ -303,7 +303,7 @@ Status _collModInternal(OperationContext* opCtx,
     StringData dbName = nss.db();
     AutoGetDb autoDb(opCtx, dbName, MODE_X);
     Database* const db = autoDb.getDb();
-    Collection* coll = db ? db->getCollection(opCtx, nss) : nullptr;
+    std::shared_ptr<Collection> coll = db ? db->getCollection(opCtx, nss) : nullptr;
 
     // May also modify a view instead of a collection.
     boost::optional<ViewDefinition> view;
@@ -337,7 +337,7 @@ Status _collModInternal(OperationContext* opCtx,
     }
 
     BSONObjBuilder oplogEntryBuilder;
-    auto statusW = parseCollModRequest(opCtx, nss, coll, cmdObj, &oplogEntryBuilder);
+    auto statusW = parseCollModRequest(opCtx, nss, coll.get(), cmdObj, &oplogEntryBuilder);
     if (!statusW.isOK()) {
         return statusW.getStatus();
     }
@@ -417,11 +417,11 @@ Status _collModInternal(OperationContext* opCtx,
 
     // UsePowerof2Sizes
     if (!cmr.usePowerOf2Sizes.eoo())
-        setCollectionOptionFlag(opCtx, coll, cmr.usePowerOf2Sizes, result);
+        setCollectionOptionFlag(opCtx, coll.get(), cmr.usePowerOf2Sizes, result);
 
     // NoPadding
     if (!cmr.noPadding.eoo())
-        setCollectionOptionFlag(opCtx, coll, cmr.noPadding, result);
+        setCollectionOptionFlag(opCtx, coll.get(), cmr.noPadding, result);
 
     // Upgrade unique indexes
     if (upgradeUniqueIndexes) {
@@ -504,7 +504,7 @@ void _addCollectionUUIDsPerDatabase(OperationContext* opCtx,
 
         AutoGetDb autoDb(opCtx, dbname, MODE_X);
         Database* const db = autoDb.getDb();
-        Collection* coll = db ? db->getCollection(opCtx, collNSS) : nullptr;
+        std::shared_ptr<Collection> coll = db ? db->getCollection(opCtx, collNSS) : nullptr;
         // If the collection no longer exists, skip it.
         if (!coll) {
             continue;
@@ -680,12 +680,12 @@ Status _updateNonReplicatedUniqueIndexesPerDatabase(OperationContext* opCtx,
     } else {
         // If we're not in the "local" database, the only non-replicated collection
         // could be system.profile.
-        Collection* coll =
+        std::shared_ptr<Collection> coll =
             db ? db->getCollection(opCtx, NamespaceString(dbName, "system.profile")) : nullptr;
         if (!coll)
             return Status::OK();
 
-        auto collModStatus = _updateNonReplicatedIndexPerCollection(opCtx, coll);
+        auto collModStatus = _updateNonReplicatedIndexPerCollection(opCtx, coll.get());
         if (!collModStatus.isOK())
             return collModStatus;
     }

@@ -146,7 +146,8 @@ public:
         AutoGetDb autoDb(opCtx, db, MODE_X);
         Database* const collDB = autoDb.getDb();
 
-        Collection* collection = collDB ? collDB->getCollection(opCtx, nss) : nullptr;
+        std::shared_ptr<Collection> collection =
+            collDB ? collDB->getCollection(opCtx, nss) : nullptr;
         auto view =
             collDB && !collection ? collDB->getViewCatalog()->lookup(opCtx, nss.ns()) : nullptr;
 

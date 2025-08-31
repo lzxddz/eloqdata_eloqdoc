@@ -413,7 +413,7 @@ public:
      * Assigns a new UUID to this collection. All collections must have UUIDs, so this is called if
      * a collection erroneously does not have a UUID.
      */
-    virtual void addUUID(OperationContext* opCtx, CollectionUUID uuid, Collection::Uptr coll) = 0;
+    virtual void addUUID(OperationContext* opCtx, CollectionUUID uuid, Collection::Sptr coll) = 0;
 
     /**
      * Compare the UUID argument to the UUID obtained from the metadata. Return true if they

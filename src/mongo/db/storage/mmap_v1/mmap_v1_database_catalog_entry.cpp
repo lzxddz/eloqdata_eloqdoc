@@ -410,7 +410,7 @@ void MMAPV1DatabaseCatalogEntry::invalidateSystemCollectionRecord(
     invariant(opCtx->lockState()->isDbLockedForMode(dbName, MODE_X));
     // Database* db = DatabaseHolder::getDatabaseHolder().get(opCtx, dbName);
     std::shared_ptr<Database> db = DatabaseHolder::getDatabaseHolder().getSptr(opCtx, dbName);
-    Collection* systemCollection = db->getCollection(opCtx, systemCollectionNamespace);
+    auto systemCollection = db->getCollection(opCtx, systemCollectionNamespace);
     systemCollection->getCursorManager()->invalidateDocument(opCtx, record, INVALIDATION_DELETION);
 }
 

@@ -209,7 +209,7 @@ void openCatalog(OperationContext* opCtx, const MinVisibleTimestampMap& minVisib
             // to the oplog.
             if (collNss.isOplog()) {
                 log() << "openCatalog: updating cached oplog pointer";
-                repl::establishOplogCollectionForLogging(opCtx, collection);
+                repl::establishOplogCollectionForLogging(opCtx, collection.get());
             }
         }
     }

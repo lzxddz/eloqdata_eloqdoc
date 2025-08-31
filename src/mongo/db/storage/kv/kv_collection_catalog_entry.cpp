@@ -281,7 +281,8 @@ void KVCollectionCatalogEntry::updateIndexMetadata(OperationContext* opCtx,
 }
 void KVCollectionCatalogEntry::addUUID(OperationContext* opCtx,
                                        CollectionUUID uuid,
-                                       Collection::Uptr coll) {
+                                       //    Collection::Uptr coll
+                                       Collection::Sptr coll) {
     // Add a UUID to CollectionOptions if a UUID does not yet exist.
     MetaData md = _getMetaData(opCtx);
     if (!md.options.uuid) {

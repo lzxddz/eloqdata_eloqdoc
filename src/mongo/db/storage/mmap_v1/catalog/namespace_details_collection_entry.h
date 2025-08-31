@@ -104,7 +104,7 @@ public:
 
     void updateFlags(OperationContext* opCtx, int newValue) final;
 
-    void addUUID(OperationContext* opCtx, CollectionUUID uuid, Collection::Uptr coll) final;
+    void addUUID(OperationContext* opCtx, CollectionUUID uuid, Collection::Sptr coll) final;
 
     bool isEqualToMetadataUUID(OperationContext* opCtx, OptionalCollectionUUID uuid);
 

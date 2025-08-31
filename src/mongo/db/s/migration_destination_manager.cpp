@@ -590,7 +590,7 @@ void MigrationDestinationManager::cloneCollectionIndexesAndOptions(OperationCont
 
         Database* const db = autoCreateDb.getDb();
 
-        Collection* collection = db->getCollection(opCtx, nss);
+        auto collection = db->getCollection(opCtx, nss);
         if (collection) {
             // We have an entry for a collection by this name. Check that our collection's UUID
             // matches the donor's.
@@ -626,7 +626,7 @@ void MigrationDestinationManager::cloneCollectionIndexesAndOptions(OperationCont
             collection = db->getCollection(opCtx, nss);
         }
 
-        MultiIndexBlock indexer(opCtx, collection);
+        MultiIndexBlock indexer(opCtx, collection.get());
         indexer.removeExistingIndexes(&donorIndexSpecs);
 
         if (!donorIndexSpecs.empty()) {

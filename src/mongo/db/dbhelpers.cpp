@@ -151,7 +151,7 @@ bool Helpers::findById(OperationContext* opCtx,
                        bool* indexFound) {
     invariant(database);
 
-    Collection* collection = database->getCollection(opCtx, ns);
+    auto collection = database->getCollection(opCtx, ns);
     if (!collection) {
         return false;
     }
@@ -279,8 +279,9 @@ BSONObj Helpers::inferKeyPattern(const BSONObj& o) {
 void Helpers::emptyCollection(OperationContext* opCtx, const NamespaceString& nss) {
     OldClientContext context(opCtx, nss.ns());
     repl::UnreplicatedWritesBlock uwb(opCtx);
-    Collection* collection = context.db() ? context.db()->getCollection(opCtx, nss) : nullptr;
-    deleteObjects(opCtx, collection, nss, BSONObj(), false);
+    std::shared_ptr<Collection> collection =
+        context.db() ? context.db()->getCollection(opCtx, nss) : nullptr;
+    deleteObjects(opCtx, collection.get(), nss, BSONObj(), false);
 }
 
 Helpers::RemoveSaver::RemoveSaver(const string& a, const string& b, const string& why) {

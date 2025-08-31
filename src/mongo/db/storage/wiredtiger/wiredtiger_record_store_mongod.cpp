@@ -105,7 +105,7 @@ public:
                 // We need to hold the database lock while getting the collection. Otherwise a
                 // concurrent collection creation would write to the map in the Database object
                 // while we concurrently read the map.
-                Collection* collection = db->getCollection(opCtx.get(), _ns);
+                auto collection = db->getCollection(opCtx.get(), _ns);
                 if (!collection) {
                     LOG(2) << "no collection " << _ns;
                     return false;

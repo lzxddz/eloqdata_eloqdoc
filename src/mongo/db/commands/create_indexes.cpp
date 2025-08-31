@@ -327,7 +327,7 @@ public:
         }
         DatabaseShardingState::get(db.get()).checkDbVersion(opCtx);
 
-        Collection* collection = db->getCollection(opCtx, ns, true);
+        std::shared_ptr<Collection> collection = db->getCollection(opCtx, ns, true);
         if (collection) {
             result.appendBool("createdCollectionAutomatically", false);
         } else {
@@ -348,12 +348,12 @@ public:
             result.appendBool("createdCollectionAutomatically", true);
         }
 
-        MultiIndexBlock indexer(opCtx, collection);
+        MultiIndexBlock indexer(opCtx, collection.get());
         indexer.allowBackgroundBuilding();
         indexer.allowInterruption();
 
         const size_t origSpecsSize = specs.size();
-        specs = resolveDefaultsAndRemoveExistingIndexes(opCtx, collection, std::move(specs));
+        specs = resolveDefaultsAndRemoveExistingIndexes(opCtx, collection.get(), std::move(specs));
 
         const int numIndexesBefore = collection->getIndexCatalog()->numIndexesTotal(opCtx);
         if (specs.size() == 0) {

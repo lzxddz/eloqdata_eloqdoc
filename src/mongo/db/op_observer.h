@@ -146,7 +146,8 @@ public:
     }
 
     virtual void onCreateCollection(OperationContext* opCtx,
-                                    Collection::Uptr coll,
+                                    // Collection::Uptr coll,
+                                    Collection::Sptr coll,
                                     const NamespaceString& collectionName,
                                     const CollectionOptions& options,
                                     const BSONObj& idIndex,

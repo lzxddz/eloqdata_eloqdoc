@@ -59,8 +59,10 @@ namespace mongo {
 class Database : public Decorable<Database> {
 public:
     // Used for range-based loop only
-    using CollectionMapView = std::map<std::string, Collection::Uptr>;
-    using CollectionMap = std::map<std::string, Collection::Uptr, std::less<void>>;
+    using CollectionMapView = std::map<std::string, Collection::Sptr>;
+    // using CollectionMap = std::map<std::string, Collection::Uptr, std::less<void>>;
+    using CollectionMap = std::map<std::string, Collection::Sptr, std::less<void>>;
+
 
     class Impl {
     public:
@@ -97,26 +99,40 @@ public:
 
         virtual Status dropView(OperationContext* opCtx, StringData fullns) = 0;
 
-        virtual Collection* createCollection(OperationContext* opCtx,
-                                             StringData ns,
-                                             const CollectionOptions& options,
-                                             bool createDefaultIndexes,
-                                             const BSONObj& idIndex) = 0;
+        // virtual Collection* createCollection(OperationContext* opCtx,
+        //                                      StringData ns,
+        //                                      const CollectionOptions& options,
+        //                                      bool createDefaultIndexes,
+        //                                      const BSONObj& idIndex) = 0;
+        virtual std::shared_ptr<Collection> createCollection(OperationContext* opCtx,
+                                                             StringData ns,
+                                                             const CollectionOptions& options,
+                                                             bool createDefaultIndexes,
+                                                             const BSONObj& idIndex) = 0;
 
         virtual Status createView(OperationContext* opCtx,
                                   StringData viewName,
                                   const CollectionOptions& options) = 0;
 
-        virtual Collection* getCollection(OperationContext* opCtx,
-                                          StringData ns,
-                                          bool isForWrite) = 0;
-        virtual Collection* getCollection(OperationContext* opCtx,
-                                          const NamespaceString& nss,
-                                          bool isForWrite) = 0;
+        // virtual Collection* getCollection(OperationContext* opCtx,
+        //                                   StringData ns,
+        //                                   bool isForWrite) = 0;
+        virtual std::shared_ptr<Collection> getCollection(OperationContext* opCtx,
+                                                          StringData ns,
+                                                          bool isForWrite) = 0;
+        // virtual Collection* getCollection(OperationContext* opCtx,
+        //                                   const NamespaceString& nss,
+        //                                   bool isForWrite) = 0;
+        virtual std::shared_ptr<Collection> getCollection(OperationContext* opCtx,
+                                                          const NamespaceString& nss,
+                                                          bool isForWrite) = 0;
+
         virtual ViewCatalog* getViewCatalog() = 0;
 
-        virtual Collection* getOrCreateCollection(OperationContext* opCtx,
-                                                  const NamespaceString& nss) = 0;
+        // virtual Collection* getOrCreateCollection(OperationContext* opCtx,
+        //                                           const NamespaceString& nss) = 0;
+        virtual std::shared_ptr<Collection> getOrCreateCollection(OperationContext* opCtx,
+                                                                  const NamespaceString& nss) = 0;
 
         virtual Status renameCollection(OperationContext* opCtx,
                                         StringData fromNS,
@@ -327,13 +343,24 @@ public:
         return this->_impl().dropView(opCtx, fullns);
     }
 
-    inline Collection* createCollection(OperationContext* const opCtx,
-                                        StringData ns,
-                                        const CollectionOptions& options = CollectionOptions(),
-                                        const bool createDefaultIndexes = true,
-                                        const BSONObj& idIndex = BSONObj()) {
-        assert(false) return this->_impl().createCollection(
-            opCtx, ns, options, createDefaultIndexes, idIndex);
+    // inline Collection* createCollection(OperationContext* const opCtx,
+    //                                     StringData ns,
+    //                                     const CollectionOptions& options = CollectionOptions(),
+    //                                     const bool createDefaultIndexes = true,
+    //                                     const BSONObj& idIndex = BSONObj()) {
+    //     assert(false);
+    //     return this->_impl()
+    //         .createCollection(opCtx, ns, options, createDefaultIndexes, idIndex)
+    //         .get();
+    // }
+
+    inline std::shared_ptr<Collection> createCollection(
+        OperationContext* const opCtx,
+        StringData ns,
+        const CollectionOptions& options = CollectionOptions(),
+        const bool createDefaultIndexes = true,
+        const BSONObj& idIndex = BSONObj()) {
+        return this->_impl().createCollection(opCtx, ns, options, createDefaultIndexes, idIndex);
     }
 
     inline Status createView(OperationContext* const opCtx,
@@ -345,15 +372,28 @@ public:
     /**
      * @param ns - this is fully qualified, which is maybe not ideal ???
      */
-    inline Collection* getCollection(OperationContext* opCtx,
-                                     const StringData ns,
-                                     bool isForWrite = false) {
+    // inline Collection* getCollection(OperationContext* opCtx,
+    //                                  const StringData ns,
+    //                                  bool isForWrite = false) {
+    //     assert(false);
+    //     return this->_impl().getCollection(opCtx, ns, isForWrite).get();
+    // }
+    inline std::shared_ptr<Collection> getCollection(OperationContext* opCtx,
+                                                     const StringData ns,
+                                                     bool isForWrite = false) {
         return this->_impl().getCollection(opCtx, ns, isForWrite);
     }
 
-    inline Collection* getCollection(OperationContext* opCtx,
-                                     const NamespaceString& ns,
-                                     bool isForWrite = false) {
+    // inline Collection* getCollection(OperationContext* opCtx,
+    //                                  const NamespaceString& ns,
+    //                                  bool isForWrite = false) {
+    //     assert(false);
+    //     return this->_impl().getCollection(opCtx, ns, isForWrite).get();
+    // }
+
+    inline std::shared_ptr<Collection> getCollection(OperationContext* opCtx,
+                                                     const NamespaceString& ns,
+                                                     bool isForWrite = false) {
         return this->_impl().getCollection(opCtx, ns, isForWrite);
     }
 
@@ -365,8 +405,14 @@ public:
         return this->_impl().getViewCatalog();
     }
 
-    inline Collection* getOrCreateCollection(OperationContext* const opCtx,
-                                             const NamespaceString& nss) {
+    // inline Collection* getOrCreateCollection(OperationContext* const opCtx,
+    //                                          const NamespaceString& nss) {
+    //     assert(false);
+    //     return this->_impl().getOrCreateCollection(opCtx, nss).get();
+    // }
+
+    inline std::shared_ptr<Collection> getOrCreateCollection(OperationContext* const opCtx,
+                                                             const NamespaceString& nss) {
         return this->_impl().getOrCreateCollection(opCtx, nss);
     }
 

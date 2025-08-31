@@ -516,7 +516,7 @@ Status IndexConsistency::_throwExceptionIfError() {
                       "The database was dropped during background validation");
     }
 
-    Collection* collection = database->getCollection(_opCtx, _nss);
+    auto collection = database->getCollection(_opCtx, _nss);
 
     // Ensure the collection still exists.
     if (!collection) {

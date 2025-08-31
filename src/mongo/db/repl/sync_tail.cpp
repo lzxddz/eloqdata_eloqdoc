@@ -1202,8 +1202,8 @@ bool SyncTail::fetchAndInsertMissingDocument(OperationContext* opCtx,
 
         WriteUnitOfWork wunit(opCtx);
 
-        Collection* coll = nullptr;
-        std::shared_ptr<Collection> uuidIndexedColl;
+        std::shared_ptr<Collection> coll = nullptr;
+        // std::shared_ptr<Collection> uuidIndexedColl;
         auto uuid = oplogEntry.getUuid();
         if (!uuid) {
             if (!db) {
@@ -1214,8 +1214,8 @@ bool SyncTail::fetchAndInsertMissingDocument(OperationContext* opCtx,
             // If the oplog entry has a UUID, use it to find the collection in which to insert the
             // missing document.
             auto& catalog = UUIDCatalog::get(opCtx);
-            uuidIndexedColl = catalog.lookupCollectionByUUID(*uuid);
-            coll = uuidIndexedColl.get();
+            coll = catalog.lookupCollectionByUUID(*uuid);
+            // coll = uuidIndexedColl.get();
             if (!coll) {
                 // TODO(SERVER-30819) insert this UUID into the missing UUIDs set.
                 return false;

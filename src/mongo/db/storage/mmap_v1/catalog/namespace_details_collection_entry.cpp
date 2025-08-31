@@ -436,7 +436,8 @@ void NamespaceDetailsCollectionCatalogEntry::updateFlags(OperationContext* opCtx
 
 void NamespaceDetailsCollectionCatalogEntry::addUUID(OperationContext* opCtx,
                                                      CollectionUUID uuid,
-                                                     Collection::Uptr coll) {
+                                                     //  Collection::Uptr coll
+                                                     Collection::Sptr coll) {
     // Add a UUID to CollectionOptions if a UUID does not yet exist.
     if (ns().coll() == "system.namespaces") {
         return;
