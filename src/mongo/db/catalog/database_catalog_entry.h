@@ -111,11 +111,6 @@ public:
         MONGO_UNREACHABLE;
         return nullptr;
     };
-    virtual std::shared_ptr<CollectionCatalogEntry> getCollectionCatalogEntrySptr(
-        StringData ns) const {
-        MONGO_UNREACHABLE;
-        return nullptr;
-    };
 
     // The DatabaseCatalogEntry owns this, do not delete
     virtual RecordStore* getRecordStore(StringData ns) const = 0;
