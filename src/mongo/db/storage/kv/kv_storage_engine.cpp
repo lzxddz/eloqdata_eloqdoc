@@ -541,29 +541,8 @@ void KVStorageEngine::listCollections(std::string_view dbName, std::set<std::str
     _engine->listCollections(dbName, out);
 }
 
-KVDatabaseCatalogEntryBase* KVStorageEngine::getDatabaseCatalogEntry(OperationContext* opCtx,
-                                                                     StringData dbName) {
-    assert(false);
-    // stdx::lock_guard<stdx::mutex> lk(_dbsLock);
-    auto id = static_cast<int16_t>(localThreadId + 1);
-    auto& dbMap = _dbMapVector[id];
-    if (auto iter = dbMap.find(dbName); iter == dbMap.end()) {
-        auto [newIter, _] =
-            dbMap.try_emplace(dbName.toString(), _databaseCatalogEntryFactory(dbName, this));
-        return newIter->second.get();
-    } else {
-        return iter->second.get();
-    }
 
-    // KVDatabaseCatalogEntryBase*& db = _dbs[dbName.toString()];
-    // if (!db) {
-    //     // Not registering change since db creation is implicit and never rolled back.
-    //     db = _databaseCatalogEntryFactory(dbName, this).release();
-    // }
-    // return db;
-}
-
-std::shared_ptr<DatabaseCatalogEntry> KVStorageEngine::getDatabaseCatalogEntrySptr(
+std::shared_ptr<DatabaseCatalogEntry> KVStorageEngine::getDatabaseCatalogEntry(
     OperationContext* opCtx, StringData dbName) {
     // stdx::lock_guard<stdx::mutex> lk(_dbsLock);
     auto id = static_cast<int16_t>(localThreadId + 1);

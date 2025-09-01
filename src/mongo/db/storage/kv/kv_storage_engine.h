@@ -98,10 +98,8 @@ public:
     bool databaseExists(std::string_view dbName) const override;
     void listCollections(std::string_view dbName, std::vector<std::string>* out) const override;
     void listCollections(std::string_view dbName, std::set<std::string>& out) const override;
-    KVDatabaseCatalogEntryBase* getDatabaseCatalogEntry(OperationContext* opCtx,
-                                                        StringData db) override;
-    std::shared_ptr<DatabaseCatalogEntry> getDatabaseCatalogEntrySptr(OperationContext* opCtx,
-                                                                      StringData db) override;
+    std::shared_ptr<DatabaseCatalogEntry> getDatabaseCatalogEntry(OperationContext* opCtx,
+                                                                  StringData db) override;
 
     bool supportsDocLocking() const override {
         return _supportsDocLocking;

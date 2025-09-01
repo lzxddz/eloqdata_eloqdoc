@@ -52,16 +52,13 @@ public:
     public:
         virtual ~Impl() = 0;
 
-        virtual Database* get(OperationContext* opCtx, StringData ns)  = 0;
-        virtual std::shared_ptr<Database> getSptr(OperationContext* opCtx, StringData ns) = 0;
+        // virtual Database* get(OperationContext* opCtx, StringData ns)  = 0;
+        virtual std::shared_ptr<Database> get(OperationContext* opCtx, StringData ns) = 0;
 
-        virtual Database* openDb(OperationContext* opCtx, StringData ns, bool* justCreated) = 0;
-        virtual std::shared_ptr<Database> openDbSptr(OperationContext* opCtx,
-                                                     StringData ns,
-                                                     bool* justCreated) {
-            assert(false);
-            return nullptr;
-        }
+        // virtual Database* openDb(OperationContext* opCtx, StringData ns, bool* justCreated) = 0;
+        virtual std::shared_ptr<Database> openDb(OperationContext* opCtx,
+                                                 StringData ns,
+                                                 bool* justCreated) = 0;
 
         virtual void close(OperationContext* opCtx, StringData ns, const std::string& reason) = 0;
 
@@ -87,13 +84,10 @@ public:
      * Retrieves an already opened database or returns NULL. Must be called with the database
      * locked in at least IS-mode.
      */
-    inline Database* get(OperationContext* const opCtx, const StringData ns)  {
-        assert(false);
+    inline std::shared_ptr<Database> get(OperationContext* const opCtx, const StringData ns) {
         return this->_impl().get(opCtx, ns);
     }
-    inline std::shared_ptr<Database> getSptr(OperationContext* const opCtx, const StringData ns) {
-        return this->_impl().getSptr(opCtx, ns);
-    }
+
     /**
      * Retrieves a database reference if it is already opened, or opens it if it hasn't been
      * opened/created yet. Must be called with the database locked in X-mode.
@@ -101,16 +95,15 @@ public:
      * @param justCreated Returns whether the database was newly created (true) or it already
      *          existed (false). Can be NULL if this information is not necessary.
      */
-    inline Database* openDb(OperationContext* const opCtx,
-                            const StringData ns,
-                            bool* const justCreated = nullptr) {
-        assert(false);
+    // inline Database* openDb(OperationContext* const opCtx,
+    //                         const StringData ns,
+    //                         bool* const justCreated = nullptr) {
+    //     return this->_impl().openDb(opCtx, ns, justCreated);
+    // }
+    inline std::shared_ptr<Database> openDb(OperationContext* const opCtx,
+                                            const StringData ns,
+                                            bool* const justCreated = nullptr) {
         return this->_impl().openDb(opCtx, ns, justCreated);
-    }
-    inline std::shared_ptr<Database> openDbSptr(OperationContext* const opCtx,
-                                                const StringData ns,
-                                                bool* const justCreated = nullptr) {
-        return this->_impl().openDbSptr(opCtx, ns, justCreated);
     }
 
     /**

@@ -847,8 +847,7 @@ void rollbackRenameCollection(OperationContext* opCtx, UUID uuid, RenameCollecti
     log() << "Attempting to rename collection with UUID: " << uuid << ", from: " << info.renameFrom
           << ", to: " << info.renameTo;
     Lock::DBLock dbLock(opCtx, dbName, MODE_X);
-    // auto db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
-    auto db = DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, dbName);
+    auto db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
     invariant(db);
 
     auto status = renameCollectionForRollback(opCtx, info.renameTo, uuid);
@@ -1147,8 +1146,7 @@ void rollback_internal::syncFixUp(OperationContext* opCtx,
 
             Lock::DBLock dbLock(opCtx, nss.db(), MODE_X);
 
-            // auto db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, nss.db().toString());
-            auto db = DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, nss.db().toString());
+            auto db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, nss.db().toString());
             invariant(db);
 
             std::shared_ptr<Collection> collection =

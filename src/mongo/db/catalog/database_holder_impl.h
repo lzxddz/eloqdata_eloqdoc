@@ -53,8 +53,7 @@ public:
      * Retrieves an already opened database or returns NULL. Must be called with the database
      * locked in at least IS-mode.
      */
-    Database* get(OperationContext* opCtx, StringData ns)  override;
-    std::shared_ptr<Database> getSptr(OperationContext* opCtx, StringData ns) override;
+    std::shared_ptr<Database> get(OperationContext* opCtx, StringData ns) override;
 
     /**
      * Retrieves a database reference if it is already opened, or opens it if it hasn't been
@@ -63,10 +62,11 @@ public:
      * @param justCreated Returns whether the database was newly created (true) or it already
      *          existed (false). Can be NULL if this information is not necessary.
      */
-    Database* openDb(OperationContext* opCtx, StringData ns, bool* justCreated = nullptr) override;
-    std::shared_ptr<Database> openDbSptr(OperationContext* opCtx,
-                                         StringData ns,
-                                         bool* justCreated = nullptr) override;
+    // Database* openDb(OperationContext* opCtx, StringData ns, bool* justCreated = nullptr)
+    // override;
+    std::shared_ptr<Database> openDb(OperationContext* opCtx,
+                                     StringData ns,
+                                     bool* justCreated = nullptr) override;
 
     /**
      * Closes the specified database. Must be called with the database locked in X-mode.

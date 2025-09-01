@@ -65,11 +65,8 @@ public:
     void getCollectionNamespaces(std::set<std::string>& out) const override;
     void getCollectionNamespaces(std::vector<std::string>& out) const override;
 
-    CollectionCatalogEntry* getCollectionCatalogEntry(OperationContext* opCtx,
-                                                      StringData ns) override;
-
-    std::shared_ptr<CollectionCatalogEntry> getCollectionCatalogEntrySptr(OperationContext* opCtx,
-                                                                          StringData ns) override;
+    std::shared_ptr<CollectionCatalogEntry> getCollectionCatalogEntry(OperationContext* opCtx,
+                                                                      StringData ns) override;
 
     RecordStore* getRecordStore(StringData ns) const override;
 
@@ -89,10 +86,8 @@ public:
     /*
      * For table which exists in Eloq, fetches the metadata and create KVCollectionCatalogEntry
      */
-    CollectionCatalogEntry* createKVCollectionCatalogEntry(OperationContext* opCtx,
-                                                           StringData ns) override;
-    std::shared_ptr<CollectionCatalogEntry> createKVCollectionCatalogEntrySptr(
-        OperationContext* opCtx, StringData ns) override;
+    std::shared_ptr<CollectionCatalogEntry> createKVCollectionCatalogEntry(OperationContext* opCtx,
+                                                                           StringData ns) override;
 
     Status renameCollection(OperationContext* opCtx,
                             StringData fromNS,

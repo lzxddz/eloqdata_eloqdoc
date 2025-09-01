@@ -95,12 +95,7 @@ StringData _todb(StringData ns) {
 
 }  // namespace
 
-Database* DatabaseHolderImpl::get(OperationContext* opCtx, StringData ns) {
-    assert(false);
-    return getSptr(opCtx, ns).get();
-}
-
-std::shared_ptr<Database> DatabaseHolderImpl::getSptr(OperationContext* opCtx, StringData ns) {
+std::shared_ptr<Database> DatabaseHolderImpl::get(OperationContext* opCtx, StringData ns) {
     const StringData db = _todb(ns);
     invariant(opCtx->lockState()->isDbLockedForMode(db, MODE_IS));
 
@@ -121,7 +116,7 @@ std::shared_ptr<Database> DatabaseHolderImpl::getSptr(OperationContext* opCtx, S
     bool existInStorageEngine =
         opCtx->getServiceContext()->getStorageEngine()->databaseExists(ns.toStringView());
     if (existInStorageEngine) {
-        return openDbSptr(opCtx, ns);
+        return openDb(opCtx, ns);
     } else {
         return nullptr;
     }
@@ -145,15 +140,9 @@ std::set<std::string> DatabaseHolderImpl::getNamesWithConflictingCasing(StringDa
     return _getNamesWithConflictingCasing_inlock(name);
 }
 
-Database* DatabaseHolderImpl::openDb(OperationContext* opCtx, StringData ns, bool* justCreated) {
-    assert(false);
-    return openDbSptr(opCtx, ns, justCreated).get();
-}
-
-
-std::shared_ptr<Database> DatabaseHolderImpl::openDbSptr(OperationContext* opCtx,
-                                                         StringData ns,
-                                                         bool* justCreated) {
+std::shared_ptr<Database> DatabaseHolderImpl::openDb(OperationContext* opCtx,
+                                                     StringData ns,
+                                                     bool* justCreated) {
     MONGO_LOG(1) << "DatabaseHolderImpl::openDb"
                  << ". ns: " << ns;
     const StringData dbName = _todb(ns);
@@ -201,9 +190,8 @@ std::shared_ptr<Database> DatabaseHolderImpl::openDbSptr(OperationContext* opCtx
                  << ". ns: " << ns << " create start";
 
     StorageEngine* storageEngine = getGlobalServiceContext()->getStorageEngine();
-    // DatabaseCatalogEntry* entry = storageEngine->getDatabaseCatalogEntry(opCtx, dbName);
     std::shared_ptr<DatabaseCatalogEntry> entry =
-        storageEngine->getDatabaseCatalogEntrySptr(opCtx, dbName);
+        storageEngine->getDatabaseCatalogEntry(opCtx, dbName);
 
 
     // if (!entry->exists()) {

@@ -86,14 +86,11 @@ Status restoreMissingFeatureCompatibilityVersionDocument(OperationContext* opCtx
 
     // If the admin database, which contains the server configuration collection with the
     // featureCompatibilityVersion document, does not exist, create it.
-    // Database* db = DatabaseHolder::getDatabaseHolder().get(opCtx, fcvNss.db());
-    std::shared_ptr<Database> db =
-        DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, fcvNss.db());
+    std::shared_ptr<Database> db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, fcvNss.db());
     if (!db) {
         log() << "Re-creating admin database that was dropped.";
     }
-    // db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, fcvNss.db());
-    db = DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, fcvNss.db());
+    db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, fcvNss.db());
 
     invariant(db);
 
@@ -151,9 +148,7 @@ Status ensureAllCollectionsHaveUUIDs(OperationContext* opCtx,
     bool isMmapV1 = opCtx->getServiceContext()->getStorageEngine()->isMmapV1();
     std::vector<NamespaceString> nonReplicatedCollNSSsWithoutUUIDs;
     for (const auto& dbName : dbNames) {
-        // Database* db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
-        std::shared_ptr<Database> db =
-            DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, dbName);
+        std::shared_ptr<Database> db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
 
         invariant(db);
         for (const auto& [name, coll] : db->collections(opCtx)) {
@@ -267,20 +262,22 @@ void rebuildIndexes(OperationContext* opCtx, StorageEngine* storageEngine) {
         NamespaceString collNss(indexNamespace.first);
         const std::string& indexName = indexNamespace.second;
 
-        DatabaseCatalogEntry* dbce = storageEngine->getDatabaseCatalogEntry(opCtx, collNss.db());
+        std::shared_ptr<DatabaseCatalogEntry> dbce =
+            storageEngine->getDatabaseCatalogEntry(opCtx, collNss.db());
+
         invariant(dbce,
                   str::stream() << "couldn't get database catalog entry for database "
                                 << collNss.db());
-        // CollectionCatalogEntry* cce = dbce->getCollectionCatalogEntry(opCtx, collNss.ns());
-        std::shared_ptr<CollectionCatalogEntry> cceSptr =
-            dbce->getCollectionCatalogEntrySptr(opCtx, collNss.ns());
-        CollectionCatalogEntry* cce = cceSptr.get();
+        std::shared_ptr<CollectionCatalogEntry> cce =
+            dbce->getCollectionCatalogEntry(opCtx, collNss.ns());
         invariant(cce,
                   str::stream() << "couldn't get collection catalog entry for collection "
                                 << collNss.toString());
 
-        auto swIndexSpecs = getIndexNameObjs(
-            opCtx, dbce, cce, [&indexName](const std::string& name) { return name == indexName; });
+        auto swIndexSpecs =
+            getIndexNameObjs(opCtx, dbce.get(), cce.get(), [&indexName](const std::string& name) {
+                return name == indexName;
+            });
         if (!swIndexSpecs.isOK() || swIndexSpecs.getValue().first.empty()) {
             fassert(40590,
                     {ErrorCodes::InternalError,
@@ -308,7 +305,7 @@ void rebuildIndexes(OperationContext* opCtx, StorageEngine* storageEngine) {
         }
         fassert(40592,
                 rebuildIndexesOnCollection(
-                    opCtx, dbCatalogEntry, collCatalogEntry, std::move(entry.second)));
+                    opCtx, dbCatalogEntry.get(), collCatalogEntry, std::move(entry.second)));
     }
 }
 
@@ -358,9 +355,7 @@ StatusWith<bool> repairDatabasesAndCheckVersion(OperationContext* opCtx) {
         // Attempt to restore the featureCompatibilityVersion document if it is missing.
         NamespaceString fcvNSS(NamespaceString::kServerConfigurationNamespace);
 
-        // Database* db = DatabaseHolder::getDatabaseHolder().get(opCtx, fcvNSS.db());
-        std::shared_ptr<Database> db =
-            DatabaseHolder::getDatabaseHolder().getSptr(opCtx, fcvNSS.db());
+        std::shared_ptr<Database> db = DatabaseHolder::getDatabaseHolder().get(opCtx, fcvNSS.db());
         std::shared_ptr<Collection> versionColl;
         BSONObj featureCompatibilityVersion;
         if (!db || !(versionColl = db->getCollection(opCtx, fcvNSS)) ||
@@ -391,8 +386,7 @@ StatusWith<bool> repairDatabasesAndCheckVersion(OperationContext* opCtx) {
         // "local" database and populate the catalog entries because we won't attempt to drop the
         // temporary collections anyway.
         Lock::DBLock dbLock(opCtx, kSystemReplSetCollection.db(), MODE_X);
-        // DatabaseHolder::getDatabaseHolder().openDb(opCtx, kSystemReplSetCollection.db());
-        DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, kSystemReplSetCollection.db());
+        DatabaseHolder::getDatabaseHolder().openDb(opCtx, kSystemReplSetCollection.db());
     }
 
     if (storageGlobalParams.repair) {
@@ -442,9 +436,8 @@ StatusWith<bool> repairDatabasesAndCheckVersion(OperationContext* opCtx) {
         }
         LOG(1) << "    Recovering database: " << dbName;
 
-        // Database* db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
         std::shared_ptr<Database> dbSptr =
-            DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, dbName);
+            DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
         Database* db = dbSptr.get();
         invariant(db);
 

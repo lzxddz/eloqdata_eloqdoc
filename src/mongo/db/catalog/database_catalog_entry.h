@@ -96,8 +96,13 @@ public:
         // Used for MMAPV1 only
     };
     // The DatabaseCatalogEntry owns this, do not delete
-    virtual CollectionCatalogEntry* getCollectionCatalogEntry(OperationContext* opCtx,
-                                                              StringData ns) {
+    // virtual CollectionCatalogEntry* getCollectionCatalogEntry(OperationContext* opCtx,
+    //                                                           StringData ns) {
+    //     MONGO_UNREACHABLE;
+    //     return nullptr;
+    // };
+    virtual std::shared_ptr<CollectionCatalogEntry> getCollectionCatalogEntry(
+        OperationContext* opCtx, StringData ns) {
         MONGO_UNREACHABLE;
         return nullptr;
     };
@@ -106,11 +111,6 @@ public:
         return nullptr;
     };
 
-    virtual std::shared_ptr<CollectionCatalogEntry> getCollectionCatalogEntrySptr(
-        OperationContext* opCtx, StringData ns) {
-        MONGO_UNREACHABLE;
-        return nullptr;
-    };
 
     // The DatabaseCatalogEntry owns this, do not delete
     virtual RecordStore* getRecordStore(StringData ns) const = 0;
@@ -131,13 +131,13 @@ public:
         return Status::OK();
     }
 
-    virtual CollectionCatalogEntry* createKVCollectionCatalogEntry(OperationContext* opCtx,
-                                                                   StringData ns) {
-        MONGO_UNREACHABLE;
-        return nullptr;
-    }
+    // virtual CollectionCatalogEntry* createKVCollectionCatalogEntry(OperationContext* opCtx,
+    //                                                                StringData ns) {
+    //     MONGO_UNREACHABLE;
+    //     return nullptr;
+    // }
 
-    virtual std::shared_ptr<CollectionCatalogEntry> createKVCollectionCatalogEntrySptr(
+    virtual std::shared_ptr<CollectionCatalogEntry> createKVCollectionCatalogEntry(
         OperationContext* opCtx, StringData ns) {
         MONGO_UNREACHABLE;
         return nullptr;

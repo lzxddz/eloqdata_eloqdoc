@@ -337,15 +337,15 @@ public:
     };
 
 public:
-    static MONGO_DECLARE_SHIM((Collection * _this,
-                               OperationContext* opCtx,
-                               StringData fullNS,
-                               OptionalCollectionUUID uuid,
-                               CollectionCatalogEntry* details,
-                               RecordStore* recordStore,
-                               DatabaseCatalogEntry* dbce,
-                               PrivateTo<Collection>)
-                                  ->std::unique_ptr<Impl>) makeImpl;
+    // static MONGO_DECLARE_SHIM((Collection * _this,
+    //                            OperationContext* opCtx,
+    //                            StringData fullNS,
+    //                            OptionalCollectionUUID uuid,
+    //                            CollectionCatalogEntry* details,
+    //                            RecordStore* recordStore,
+    //                            DatabaseCatalogEntry* dbce,
+    //                            PrivateTo<Collection>)
+    //                               ->std::unique_ptr<Impl>) makeImpl;
 
     static MONGO_DECLARE_SHIM((Collection * _this,
                                OperationContext* opCtx,
@@ -357,16 +357,18 @@ public:
                                PrivateTo<Collection>)
                                   ->std::unique_ptr<Impl>) makeImplSptr;
 
-    explicit inline Collection(OperationContext* const opCtx,
-                               const StringData fullNS,
-                               OptionalCollectionUUID uuid,
-                               CollectionCatalogEntry* const details,  // does not own
-                               RecordStore* const recordStore,         // does not own
-                               DatabaseCatalogEntry* const dbce)       // does not own
-        : _pimpl(makeImpl(
-              this, opCtx, fullNS, uuid, details, recordStore, dbce, PrivateCall<Collection>{})) {
-        this->_impl().init(opCtx);
-    }
+    // explicit inline Collection(OperationContext* const opCtx,
+    //                            const StringData fullNS,
+    //                            OptionalCollectionUUID uuid,
+    //                            CollectionCatalogEntry* const details,  // does not own
+    //                            RecordStore* const recordStore,         // does not own
+    //                            DatabaseCatalogEntry* const dbce)       // does not own
+    //     : _pimpl(makeImpl(
+    //           this, opCtx, fullNS, uuid, details, recordStore, dbce, PrivateCall<Collection>{}))
+    //           {
+    //     assert(false);
+    //     this->_impl().init(opCtx);
+    // }
 
     explicit inline Collection(OperationContext* const opCtx,
                                const StringData fullNS,

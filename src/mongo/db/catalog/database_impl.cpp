@@ -229,7 +229,8 @@ std::shared_ptr<Collection> DatabaseImpl::_getOrCreateCollectionInstance(
         return collection;
     }
 
-    unique_ptr<CollectionCatalogEntry> cce(_dbEntry->getCollectionCatalogEntry(opCtx, nss.ns()));
+    std::shared_ptr<CollectionCatalogEntry> cce =
+        _dbEntry->getCollectionCatalogEntry(opCtx, nss.ns());
     if (!cce) {
         return nullptr;
     }
@@ -244,8 +245,7 @@ std::shared_ptr<Collection> DatabaseImpl::_getOrCreateCollectionInstance(
     }
 
     // Not registering AddCollectionChange since this is for collections that already exist.
-    auto coll =
-        std::make_shared<Collection>(opCtx, nss.ns(), uuid, cce.release(), rs.release(), _dbEntry);
+    auto coll = std::make_shared<Collection>(opCtx, nss.ns(), uuid, cce, rs.release(), _dbEntry);
     if (uuid) {
         // We are not in a WUOW only when we are called from Database::init(). There is no need
         // to rollback UUIDCatalog changes because we are initializing existing collections.
@@ -271,7 +271,7 @@ std::shared_ptr<Collection> DatabaseImpl::_createCollectionHandler(OperationCont
             return iter->second;
         }
     }
-    auto cce = _dbEntry->getCollectionCatalogEntrySptr(opCtx, nss.toStringData());
+    auto cce = _dbEntry->getCollectionCatalogEntry(opCtx, nss.toStringData());
     if (!cce) {
         // The collection not exists in the Eloq
         return nullptr;
@@ -431,9 +431,8 @@ void DatabaseImpl::clearTmpCollections(OperationContext* opCtx) {
     for (const auto& ns : collections) {
         invariant(NamespaceString::normal(ns));
 
-        // CollectionCatalogEntry* coll = _dbEntry->getCollectionCatalogEntry(opCtx, ns);
         std::shared_ptr<CollectionCatalogEntry> coll =
-            _dbEntry->getCollectionCatalogEntrySptr(opCtx, ns);
+            _dbEntry->getCollectionCatalogEntry(opCtx, ns);
 
 
         CollectionOptions options = coll->getCollectionOptions(opCtx);
@@ -1707,9 +1706,8 @@ MONGO_REGISTER_SHIM(Database::dropAllDatabasesExceptLocal)(OperationContext* opC
     for (const auto& dbName : dbs) {
         if (dbName != "local") {
             writeConflictRetry(opCtx, "dropAllDatabasesExceptLocal", dbName, [&opCtx, &dbName] {
-                // Database* db = DatabaseHolder::getDatabaseHolder().get(opCtx, dbName);
                 std::shared_ptr<Database> dbSptr =
-                    DatabaseHolder::getDatabaseHolder().getSptr(opCtx, dbName);
+                    DatabaseHolder::getDatabaseHolder().get(opCtx, dbName);
                 auto* db = dbSptr.get();
 
                 // This is needed since dropDatabase can't be rolled back.

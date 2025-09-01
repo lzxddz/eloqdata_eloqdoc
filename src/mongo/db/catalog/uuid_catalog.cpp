@@ -93,8 +93,7 @@ void UUIDCatalogObserver::onRenameCollection(OperationContext* opCtx,
 
     if (!uuid)
         return;
-    // auto db = DatabaseHolder::getDatabaseHolder().get(opCtx, toCollection.db());
-    auto db = DatabaseHolder::getDatabaseHolder().getSptr(opCtx, toCollection.db());
+    auto db = DatabaseHolder::getDatabaseHolder().get(opCtx, toCollection.db());
     auto newColl = db->getCollection(opCtx, toCollection);
     invariant(newColl);
     UUIDCatalog& catalog = UUIDCatalog::get(opCtx);

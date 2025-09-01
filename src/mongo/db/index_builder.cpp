@@ -136,9 +136,8 @@ void IndexBuilder::run() {
     Lock::DBLock dlk(opCtx.get(), ns.db(), MODE_X);
     OldClientContext ctx(opCtx.get(), ns.getSystemIndexesCollection());
 
-    // Database* db = DatabaseHolder::getDatabaseHolder().get(opCtx.get(), ns.db().toString());
     std::shared_ptr<Database> db =
-        DatabaseHolder::getDatabaseHolder().getSptr(opCtx.get(), ns.db().toString());
+        DatabaseHolder::getDatabaseHolder().get(opCtx.get(), ns.db().toString());
 
 
     Status status = _build(opCtx.get(), db.get(), true, &dlk);
@@ -272,9 +271,8 @@ Status IndexBuilder::_build(OperationContext* opCtx,
 
     if (allowBackgroundBuilding) {
         dbLock->relockWithMode(MODE_X);
-        // Database* reloadDb = DatabaseHolder::getDatabaseHolder().get(opCtx, ns.db());
         std::shared_ptr<Database> reloadDb =
-            DatabaseHolder::getDatabaseHolder().getSptr(opCtx, ns.db());
+            DatabaseHolder::getDatabaseHolder().get(opCtx, ns.db());
 
         fassert(28553, reloadDb.get());
         fassert(28554, reloadDb->getCollection(opCtx, ns).get());

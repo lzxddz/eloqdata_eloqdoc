@@ -178,9 +178,7 @@ void openCatalog(OperationContext* opCtx, const MinVisibleTimestampMap& minVisib
     storageEngine->listDatabases(&databasesToOpen);
     for (auto&& dbName : databasesToOpen) {
         LOG(1) << "openCatalog: dbholder reopening database " << dbName;
-        // auto db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
-        std::shared_ptr<Database> db =
-            DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, dbName);
+        std::shared_ptr<Database> db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
 
         invariant(db, str::stream() << "failed to reopen database " << dbName);
 

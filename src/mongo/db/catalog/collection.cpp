@@ -70,7 +70,7 @@ namespace mongo {
 // Emit the vtable in this TU
 Collection::Impl::~Impl() = default;
 
-MONGO_DEFINE_SHIM(Collection::makeImpl);
+// MONGO_DEFINE_SHIM(Collection::makeImpl);
 MONGO_DEFINE_SHIM(Collection::makeImplSptr);
 
 MONGO_DEFINE_SHIM(Collection::parseValidationLevel);

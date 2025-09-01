@@ -55,8 +55,7 @@ namespace mongo {
 
 void DurableViewCatalog::onExternalChange(OperationContext* opCtx, const NamespaceString& name) {
     dassert(opCtx->lockState()->isDbLockedForMode(name.db(), MODE_IX));
-    // Database* db = DatabaseHolder::getDatabaseHolder().get(opCtx, name.db());
-    std::shared_ptr<Database> db = DatabaseHolder::getDatabaseHolder().getSptr(opCtx, name.db());
+    std::shared_ptr<Database> db = DatabaseHolder::getDatabaseHolder().get(opCtx, name.db());
 
     if (db) {
         opCtx->recoveryUnit()->onCommit(

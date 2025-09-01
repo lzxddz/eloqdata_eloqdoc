@@ -129,7 +129,8 @@ StatusWith<IndexNameObjs> getIndexNameObjs(OperationContext* opCtx,
 
 Status rebuildIndexesOnCollection(OperationContext* opCtx,
                                   DatabaseCatalogEntry* dbce,
-                                  CollectionCatalogEntry* cce,
+                                  //   CollectionCatalogEntry* cce,
+                                  std::shared_ptr<CollectionCatalogEntry> cce,
                                   const IndexNameObjs& indexNameObjs) {
     const std::vector<std::string>& indexNames = indexNameObjs.first;
     const std::vector<BSONObj>& indexSpecs = indexNameObjs.second;
@@ -233,7 +234,7 @@ Status repairCollections(OperationContext* opCtx,
                          StorageEngine* engine,
                          const std::string& dbName) {
 
-    DatabaseCatalogEntry* dbce = engine->getDatabaseCatalogEntry(opCtx, dbName);
+    std::shared_ptr<DatabaseCatalogEntry> dbce = engine->getDatabaseCatalogEntry(opCtx, dbName);
 
     std::vector<std::string> colls;
     dbce->getCollectionNamespaces(colls);
@@ -249,16 +250,13 @@ Status repairCollections(OperationContext* opCtx,
         if (!status.isOK())
             return status;
 
-        // CollectionCatalogEntry* cce = dbce->getCollectionCatalogEntry(opCtx, *it);
-        std::shared_ptr<CollectionCatalogEntry> cceSptr =
-            dbce->getCollectionCatalogEntrySptr(opCtx, *it);
-        CollectionCatalogEntry* cce = cceSptr.get();
+        std::shared_ptr<CollectionCatalogEntry> cce = dbce->getCollectionCatalogEntry(opCtx, *it);
 
-        auto swIndexNameObjs = getIndexNameObjs(opCtx, dbce, cce);
+        auto swIndexNameObjs = getIndexNameObjs(opCtx, dbce.get(), cce.get());
         if (!swIndexNameObjs.isOK())
             return swIndexNameObjs.getStatus();
 
-        status = rebuildIndexesOnCollection(opCtx, dbce, cce, swIndexNameObjs.getValue());
+        status = rebuildIndexesOnCollection(opCtx, dbce.get(), cce, swIndexNameObjs.getValue());
         if (!status.isOK())
             return status;
     }
@@ -309,9 +307,8 @@ Status repairDatabase(OperationContext* opCtx,
             UninterruptibleLockGuard noInterrupt(opCtx->lockState());
 
             // Open the db after everything finishes.
-            // auto db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
             std::shared_ptr<Database> db =
-                DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, dbName);
+                DatabaseHolder::getDatabaseHolder().openDb(opCtx, dbName);
 
             // Set the minimum snapshot for all Collections in this db. This ensures that readers
             // using majority readConcern level can only use the collections after their repaired

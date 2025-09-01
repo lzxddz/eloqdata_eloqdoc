@@ -61,7 +61,12 @@ public:
     Status beginBackup(OperationContext* opCtx);
     void endBackup(OperationContext* opCtx);
 
-    DatabaseCatalogEntry* getDatabaseCatalogEntry(OperationContext* opCtx, StringData db);
+    // DatabaseCatalogEntry* getDatabaseCatalogEntry(OperationContext* opCtx, StringData db);
+    std::shared_ptr<DatabaseCatalogEntry> getDatabaseCatalogEntry(OperationContext* opCtx,
+                                                                  StringData db) {
+        MONGO_UNREACHABLE;
+        return nullptr;
+    }
 
     virtual bool supportsDocLocking() const {
         return false;

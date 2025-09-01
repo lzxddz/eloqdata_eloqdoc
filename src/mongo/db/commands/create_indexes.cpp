@@ -319,11 +319,9 @@ public:
         // not allow locks or re-locks to be interrupted.
         UninterruptibleLockGuard noInterrupt(opCtx->lockState());
 
-        // Database* db = DatabaseHolder::getDatabaseHolder().get(opCtx, ns.db());
-        std::shared_ptr<Database> db = DatabaseHolder::getDatabaseHolder().getSptr(opCtx, ns.db());
+        std::shared_ptr<Database> db = DatabaseHolder::getDatabaseHolder().get(opCtx, ns.db());
         if (!db) {
-            // db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, ns.db());
-            db = DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, ns.db());
+            db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, ns.db());
         }
         DatabaseShardingState::get(db.get()).checkDbVersion(opCtx);
 

@@ -95,8 +95,7 @@ public:
         std::vector<std::string> allDbs;
         getGlobalServiceContext()->getStorageEngine()->listDatabases(&allDbs);
         for (auto&& dbName : allDbs) {
-            // const auto db = DatabaseHolder::getDatabaseHolder().get(opCtx, dbName);
-            auto db = DatabaseHolder::getDatabaseHolder().getSptr(opCtx, dbName);
+            auto db = DatabaseHolder::getDatabaseHolder().get(opCtx, dbName);
             if (db->isDropPending(opCtx)) {
                 uasserted(ErrorCodes::DatabaseDropPending,
                           str::stream() << "cannot restart the catalog because database " << dbName

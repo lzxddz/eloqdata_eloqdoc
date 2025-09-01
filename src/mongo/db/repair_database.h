@@ -65,7 +65,8 @@ StatusWith<IndexNameObjs> getIndexNameObjs(OperationContext* opCtx,
  */
 Status rebuildIndexesOnCollection(OperationContext* opCtx,
                                   DatabaseCatalogEntry* dbce,
-                                  CollectionCatalogEntry* cce,
+                                  //   CollectionCatalogEntry* cce,
+                                  std::shared_ptr<CollectionCatalogEntry> cce,
                                   const IndexNameObjs& indexNameObjs);
 
 /**

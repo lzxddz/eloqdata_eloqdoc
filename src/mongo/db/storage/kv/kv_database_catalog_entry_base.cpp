@@ -195,18 +195,12 @@ void KVDatabaseCatalogEntryBase::getCollectionNamespaces(std::vector<std::string
     _engine->getEngine()->listCollections(name(), out);
 }
 
-CollectionCatalogEntry* KVDatabaseCatalogEntryBase::getCollectionCatalogEntry(
-    OperationContext* opCtx, StringData ns) {
-    assert(false);
-    return getCollectionCatalogEntrySptr(opCtx, ns).get();
-}
-
-std::shared_ptr<CollectionCatalogEntry> KVDatabaseCatalogEntryBase::getCollectionCatalogEntrySptr(
+std::shared_ptr<CollectionCatalogEntry> KVDatabaseCatalogEntryBase::getCollectionCatalogEntry(
     OperationContext* opCtx, StringData ns) {
     if (auto iter = _collections.find(ns.toString()); iter != _collections.end()) {
         return iter->second;
     } else {
-        return createKVCollectionCatalogEntrySptr(opCtx, ns);
+        return createKVCollectionCatalogEntry(opCtx, ns);
     }
 }
 
@@ -300,14 +294,8 @@ Status KVDatabaseCatalogEntryBase::createCollection(OperationContext* opCtx,
     return status;
 }
 
-CollectionCatalogEntry* KVDatabaseCatalogEntryBase::createKVCollectionCatalogEntry(
+std::shared_ptr<CollectionCatalogEntry> KVDatabaseCatalogEntryBase::createKVCollectionCatalogEntry(
     OperationContext* opCtx, StringData ns) {
-    return createKVCollectionCatalogEntrySptr(opCtx, ns).get();
-}
-
-std::shared_ptr<CollectionCatalogEntry>
-KVDatabaseCatalogEntryBase::createKVCollectionCatalogEntrySptr(OperationContext* opCtx,
-                                                               StringData ns) {
     MONGO_LOG(1) << "KVDatabaseCatalogEntryBase::createKVCollectionCatalogEntry";
     if (auto iter = _collections.find(ns); iter != _collections.end()) {
         return iter->second;

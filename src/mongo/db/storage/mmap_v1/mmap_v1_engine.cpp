@@ -284,36 +284,36 @@ void MMAPV1Engine::listDatabases(std::vector<std::string>* out) const {
     _listDatabases(storageGlobalParams.dbpath, out);
 }
 
-DatabaseCatalogEntry* MMAPV1Engine::getDatabaseCatalogEntry(OperationContext* opCtx,
-                                                            StringData db) {
-    {
-        stdx::lock_guard<stdx::mutex> lk(_entryMapMutex);
-        EntryMap::const_iterator iter = _entryMap.find(db.toString());
-        if (iter != _entryMap.end()) {
-            return iter->second;
-        }
-    }
+// DatabaseCatalogEntry* MMAPV1Engine::getDatabaseCatalogEntry(OperationContext* opCtx,
+//                                                             StringData db) {
+//     {
+//         stdx::lock_guard<stdx::mutex> lk(_entryMapMutex);
+//         EntryMap::const_iterator iter = _entryMap.find(db.toString());
+//         if (iter != _entryMap.end()) {
+//             return iter->second;
+//         }
+//     }
 
-    // This is an on-demand database create/open. At this point, we are locked under X lock for
-    // the database (MMAPV1DatabaseCatalogEntry's constructor checks that) so no two threads
-    // can be creating the same database concurrenty. We need to create the database outside of
-    // the _entryMapMutex so we do not deadlock (see SERVER-15880).
-    MMAPV1DatabaseCatalogEntry* entry = new MMAPV1DatabaseCatalogEntry(
-        opCtx,
-        db,
-        storageGlobalParams.dbpath,
-        storageGlobalParams.directoryperdb,
-        false,
-        _extentManagerFactory->create(
-            db, storageGlobalParams.dbpath, storageGlobalParams.directoryperdb));
+//     // This is an on-demand database create/open. At this point, we are locked under X lock for
+//     // the database (MMAPV1DatabaseCatalogEntry's constructor checks that) so no two threads
+//     // can be creating the same database concurrenty. We need to create the database outside of
+//     // the _entryMapMutex so we do not deadlock (see SERVER-15880).
+//     MMAPV1DatabaseCatalogEntry* entry = new MMAPV1DatabaseCatalogEntry(
+//         opCtx,
+//         db,
+//         storageGlobalParams.dbpath,
+//         storageGlobalParams.directoryperdb,
+//         false,
+//         _extentManagerFactory->create(
+//             db, storageGlobalParams.dbpath, storageGlobalParams.directoryperdb));
 
-    stdx::lock_guard<stdx::mutex> lk(_entryMapMutex);
+//     stdx::lock_guard<stdx::mutex> lk(_entryMapMutex);
 
-    // Sanity check that we are not overwriting something
-    invariant(_entryMap.insert(EntryMap::value_type(db.toString(), entry)).second);
+//     // Sanity check that we are not overwriting something
+//     invariant(_entryMap.insert(EntryMap::value_type(db.toString(), entry)).second);
 
-    return entry;
-}
+//     return entry;
+// }
 
 Status MMAPV1Engine::closeDatabase(OperationContext* opCtx, StringData db) {
     // Before the files are closed, flush any potentially outstanding changes, which might

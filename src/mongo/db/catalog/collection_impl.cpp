@@ -76,18 +76,19 @@
 
 namespace mongo {
 
-MONGO_REGISTER_SHIM(Collection::makeImpl)
-(Collection* const _this,
- OperationContext* const opCtx,
- const StringData fullNS,
- OptionalCollectionUUID uuid,
- CollectionCatalogEntry* const details,
- RecordStore* const recordStore,
- DatabaseCatalogEntry* const dbce,
- PrivateTo<Collection>)
-    ->std::unique_ptr<Collection::Impl> {
-    return std::make_unique<CollectionImpl>(_this, opCtx, fullNS, uuid, details, recordStore, dbce);
-}
+// MONGO_REGISTER_SHIM(Collection::makeImpl)
+// (Collection* const _this,
+//  OperationContext* const opCtx,
+//  const StringData fullNS,
+//  OptionalCollectionUUID uuid,
+//  CollectionCatalogEntry* const details,
+//  RecordStore* const recordStore,
+//  DatabaseCatalogEntry* const dbce,
+//  PrivateTo<Collection>)
+//     ->std::unique_ptr<Collection::Impl> {
+//     return std::make_unique<CollectionImpl>(_this, opCtx, fullNS, uuid, details, recordStore,
+//     dbce);
+// }
 
 MONGO_REGISTER_SHIM(Collection::makeImplSptr)
 (Collection* const _this,

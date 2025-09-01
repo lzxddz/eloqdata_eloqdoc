@@ -145,9 +145,8 @@ Status renameCollectionCommon(OperationContext* opCtx,
                                     << " to " << target.ns());
     }
 
-    // Database* const sourceDB = DatabaseHolder::getDatabaseHolder().get(opCtx, source.db());
     std::shared_ptr<mongo::Database> sourceDB =
-        DatabaseHolder::getDatabaseHolder().getSptr(opCtx, source.db());
+        DatabaseHolder::getDatabaseHolder().get(opCtx, source.db());
     if (sourceDB) {
         DatabaseShardingState::get(sourceDB.get()).checkDbVersion(opCtx);
     }
@@ -179,9 +178,8 @@ Status renameCollectionCommon(OperationContext* opCtx,
 
     BackgroundOperation::assertNoBgOpInProgForNs(source.ns());
 
-    // Database* const targetDB = DatabaseHolder::getDatabaseHolder().openDb(opCtx, target.db());
     std::shared_ptr<Database> targetDB =
-        DatabaseHolder::getDatabaseHolder().openDbSptr(opCtx, target.db());
+        DatabaseHolder::getDatabaseHolder().openDb(opCtx, target.db());
 
     // Check if the target namespace exists and if dropTarget is true.
     // Return a non-OK status if target exists and dropTarget is not true or if the collection

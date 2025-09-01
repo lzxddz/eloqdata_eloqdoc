@@ -198,12 +198,10 @@ public:
      * StorageEngine owns returned pointer.
      * It should not be deleted by any caller.
      */
-    virtual DatabaseCatalogEntry* getDatabaseCatalogEntry(OperationContext* opCtx,
-                                                          StringData db) = 0;
-    virtual std::shared_ptr<DatabaseCatalogEntry> getDatabaseCatalogEntrySptr(
-        OperationContext* opCtx, StringData db) {
-        assert(false);
-    }
+    // virtual DatabaseCatalogEntry* getDatabaseCatalogEntry(OperationContext* opCtx,
+    //                                                       StringData db) = 0;
+    virtual std::shared_ptr<DatabaseCatalogEntry> getDatabaseCatalogEntry(OperationContext* opCtx,
+                                                                          StringData db) = 0;
 
     /**
      * Returns whether the storage engine supports its own locking locking below the collection
