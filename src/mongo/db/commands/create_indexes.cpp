@@ -330,7 +330,13 @@ public:
             result.appendBool("createdCollectionAutomatically", false);
         } else {
             // Prevent collection from being deleted immediately after creation
-            while (!collection_tmp) {
+            uint32_t retry_cnt = 10;
+            while (!collection_tmp && --retry_cnt > 0) {
+                db = DatabaseHolder::getDatabaseHolder().get(opCtx, ns.db());
+                if (!db) {
+                    db = DatabaseHolder::getDatabaseHolder().openDb(opCtx, ns.db());
+                }
+                DatabaseShardingState::get(db).checkDbVersion(opCtx);
                 if (db->getViewCatalog()->lookup(opCtx, ns.ns())) {
                     errmsg = "Cannot create indexes on a view";
                     uasserted(ErrorCodes::CommandNotSupportedOnView, errmsg);
@@ -347,12 +353,16 @@ public:
                 });
                 collection_tmp = db->getCollection(opCtx, ns, true);
             }
+
+            if (!collection_tmp) {
+                uassert(70002, "collection dropped during index build", collection_tmp);
+            }
             result.appendBool("createdCollectionAutomatically", true);
         }
 
         // In EloqDoc, once the txservice executed UpsertTable (in "indexer.init(specs)"), the
-        // collection in cache is expired and may be erased. But, the collection pointer is used at
-        // next in "indexer.init(specs)", to avoid program being crashed, we copy it.
+        // collection in cache is expired and may be erased. But, the collection pointer is still
+        // used at next in "indexer.init(specs)", to avoid program being crashed, we copy it.
         auto collection_uptr = collection_tmp->clone(opCtx);
         Collection* collection = collection_uptr.get();
 
