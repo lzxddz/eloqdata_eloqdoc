@@ -203,13 +203,24 @@ Status KVCollectionCatalogEntry::prepareForIndexBuild(OperationContext* opCtx,
             RecoveryUnit* newRU = opCtx->getServiceContext()->getStorageEngine()->newRecoveryUnit();
             WriteUnitOfWork::RecoveryUnitState oldState =
                 opCtx->setRecoveryUnit(newRU, WriteUnitOfWork::kNotInUnitOfWork);
-            newRU->beginUnitOfWork(opCtx);
 
-            if (!_catalog->getFeatureTracker()->isRepairableFeatureInUse(opCtx, feature)) {
-                _catalog->getFeatureTracker()->markRepairableFeatureAsInUse(opCtx, feature);
+            int retryCount = 0;
+            const int maxRetry = 10;
+            Status tmp_st = Status::OK();
+            while (retryCount++ < maxRetry) {
+                newRU->beginUnitOfWork(opCtx);
+                if (!_catalog->getFeatureTracker()->isRepairableFeatureInUse(opCtx, feature)) {
+                    tmp_st =
+                        _catalog->getFeatureTracker()->markRepairableFeatureAsInUse(opCtx, feature);
+                    if (tmp_st.isOK()) {
+                        newRU->commitUnitOfWork();
+                        break;
+                    }
+                }
+                newRU->abortUnitOfWork();
+                opCtx->sleepFor(retryCount * Milliseconds{1});
             }
-
-            newRU->commitUnitOfWork();
+            fassert(70003, tmp_st);
             opCtx->setRecoveryUnit(oldRU, oldState);
 
             imd.multikeyPaths = MultikeyPaths{static_cast<size_t>(spec->keyPattern().nFields())};
@@ -225,13 +236,25 @@ Status KVCollectionCatalogEntry::prepareForIndexBuild(OperationContext* opCtx,
             RecoveryUnit* newRU = opCtx->getServiceContext()->getStorageEngine()->newRecoveryUnit();
             WriteUnitOfWork::RecoveryUnitState oldState =
                 opCtx->setRecoveryUnit(newRU, WriteUnitOfWork::kNotInUnitOfWork);
-            newRU->beginUnitOfWork(opCtx);
 
-            if (!_catalog->getFeatureTracker()->isNonRepairableFeatureInUse(opCtx, feature)) {
-                _catalog->getFeatureTracker()->markNonRepairableFeatureAsInUse(opCtx, feature);
+            int retryCount = 0;
+            const int maxRetry = 10;
+            Status tmp_st = Status::OK();
+            while (retryCount++ < maxRetry) {
+                newRU->beginUnitOfWork(opCtx);
+                if (!_catalog->getFeatureTracker()->isNonRepairableFeatureInUse(opCtx, feature)) {
+                    tmp_st = _catalog->getFeatureTracker()->markNonRepairableFeatureAsInUse(
+                        opCtx, feature);
+                    if (tmp_st.isOK()) {
+                        newRU->commitUnitOfWork();
+                        break;
+                    }
+                }
+                newRU->abortUnitOfWork();
+                opCtx->sleepFor(retryCount * Milliseconds{1});
             }
+            fassert(70004, tmp_st);
 
-            newRU->commitUnitOfWork();
             opCtx->setRecoveryUnit(oldRU, oldState);
         }
 
