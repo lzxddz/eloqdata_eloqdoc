@@ -207,6 +207,7 @@ Status KVCollectionCatalogEntry::prepareForIndexBuild(OperationContext* opCtx,
             int retryCount = 0;
             const int maxRetry = 10;
             Status tmp_st = Status::OK();
+
             while (retryCount++ < maxRetry) {
                 newRU->beginUnitOfWork(opCtx);
                 if (!_catalog->getFeatureTracker()->isRepairableFeatureInUse(opCtx, feature)) {
@@ -215,10 +216,14 @@ Status KVCollectionCatalogEntry::prepareForIndexBuild(OperationContext* opCtx,
                     if (tmp_st.isOK()) {
                         newRU->commitUnitOfWork();
                         break;
+                    } else {
+                        newRU->abortUnitOfWork();
+                        opCtx->sleepFor(retryCount * Milliseconds{1});
                     }
+                } else {
+                    newRU->commitUnitOfWork();
+                    break;
                 }
-                newRU->abortUnitOfWork();
-                opCtx->sleepFor(retryCount * Milliseconds{1});
             }
             fassert(70003, tmp_st);
             opCtx->setRecoveryUnit(oldRU, oldState);
@@ -248,10 +253,14 @@ Status KVCollectionCatalogEntry::prepareForIndexBuild(OperationContext* opCtx,
                     if (tmp_st.isOK()) {
                         newRU->commitUnitOfWork();
                         break;
+                    } else {
+                        newRU->abortUnitOfWork();
+                        opCtx->sleepFor(retryCount * Milliseconds{1});
                     }
+                } else {
+                    newRU->commitUnitOfWork();
+                    break;
                 }
-                newRU->abortUnitOfWork();
-                opCtx->sleepFor(retryCount * Milliseconds{1});
             }
             fassert(70004, tmp_st);
 
