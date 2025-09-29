@@ -225,7 +225,8 @@ Status KVCollectionCatalogEntry::prepareForIndexBuild(OperationContext* opCtx,
                     break;
                 }
             }
-            fassert(70003, tmp_st);
+            uassertStatusOK(tmp_st);
+
             opCtx->setRecoveryUnit(oldRU, oldState);
 
             imd.multikeyPaths = MultikeyPaths{static_cast<size_t>(spec->keyPattern().nFields())};
@@ -262,7 +263,7 @@ Status KVCollectionCatalogEntry::prepareForIndexBuild(OperationContext* opCtx,
                     break;
                 }
             }
-            fassert(70004, tmp_st);
+            uassertStatusOK(tmp_st);
 
             opCtx->setRecoveryUnit(oldRU, oldState);
         }
