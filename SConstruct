@@ -20,7 +20,7 @@ import SCons
 # we are to avoid bulk loading all tools in the DefaultEnvironment.
 DefaultEnvironment(tools=[])
 
-# These come from site_scons/mongo. Import these things
+# These come from scons/mongo. Import these things
 # after calling DefaultEnvironment, for the sake of paranoia.
 import mongo
 import mongo.platform as mongo_platform
@@ -29,6 +29,8 @@ import mongo.generators as mongo_generators
 
 EnsurePythonVersion(2, 7)
 EnsureSConsVersion(2, 5)
+
+sys.path.append("scripts")
 
 from buildscripts import utils
 from buildscripts import moduleconfig
@@ -703,7 +705,7 @@ env_vars.Add('ICERUN',
 
 env_vars.Add('ICECC_CREATE_ENV',
     help='Tell SCons where icecc-create-env tool is',
-    default='buildscripts/icecc_create_env')
+    default='scripts/buildscripts/icecc_create_env')
 
 env_vars.Add('ICECC_SCHEDULER',
     help='Tell ICECC where the sceduler daemon is running')
@@ -3604,7 +3606,7 @@ compileDb = env.Alias("compiledb", compileCommands)
 vcxprojFile = env.Command(
     "mongodb.vcxproj",
     compileCommands,
-    r"$PYTHON buildscripts\make_vcxproj.py mongodb")
+    r"$PYTHON scripts\buildscripts\make_vcxproj.py mongodb")
 vcxproj = env.Alias("vcxproj", vcxprojFile)
 
 env.Alias("distsrc-tar", env.DistSrc("mongodb-src-${MONGO_VERSION}.tar"))
@@ -3678,7 +3680,7 @@ env.NoCache(env.FindInstalledFiles())
 cachePrune = env.Command(
     target="#cache-prune",
     source=[
-        "#buildscripts/scons_cache_prune.py",
+        "#scripts/buildscripts/scons_cache_prune.py",
     ],
     action="$PYTHON ${SOURCES[0]} --cache-dir=${CACHE_DIR.abspath} --cache-size=${CACHE_SIZE} --prune-ratio=${CACHE_PRUNE_TARGET/100.00}",
     CACHE_DIR=env.Dir(cacheDir),

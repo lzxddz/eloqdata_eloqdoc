@@ -392,9 +392,9 @@ pyenv global 2.7.18
 
 # Return to the original directory to find the requirements.txt file
 cd "$SCRIPT_START_DIR"
-log_info "Installing Python dependencies from: $SCRIPT_START_DIR/buildscripts/requirements.txt"
+log_info "Installing Python dependencies from: $SCRIPT_START_DIR/scripts/buildscripts/requirements.txt"
 
 # Install Python dependencies
-pip2 install -r buildscripts/requirements.txt
+pip2 install -r scripts/buildscripts/requirements.txt
 
 log_info "EloqDoc dependency installation completed successfully"

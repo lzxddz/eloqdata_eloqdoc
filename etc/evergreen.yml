@@ -172,7 +172,7 @@ variables:
      - key: db_path
        value: /data/db
      - key: log_path
-       value: ${remote_dir}/mongod.log
+       value: ${remote_dir}/eloqdoc.log
      - key: exit_file
        value: powercycle_exit.yml
 
@@ -469,7 +469,7 @@ variables:
   - name: auth_audit
   - name: benchmarks_orphaned
   - name: benchmarks_sharding
-  - name: buildscripts_test
+  - name: scripts/buildscripts_test
   - name: dbtest
   - name: ese
   - name: external_auth
@@ -843,7 +843,7 @@ functions:
       system_log: true
       script: |
         ${activate_virtualenv}
-        $python buildscripts/collect_resource_info.py -o system_resource_info.json -i 5
+        $python scripts/buildscripts/collect_resource_info.py -o system_resource_info.json -i 5
 
   # Run a monitor process as a background, system task to periodically
   # display how many threads interesting processes are using.
@@ -1038,7 +1038,7 @@ functions:
             set -o errexit
             set -o verbose
             if [ "${build_openssl|}" = "true" ]; then
-                bash buildscripts/fetch_and_build_openssl.sh "${python|python}" "${openssl_make_flags|}" "${openssl_config_flags|}"
+                bash scripts/buildscripts/fetch_and_build_openssl.sh "${python|python}" "${openssl_make_flags|}" "${openssl_config_flags|}"
             fi
 
   "setup android toolchain" :
@@ -1049,7 +1049,7 @@ functions:
         set -o verbose
         if [ "${setup_android_toolchain|}" = "true" ]; then
             ${activate_virtualenv}
-            PYTHON=$python ${compile_env|} src/buildscripts/setup-android-toolchain.sh ${android_toolchain_target_arch} ${android_toolchain_api_version}
+            PYTHON=$python ${compile_env|} src/scripts/buildscripts/setup-android-toolchain.sh ${android_toolchain_target_arch} ${android_toolchain_api_version}
         fi
 
   "scons cache pruning" :
@@ -1064,16 +1064,16 @@ functions:
         # these default values in the distro config in evergreen.
 
         ${activate_virtualenv}
-        prune_scons_cache="$python buildscripts/scons_cache_prune.py --cache-dir ${scons_cache_path} --cache-size ${scons_cache_size|200} --prune-ratio ${scons_prune_ratio|0.8}"
+        prune_scons_cache="$python scripts/buildscripts/scons_cache_prune.py --cache-dir ${scons_cache_path} --cache-size ${scons_cache_size|200} --prune-ratio ${scons_prune_ratio|0.8}"
         if [ "${scons_cache_scope}" = "shared" ]; then
             if [ "${shared_scons_pruning}" = "true" ] && [ "${is_patch}" != "true" ]; then
               echo "shared_scons_pruning is set to true, checking last prune time"
-              if $python buildscripts/prune_check.py; then
+              if $python scripts/buildscripts/prune_check.py; then
                 echo "Pruning shared cache"
                 $prune_scons_cache
                 if [ $? -eq 0 ]; then
                   echo "Prune successful.  Resetting last_prune timestamp"
-                  $python buildscripts/prune_check.py -w
+                  $python scripts/buildscripts/prune_check.py -w
                 fi
               else
                 echo "We are less than the 'shared_scons_pruning' num seconds threshold, pruning will be skipped"
@@ -1161,7 +1161,7 @@ functions:
         set -o errexit
 
         ${activate_virtualenv}
-        $python buildscripts/evergreen_task_timeout.py \
+        $python scripts/buildscripts/evergreen_task_timeout.py \
           --task-name ${task_name}                     \
           --build-variant ${build_variant}             \
           --timeout ${timeout_secs|0}                  \
@@ -1197,7 +1197,7 @@ functions:
         # For patch builds determine if we can bypass compile.
         if [[ "${is_patch}" = "true" && "${task_name}" = "compile" ]]; then
           ${activate_virtualenv}
-          $python buildscripts/bypass_compile_and_fetch_binaries.py            \
+          $python scripts/buildscripts/bypass_compile_and_fetch_binaries.py            \
             --project ${project}                                               \
             --buildVariant ${build_variant}                                    \
             --revision ${revision}                                             \
@@ -1397,7 +1397,7 @@ functions:
               ${san_symbolizer}                           \
               ${snmp_config_path}                         \
               ${resmoke_wrapper}                          \
-              $python buildscripts/evergreen_run_tests.py \
+              $python scripts/buildscripts/evergreen_run_tests.py \
                   ${resmoke_args}                         \
                   $extra_args                             \
                   ${test_flags}                           \
@@ -1466,7 +1466,7 @@ functions:
 
         ${activate_virtualenv}
         set +o errexit
-        ${compile_env|} $python ./buildscripts/scons.py ${compile_flags|} ${task_compile_flags|} ${task_compile_flags_extra|} ${scons_cache_args|} $extra_args ${targets} ${additional_targets|} MONGO_VERSION=${version}
+        ${compile_env|} $python ./scripts/buildscripts/scons.py ${compile_flags|} ${task_compile_flags|} ${task_compile_flags_extra|} ${scons_cache_args|} $extra_args ${targets} ${additional_targets|} MONGO_VERSION=${version}
         exit_status=$?
         # If compile fails we do not run any tests
         if [ $exit_status -ne 0 ]; then
@@ -1526,7 +1526,7 @@ functions:
           fi
 
           echo "Shared Cache with setting: ${scons_cache_scope}"
-          MONGO_VERSION=$MONGO_VERSION SCONS_CACHE_MODE=${scons_cache_mode|nolinked} SCONS_CACHE_SCOPE=$scons_cache_scope IS_PATCH=${is_patch} ${python|/opt/mongodbtoolchain/v2/bin/python2} buildscripts/generate_compile_expansions_shared_cache.py --out compile_expansions.yml
+          MONGO_VERSION=$MONGO_VERSION SCONS_CACHE_MODE=${scons_cache_mode|nolinked} SCONS_CACHE_SCOPE=$scons_cache_scope IS_PATCH=${is_patch} ${python|/opt/mongodbtoolchain/v2/bin/python2} scripts/buildscripts/generate_compile_expansions_shared_cache.py --out compile_expansions.yml
 
         # Legacy Expansion generation
         else
@@ -1534,7 +1534,7 @@ functions:
           # Proceed with regular expansions generated
           # This script converts the generated version string into a sanitized version string for
           # use by scons and uploading artifacts as well as information about for the scons cache.
-          MONGO_VERSION=$MONGO_VERSION SCONS_CACHE_MODE=${scons_cache_mode|nolinked} USE_SCONS_CACHE=${use_scons_cache|false} ${python|/opt/mongodbtoolchain/v2/bin/python2} buildscripts/generate_compile_expansions.py --out compile_expansions.yml
+          MONGO_VERSION=$MONGO_VERSION SCONS_CACHE_MODE=${scons_cache_mode|nolinked} USE_SCONS_CACHE=${use_scons_cache|false} ${python|/opt/mongodbtoolchain/v2/bin/python2} scripts/buildscripts/generate_compile_expansions.py --out compile_expansions.yml
         fi
 
   "apply compile expansions" :
@@ -1663,7 +1663,7 @@ functions:
 
           git clone git@github.com:10gen/jstestfuzz.git
 
-          cp mongodb*/bin/mongod .
+          cp mongodb*/bin/eloqdoc .
     - command: shell.exec
       params:
         working_dir: src
@@ -1735,7 +1735,7 @@ functions:
           set -o errexit
 
           ${activate_virtualenv}
-          $python buildscripts/idl/run_tests.py
+          $python scripts/buildscripts/idl/run_tests.py
 
   "run powercycle test" :
     - command: shell.exec
@@ -1831,7 +1831,7 @@ functions:
           fi
           grep -q "pass" report.json
           pass=$?
-          # On test success, we only archive mongod.log.
+          # On test success, we only archive eloqdoc.log.
           if [ $pass -eq 0 ]; then
             echo "ec2_artifacts: ${log_path}" > ec2_artifacts.yml
           fi
@@ -1873,7 +1873,7 @@ functions:
         pip install 'pyOpenSSL ; sys_platform == "win32" or sys_platform == "cygwin"'
 
         rm -rf /data/install /data/multiversion
-        $python buildscripts/setup_multiversion_mongodb.py   \
+        $python scripts/buildscripts/setup_multiversion_mongodb.py   \
           --installDir /data/install                         \
           --linkDir /data/multiversion                       \
           --edition ${multiversion_edition|base}             \
@@ -1966,7 +1966,7 @@ functions:
     type: test
     params:
       shell: bash
-      working_dir: src/buildscripts/package_test
+      working_dir: src/scripts/buildscripts/package_test
       script: |
         set -o errexit
 
@@ -2006,7 +2006,7 @@ functions:
         set -o verbose
 
         ${activate_virtualenv}
-        $python buildscripts/fetch_test_lifecycle.py                      \
+        $python scripts/buildscripts/fetch_test_lifecycle.py                      \
             --metadataRepo git@github.com:mongodb/mongo-test-metadata.git \
             --lifecycleFile etc/test_lifecycle.yml                        \
             --referencesFile references.yml                               \
@@ -2039,9 +2039,9 @@ functions:
           ${activate_virtualenv}
           # Specify '--mode start' to ensure the remote instance is running.
           monitor_ec2_yml=monitor_ec2.yml
-          $python buildscripts/aws_ec2.py --imageId ${instance_id} --mode start --yamlFile $monitor_ec2_yml
+          $python scripts/buildscripts/aws_ec2.py --imageId ${instance_id} --mode start --yamlFile $monitor_ec2_yml
           echo "AMI EC2 instance ${instance_id} status: $(cat $monitor_ec2_yml)"
-          private_ip_address=$($python buildscripts/yaml_key_value.py --yamlFile $monitor_ec2_yml --yamlKey private_ip_address)
+          private_ip_address=$($python scripts/buildscripts/yaml_key_value.py --yamlFile $monitor_ec2_yml --yamlKey private_ip_address)
           if [ -z "$private_ip_address" ]; then
             echo "Cannot determine the IP address for the remote monitor."
             continue
@@ -2049,13 +2049,13 @@ functions:
           cmd="${tar|tar} czf ec2_monitor_files.tgz ${ec2_monitor_files}"
           ssh_connection_options="${ssh_identity} ${ssh_connection_options}"
           ssh_connection_options="$ssh_connection_options -o ConnectionAttempts=3"
-          $python buildscripts/remote_operations.py          \
+          $python scripts/buildscripts/remote_operations.py          \
             --verbose                                        \
             --userHost $USER@$private_ip_address             \
             --sshConnectionOptions "$ssh_connection_options" \
             --retries ${ssh_retries|0}                       \
             --commands "$cmd"
-          $python buildscripts/remote_operations.py          \
+          $python scripts/buildscripts/remote_operations.py          \
             --verbose                                        \
             --userHost $USER@$private_ip_address             \
             --operation "copy_from"                          \
@@ -2073,7 +2073,7 @@ functions:
 
           set -o errexit
           ${activate_virtualenv}
-          pip install -r buildscripts/requirements.txt
+          pip install -r scripts/buildscripts/requirements.txt
           pip install -r pytests/requirements.txt
 
           if [ ! -z "${subnet_id}" ]; then
@@ -2101,7 +2101,7 @@ functions:
           fi
 
           # Clone another instance of this host in EC2.
-          buildscripts/launch_evergreen_ec2_instance.sh \
+          scripts/buildscripts/launch_evergreen_ec2_instance.sh \
             $expire_hours                               \
             -k ${ssh_key_id}                            \
             $security_groups                            \
@@ -2123,13 +2123,13 @@ functions:
           # Copy mount_drives.sh script to remote host.
           ssh_connection_options="${ssh_identity} ${ssh_connection_options}"
           ${activate_virtualenv}
-          $python buildscripts/remote_operations.py          \
+          $python scripts/buildscripts/remote_operations.py          \
             --verbose                                        \
             --userHost $USER@${private_ip_address}           \
             --operation "copy_to"                            \
             --sshConnectionOptions "$ssh_connection_options" \
             --retries ${ssh_retries|0}                       \
-            --file buildscripts/mount_drives.sh
+            --file scripts/buildscripts/mount_drives.sh
 
     - command: shell.exec
       params:
@@ -2161,7 +2161,7 @@ functions:
           cmds="$sudo bash mount_drives.sh $script_opts; mount; ls -ld $data_db $log; df"
           ssh_connection_options="${ssh_identity} ${ssh_connection_options}"
           ${activate_virtualenv}
-          $python buildscripts/remote_operations.py          \
+          $python scripts/buildscripts/remote_operations.py          \
             --verbose                                        \
             --userHost $USER@${private_ip_address}           \
             --sshConnectionOptions "$ssh_connection_options" \
@@ -2188,7 +2188,7 @@ functions:
           fi
           cmds="$sudo mkdir -p ${remote_dir}; $sudo chown $user_group ${remote_dir}; $set_permission; ls -ld ${remote_dir}"
           ${activate_virtualenv}
-          $python buildscripts/remote_operations.py          \
+          $python scripts/buildscripts/remote_operations.py          \
             --verbose                                        \
             --userHost $USER@${private_ip_address}           \
             --sshConnectionOptions "$ssh_connection_options" \
@@ -2201,8 +2201,8 @@ functions:
         working_dir: src
         script: |
           set -o errexit
-          # Copy buildscripts, pytests and mongoDB executables to the remote host.
-          file_param="--file buildscripts --file pytests"
+          # Copy scripts/buildscripts, pytests and mongoDB executables to the remote host.
+          file_param="--file scripts/buildscripts --file pytests"
           mongo_executables="mongo mongod mongos"
           for executable in $mongo_executables
           do
@@ -2210,7 +2210,7 @@ functions:
           done
           ssh_connection_options="${ssh_identity} ${ssh_connection_options}"
           ${activate_virtualenv}
-          $python buildscripts/remote_operations.py          \
+          $python scripts/buildscripts/remote_operations.py          \
             --verbose                                        \
             --userHost $USER@${private_ip_address}           \
             --operation "copy_to"                            \
@@ -2235,7 +2235,7 @@ functions:
           cmds="$cmds; pip install -r \$remote_dir/pytests/requirements.txt"
           ssh_connection_options="${ssh_identity} ${ssh_connection_options}"
           ${activate_virtualenv}
-          $python buildscripts/remote_operations.py          \
+          $python scripts/buildscripts/remote_operations.py          \
             --verbose                                        \
             --userHost $USER@${private_ip_address}           \
             --sshConnectionOptions "$ssh_connection_options" \
@@ -2270,7 +2270,7 @@ functions:
           cmds="$cmds; $sudo reboot"
           ssh_connection_options="${ssh_identity} ${ssh_connection_options}"
           ${activate_virtualenv}
-          $python buildscripts/remote_operations.py          \
+          $python scripts/buildscripts/remote_operations.py          \
             --verbose                                        \
             --userHost $USER@${private_ip_address}           \
             --sshConnectionOptions "$ssh_connection_options" \
@@ -2295,7 +2295,7 @@ functions:
           cmds="$cmds; fi"
           ssh_connection_options="${ssh_identity} ${ssh_connection_options}"
           ${activate_virtualenv}
-          $python buildscripts/remote_operations.py          \
+          $python scripts/buildscripts/remote_operations.py          \
             --verbose                                        \
             --userHost $USER@${private_ip_address}           \
             --sshConnectionOptions "$ssh_connection_options" \
@@ -2337,7 +2337,7 @@ functions:
           fi
           ssh_connection_options="${ssh_identity} ${ssh_connection_options}"
           ${activate_virtualenv}
-          $python buildscripts/remote_operations.py          \
+          $python scripts/buildscripts/remote_operations.py          \
             --verbose                                        \
             --userHost $USER@${private_ip_address}           \
             --sshConnectionOptions "$ssh_connection_options" \
@@ -2408,7 +2408,7 @@ functions:
           if [ ! -z "$cmds" ]; then
             ssh_connection_options="${ssh_identity} ${ssh_connection_options}"
             ${activate_virtualenv}
-            $python buildscripts/remote_operations.py          \
+            $python scripts/buildscripts/remote_operations.py          \
               --verbose                                        \
               --userHost $USER@${private_ip_address}           \
               --sshConnectionOptions "$ssh_connection_options" \
@@ -2431,7 +2431,7 @@ functions:
           cmds="$cmds; chmod +x ${windows_crash_dir}/*.exe"
           ssh_connection_options="${ssh_identity} ${ssh_connection_options}"
           ${activate_virtualenv}
-          $python buildscripts/remote_operations.py          \
+          $python scripts/buildscripts/remote_operations.py          \
             --verbose                                        \
             --userHost $USER@${private_ip_address}           \
             --sshConnectionOptions "$ssh_connection_options" \
@@ -2456,13 +2456,13 @@ functions:
         # Specify '--mode start' to ensure the remote instance is running.
         now=$(date +'%Y%m%d%H%M%S')
         aws_ec2_status_yml=aws_ec2_status.yml
-        $python buildscripts/aws_ec2.py            \
+        $python scripts/buildscripts/aws_ec2.py            \
           --imageId ${instance_id}                 \
           --mode start                             \
           --yamlFile $aws_ec2_status_yml           \
           --consoleOutputFile ec2_console_$now.log \
           --consoleScreenshotFile ec2_console_screen_shot_$now.jpg
-        private_ip_address=$($python buildscripts/yaml_key_value.py --yamlFile $aws_ec2_status_yml --yamlKey private_ip_address)
+        private_ip_address=$($python scripts/buildscripts/yaml_key_value.py --yamlFile $aws_ec2_status_yml --yamlKey private_ip_address)
         echo "private_ip_address: $private_ip_address" > private_ip_address.yml
 
   "update EC2 address": &update_ec2_address
@@ -2484,7 +2484,7 @@ functions:
         cmd="${tar|tar} czf ec2_artifacts.tgz ${ec2_artifacts}"
         ssh_connection_options="${ssh_identity} ${ssh_connection_options}"
         ${activate_virtualenv}
-        $python buildscripts/remote_operations.py          \
+        $python scripts/buildscripts/remote_operations.py          \
           --verbose                                        \
           --userHost $USER@${private_ip_address}           \
           --sshConnectionOptions "$ssh_connection_options" \
@@ -2503,7 +2503,7 @@ functions:
         fi
         ssh_connection_options="${ssh_identity} ${ssh_connection_options}"
         ${activate_virtualenv}
-        $python buildscripts/remote_operations.py          \
+        $python scripts/buildscripts/remote_operations.py          \
           --verbose                                        \
           --userHost $USER@${private_ip_address}           \
           --operation "copy_from"                          \
@@ -2523,7 +2523,7 @@ functions:
         fi
         ${activate_virtualenv}
         echo "Terminating $instance_id"
-        aws_ec2=$($python buildscripts/aws_ec2.py --imageId ${instance_id} --mode terminate)
+        aws_ec2=$($python scripts/buildscripts/aws_ec2.py --imageId ${instance_id} --mode terminate)
         echo "Terminated AMI EC2 instance: $aws_ec2"
 
   "gather remote mongo coredumps": &gather_remote_mongo_coredumps
@@ -2546,7 +2546,7 @@ functions:
         cmds="$cmds;   if [ ! -f \$base_name ]; then mv \$core_file .; fi"
         cmds="$cmds; done"
         ${activate_virtualenv}
-        $python buildscripts/remote_operations.py          \
+        $python scripts/buildscripts/remote_operations.py          \
           --verbose                                        \
           --userHost $USER@${private_ip_address}           \
           --sshConnectionOptions "$ssh_connection_options" \
@@ -2566,7 +2566,7 @@ functions:
         ssh_connection_options="${ssh_identity} ${ssh_connection_options}"
         remote_dir=${remote_dir|.}
         ${activate_virtualenv}
-        $python buildscripts/remote_operations.py          \
+        $python scripts/buildscripts/remote_operations.py          \
           --verbose                                        \
           --userHost $USER@${private_ip_address}           \
           --operation "copy_from"                          \
@@ -3045,8 +3045,8 @@ functions:
         fi
 
         ${activate_virtualenv}
-        echo "Calling the hang analyzer: PATH=\"/opt/mongodbtoolchain/gdb/bin:$PATH\" $python buildscripts/hang_analyzer.py $hang_analyzer_option"
-        PATH="/opt/mongodbtoolchain/gdb/bin:$PATH" $python buildscripts/hang_analyzer.py $hang_analyzer_option
+        echo "Calling the hang analyzer: PATH=\"/opt/mongodbtoolchain/gdb/bin:$PATH\" $python scripts/buildscripts/hang_analyzer.py $hang_analyzer_option"
+        PATH="/opt/mongodbtoolchain/gdb/bin:$PATH" $python scripts/buildscripts/hang_analyzer.py $hang_analyzer_option
 
         # Call hang_analyzer.py script for tasks that are running remote mongo processes
         if [ -n "${private_ip_address}" ]; then
@@ -3055,7 +3055,7 @@ functions:
             core_ext=mdmp
           fi
           ssh_connection_options="${ssh_identity} ${ssh_connection_options}"
-          # buildscripts must be installed in ${remote_dir} on the remote host.
+          # scripts/buildscripts must be installed in ${remote_dir} on the remote host.
           remote_dir=${remote_dir|.}
 
           # Copy mongoDB debug symbols to the remote host.
@@ -3065,7 +3065,7 @@ functions:
             file_param="$file_param --file $debug_file"
           done
           if [ ! -z "$file_param" ]; then
-            $python buildscripts/remote_operations.py          \
+            $python scripts/buildscripts/remote_operations.py          \
               --verbose                                        \
               --userHost $USER@${private_ip_address}           \
               --operation "copy_to"                            \
@@ -3083,15 +3083,15 @@ functions:
           # we don't want to evaluate the local python variable, but instead pass the python string
           # so the remote host will use the right python when the virtualenv is sourced.
           cmds="$cmds; cd ${remote_dir}"
-          cmds="$cmds; PATH=\"/opt/mongodbtoolchain/gdb/bin:\$PATH\" python buildscripts/hang_analyzer.py $hang_analyzer_option"
-          $python buildscripts/remote_operations.py          \
+          cmds="$cmds; PATH=\"/opt/mongodbtoolchain/gdb/bin:\$PATH\" python scripts/buildscripts/hang_analyzer.py $hang_analyzer_option"
+          $python scripts/buildscripts/remote_operations.py          \
             --verbose                                        \
             --userHost $USER@${private_ip_address}           \
             --sshConnectionOptions "$ssh_connection_options" \
             --retries ${ssh_retries}                         \
             --commands "$cmds"
 
-          $python buildscripts/remote_operations.py          \
+          $python scripts/buildscripts/remote_operations.py          \
             --verbose                                        \
             --userHost $USER@${private_ip_address}           \
             --operation "copy_from"                          \
@@ -3320,7 +3320,7 @@ tasks:
           fi
           ${activate_virtualenv}
           if [ "${has_packages|}" = "true" ] ; then
-            cd buildscripts
+            cd scripts/buildscripts
             $python ${packager_script} --prefix `pwd`/.. --distros ${packager_distro} --tarball `pwd`/../mongodb-binaries.tgz -s ${version} -m HEAD -a ${packager_arch}
             cd ..
           fi
@@ -3330,7 +3330,7 @@ tasks:
           cd shell-archive
           ${platform_decompress|tar xzvf} ../mongodb-binaries.tgz
           find . -mindepth 3 ! -name "mongo${exe}" -type f -exec rm {} \; # delete bin/* except bin/mongo
-          $python ../buildscripts/make_archive.py -o mongodb-shell.${ext|tgz} $(find mongodb-* -type f)
+          $python ../scripts/buildscripts/make_archive.py -o mongodb-shell.${ext|tgz} $(find mongodb-* -type f)
           cd ..
 
     - func: "fetch test_lifecycle.yml"
@@ -3355,7 +3355,7 @@ tasks:
           - "./mongobridge*"
           - "./mongoebench*"
           - "./mongoed*"
-          - "buildscripts/**"
+          - "scripts/buildscripts/**"
           - "*Example"
           - "*Test"
           - "./**.pdb"
@@ -3600,14 +3600,14 @@ tasks:
 
           ${activate_virtualenv}
           if [ ${enable_embedded_tests|false} = "ios_tvos_simulator" ]; then
-              ${compile_env|} buildscripts/runiossim.sh ${ios_sim_device} ${ios_sim_runtime} "build/mongo-embedded-sdk-${version}/bin/mongo_embedded_capi_test" --tempPath /data
-              ${compile_env|} buildscripts/runiossim.sh ${ios_sim_device} ${ios_sim_runtime} "build/mongo-embedded-sdk-${version}/bin/mongo_embedded_mongoc_client_test" --tempPath /data
+              ${compile_env|} scripts/buildscripts/runiossim.sh ${ios_sim_device} ${ios_sim_runtime} "build/mongo-embedded-sdk-${version}/bin/mongo_embedded_capi_test" --tempPath /data
+              ${compile_env|} scripts/buildscripts/runiossim.sh ${ios_sim_device} ${ios_sim_runtime} "build/mongo-embedded-sdk-${version}/bin/mongo_embedded_mongoc_client_test" --tempPath /data
           elif [ ${enable_embedded_tests|false} = "android_emulator" ]; then
               # strip because the binaries with debug symbols are too big for the default storage on the emulator
               find build/mongo-embedded-sdk-${version}/bin -type f | xargs $(dirname $(pwd))/android_toolchain-${android_toolchain_target_arch}-${android_toolchain_api_version}/bin/*-linux-android*-strip
               find build/mongo-embedded-sdk-${version}/lib -type f -name "*.so" | xargs $(dirname $(pwd))/android_toolchain-${android_toolchain_target_arch}-${android_toolchain_api_version}/bin/*-linux-android*-strip
-              ${compile_env|} buildscripts/runandroidsim.sh $(dirname $(pwd))/android_sdk ${android_toolchain_system_image_arch} ${android_system_image_version} "build/mongo-embedded-sdk-${version}" "bin/mongo_embedded_capi_test" --tempPath /data
-              ${compile_env|} buildscripts/runandroidsim.sh $(dirname $(pwd))/android_sdk ${android_toolchain_system_image_arch} ${android_system_image_version} "build/mongo-embedded-sdk-${version}" "bin/mongo_embedded_mongoc_client_test" --tempPath /data
+              ${compile_env|} scripts/buildscripts/runandroidsim.sh $(dirname $(pwd))/android_sdk ${android_toolchain_system_image_arch} ${android_system_image_version} "build/mongo-embedded-sdk-${version}" "bin/mongo_embedded_capi_test" --tempPath /data
+              ${compile_env|} scripts/buildscripts/runandroidsim.sh $(dirname $(pwd))/android_sdk ${android_toolchain_system_image_arch} ${android_system_image_version} "build/mongo-embedded-sdk-${version}" "bin/mongo_embedded_mongoc_client_test" --tempPath /data
           elif [ ${enable_embedded_tests|false} = "native" ]; then
             "build/mongo-embedded-sdk-${version}/bin/mongo_embedded_capi_test"
             "build/mongo-embedded-sdk-${version}/bin/mongo_embedded_mongoc_client_test"
@@ -3918,16 +3918,16 @@ tasks:
           ### TODO: Remove python3 when mypy 0.580 is installed in the toolchain.
           # Since mypy requires python3, we need to activate the venv_3
           ${activate_virtualenv_3}
-          pip install -r buildscripts/requirements.txt
+          pip install -r scripts/buildscripts/requirements.txt
           updated_mypy=$(PATH=$PATH:/opt/mongodbtoolchain/v2/bin which mypy)
           deactivate
           ###
           ${activate_virtualenv}
           # TODO: Remove once the linters have been updated on the variants.
-          pip install -r buildscripts/requirements.txt
+          pip install -r scripts/buildscripts/requirements.txt
           # The linters require the modules be installed.
           pip install -r pytests/requirements.txt
-          MYPY=$updated_mypy ${compile_env|} $python ./buildscripts/scons.py ${compile_flags|} --stack-size=1024 lint
+          MYPY=$updated_mypy ${compile_env|} $python ./scripts/buildscripts/scons.py ${compile_flags|} --stack-size=1024 lint
 
 - <<: *task_template
   name: burn_in_tests
@@ -3964,14 +3964,14 @@ tasks:
           build_variant=${burn_in_tests_build_variant|}
         fi
         # Evergreen executable is in $HOME.
-        PATH=$PATH:$HOME $python buildscripts/burn_in_tests.py --branch=${branch_name} --buildVariant=$build_variant --testListOutfile=jstests/new_tests.json --noExec $burn_in_args
+        PATH=$PATH:$HOME $python scripts/buildscripts/burn_in_tests.py --branch=${branch_name} --buildVariant=$build_variant --testListOutfile=jstests/new_tests.json --noExec $burn_in_args
         # Copy the results to the src dir.
         cp jstests/new_tests.json ../src/jstests/new_tests.json
   - func: "do multiversion setup"
   - func: "run tests"
     vars:
       task_path_suffix: /data/multiversion:$HOME
-      resmoke_wrapper: $python buildscripts/burn_in_tests.py --testListFile=jstests/new_tests.json
+      resmoke_wrapper: $python scripts/buildscripts/burn_in_tests.py --testListFile=jstests/new_tests.json
       resmoke_args: --repeat=2
       run_multiple_jobs: true
 
@@ -4013,7 +4013,7 @@ tasks:
         mkdir -p /data/db
         rm -rf /data/db/*
 
-        ./mongod --fork --logpath=/data/db/mongod.log
+        ./mongod --fork --logpath=/data/db/eloqdoc.log
         PATH="$(pwd):$PATH" ./src/third_party/scripts/mongo-perf_get_sources.sh
         ./mongo --eval 'db.getSiblingDB("admin").shutdownServer()'
   - command: archive.targz_pack
@@ -6860,7 +6860,7 @@ tasks:
 
         ${activate_virtualenv}
         if [ "Windows_NT" = "$OS" ]; then
-          /cygdrive/c/python/python36/python.exe -m pip install -r buildscripts/requirements.txt
+          /cygdrive/c/python/python36/python.exe -m pip install -r scripts/buildscripts/requirements.txt
         fi
   - func: "run tests"
     vars:
@@ -7050,7 +7050,7 @@ tasks:
   - func: "do setup"
   - func: "run idl tests"
 
-- name: buildscripts_test
+- name: scripts/buildscripts_test
   depends_on: []
   commands:
   - func: "git get project"
@@ -7058,7 +7058,7 @@ tasks:
   - func: "set up credentials"
   - func: "run tests"
     vars:
-      resmoke_args: --suites=buildscripts_test
+      resmoke_args: --suites=scripts/buildscripts_test
 
 - name: package
   depends_on:
@@ -7581,7 +7581,7 @@ tasks:
         # We use a small batch size to avoid hitting the load balancer timeout if the Evergreen
         # API query is not fast enough.
         # Evergreen executable is in $HOME.
-        PATH=$PATH:$HOME $python buildscripts/update_test_lifecycle.py  \
+        PATH=$PATH:$HOME $python scripts/buildscripts/update_test_lifecycle.py  \
             --project ${project}                                        \
             --requestBatchSize 20                                       \
             --commit                                                    \
@@ -9220,7 +9220,7 @@ buildvariants:
   - name: auth_audit
   - name: benchmarks_orphaned
   - name: benchmarks_sharding
-  - name: buildscripts_test
+  - name: scripts/buildscripts_test
   - name: dbtest
   - name: ese
   - name: external_auth
@@ -10411,7 +10411,7 @@ buildvariants:
   - name: benchmarks_sharding
     distros:
     - centos6-perf
-  - name: buildscripts_test
+  - name: scripts/buildscripts_test
   - name: bulk_gle_passthrough
   - name: causally_consistent_jscore_passthrough
   - name: causally_consistent_jscore_passthrough_auth
@@ -10967,7 +10967,7 @@ buildvariants:
   - name: audit
   - name: auth
   - name: auth_audit
-  - name: buildscripts_test
+  - name: scripts/buildscripts_test
   - name: bulk_gle_passthrough
   - name: causally_consistent_jscore_passthrough
   - name: causally_consistent_jscore_passthrough_auth
@@ -12387,7 +12387,7 @@ buildvariants:
   - name: compile_all_run_unittests_TG
     distros:
     - ubuntu1604-build
-  - name: buildscripts_test
+  - name: scripts/buildscripts_test
 
 - name: ubuntu-dynamic-1604-clang-3.8-libcxx
   display_name: "* Shared Library Ubuntu 16.04 (Clang 3.8)"
@@ -12407,7 +12407,7 @@ buildvariants:
   - name: compile_all_run_unittests_TG
     distros:
     - ubuntu1604-build
-  - name: buildscripts_test
+  - name: scripts/buildscripts_test
 
 ###########################################
 #          SUSE buildvariants             #

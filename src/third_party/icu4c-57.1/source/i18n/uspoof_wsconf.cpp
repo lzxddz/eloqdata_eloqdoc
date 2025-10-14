@@ -262,7 +262,7 @@ void buildWSConfusableData(SpoofImpl *spImpl, const char * confusablesWS,
     // Eliminate duplicate script sets.  At this point we have a separate
     // script set for every code point that had data in the input file.
     //
-    // We eliminate underlying ScriptSet objects, not the BuildScriptSets that wrap them
+    // We eliminate underlying ScriptSet objects, not the scripts/buildscriptsets that wrap them
     //
     // printf("Number of scriptSets: %d\n", scriptSets->size());
     {

@@ -6,10 +6,10 @@ set print elements 0
 set print length 0
 
 # Load the mongodb utilities
-source buildscripts/gdb/mongo.py
+source scripts/buildscripts/gdb/mongo.py
 
 # Load the mongodb pretty printers
-source buildscripts/gdb/mongo_printers.py
+source scripts/buildscripts/gdb/mongo_printers.py
 
 # Load the mongodb lock analysis
-source buildscripts/gdb/mongo_lock.py
+source scripts/buildscripts/gdb/mongo_lock.py

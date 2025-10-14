@@ -53,7 +53,7 @@ Compile EloqDoc from the repository root.
 
 ```bash
 env WITH_DATA_STORE=ELOQDSS_ROCKSDB \
-python buildscripts/scons.py \
+python scripts/buildscripts/scons.py \
     MONGO_VERSION=4.0.3 \
     VARIANT_DIR=RelWithDebInfo \
     LIBPATH=/usr/local/lib \
@@ -104,7 +104,7 @@ Compile EloqDoc from the repository root.
 
 ```bash
 env WITH_LOG_STATE=ROCKSDB_CLOUD_S3 WITH_DATA_STORE=ELOQDSS_ROCKSDB_CLOUD_S3 \
-python buildscripts/scons.py \
+python scripts/buildscripts/scons.py \
     MONGO_VERSION=4.0.3 \
     VARIANT_DIR=RelWithDebInfo \
     LIBPATH=/usr/local/lib \
@@ -123,10 +123,10 @@ All executable files will be installed to `$INSTALL_PREFIX/bin`, and all librari
 EloqDoc depends on libmimalloc and libbrpc, and requires them to load before other libraries.
 
 ```bash
-patchelf --remove-needed libmimalloc.so.2 $INSTALL_PREFIX/bin/mongod
-patchelf --remove-needed libbrpc.so $INSTALL_PREFIX/bin/mongod
-patchelf --add-needed libbrpc.so $INSTALL_PREFIX/bin/mongod
-patchelf --add-needed libmimalloc.so.2 $INSTALL_PREFIX/bin/mongod
+patchelf --remove-needed libmimalloc.so.2 $INSTALL_PREFIX/bin/eloqdoc
+patchelf --remove-needed libbrpc.so $INSTALL_PREFIX/bin/eloqdoc
+patchelf --add-needed libbrpc.so $INSTALL_PREFIX/bin/eloqdoc
+patchelf --add-needed libmimalloc.so.2 $INSTALL_PREFIX/bin/eloqdoc
 ```
 
 If you don't adjust load order, then you must set LD_PRELOAD before run EloqDoc.

@@ -125,7 +125,7 @@ env.Command(objects,
             ' -dOutDir=' + buildDir + r'\msi'
             ' -dPlatform=' + msi_platform +
             ' -dFlavor=' + msi_flavor +
-            r' -dProjectDir=buildscripts\packaging\msi\\'
+            r' -dProjectDir=scripts\buildscripts\packaging\msi\\'
             ' -dProjectName=MongoDB'
             ' -dCompassDir=src\mongo\installer\compass'
             ' -dTargetDir=' + buildDir + r'\msi'
@@ -168,7 +168,7 @@ env.Depends(pre_msi_cmd, '$BUILD_DIR/mongo/installer/msi/ca/mongoca.dll')
 env.Depends(pre_msi_cmd, '#src/mongo/installer/compass/Install-Compass.ps1')
 
 # Source Dependencies
-env.Depends(pre_msi_cmd, '#buildscripts/packaging/msi/mongod.yaml')
+env.Depends(pre_msi_cmd, '#scripts/buildscripts/packaging/msi/mongod.yaml')
 
 if 'enterprise' in env['MONGO_MODULES']:
     env.Depends(pre_msi_cmd, "#" + enterpriseToolBuildDir + "/mongodecrypt.exe")
@@ -177,7 +177,7 @@ if 'enterprise' in env['MONGO_MODULES']:
 msi = "$BUILD_DIR/msi/${SERVER_DIST_BASENAME}.msi"
 env.Command(msi,
             pre_msi,
-            r'$PYTHON buildscripts\msitrim.py ${SOURCES} ${TARGET}')
+            r'$PYTHON scripts\buildscripts\msitrim.py ${SOURCES} ${TARGET}')
 env.AlwaysBuild(msi)
 
 env.Alias( "msi" , msi )

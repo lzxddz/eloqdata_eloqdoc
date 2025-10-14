@@ -55,4 +55,4 @@ newtag=$(
     echo "${digits[*]}"
 )
 
-bash scripts/git-tag.sh $newtag
+bash concourse/scripts/git-tag.sh $newtag

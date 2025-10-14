@@ -87,7 +87,7 @@ variables:
 
       # This script converts the generated version string into a sanitized version string for
       # use by scons and uploading artifacts as well as information about for the scons cache.
-      MONGO_VERSION=$MONGO_VERSION SCONS_CACHE_MODE=${scons_cache_mode|nolinked} USE_SCONS_CACHE=${use_scons_cache|false} ${python|/opt/mongodbtoolchain/v2/bin/python2} buildscripts/generate_compile_expansions.py --out compile_expansions.yml
+      MONGO_VERSION=$MONGO_VERSION SCONS_CACHE_MODE=${scons_cache_mode|nolinked} USE_SCONS_CACHE=${use_scons_cache|false} ${python|/opt/mongodbtoolchain/v2/bin/python2} scripts/buildscripts/generate_compile_expansions.py --out compile_expansions.yml
 
 - &apply_compile_expansions
   command: expansions.update
@@ -188,7 +188,7 @@ functions:
         fi
 
         ${rlp_environment}   \
-        ${python|/opt/mongodbtoolchain/v2/bin/python2} buildscripts/resmoke.py ${resmoke_args} $extra_args ${test_flags} --log=buildlogger --reportFile=report.json
+        ${python|/opt/mongodbtoolchain/v2/bin/python2} scripts/buildscripts/resmoke.py ${resmoke_args} $extra_args ${test_flags} --log=buildlogger --reportFile=report.json
 
   "cleanup environment" :
     command: shell.exec
@@ -395,7 +395,7 @@ post:
         # these default values in the distro config in evergreen.
 
         if [ -d "${scons_cache_path}" ]; then
-            ${python|python} buildscripts/scons_cache_prune.py --cache-dir '${scons_cache_path}' --cache-size ${scons_cache_size|200} --prune-ratio ${scons_prune_ratio|0.8}
+            ${python|python} scripts/buildscripts/scons_cache_prune.py --cache-dir '${scons_cache_path}' --cache-size ${scons_cache_size|200} --prune-ratio ${scons_prune_ratio|0.8}
         fi
   - func: "cleanup environment"
 
@@ -428,7 +428,7 @@ tasks:
 
           rm -rf ${install_directory|/data/mongo-install-directory}
 
-          ${compile_env|} ${python|/opt/mongodbtoolchain/v2/bin/python2} ./buildscripts/scons.py ${compile_flags|} ${scons_cache_args|} core unittests MONGO_VERSION=${version}
+          ${compile_env|} ${python|/opt/mongodbtoolchain/v2/bin/python2} ./scripts/buildscripts/scons.py ${compile_flags|} ${scons_cache_args|} core unittests MONGO_VERSION=${version}
 
           # Pack up the binaries
           mkdir -p mongodb-binaries/bin

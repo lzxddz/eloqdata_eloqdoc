@@ -74,7 +74,7 @@ mkdir $HOME/eloqdoc-rocksdb && tar -xf eloqdoc-0.2.6-ubuntu22-amd64.tar.gz -C $H
 ```
 
 After uncompress the package, you should see three directories: `bin`, `lib`, and `etc`.
-`bin` contains all executable files, `lib` contains all dependencies, and `etc` contains an example configuration file `mongod.conf`. Switch to `eloqdoc-rocksdb` to verify that.
+`bin` contains all executable files, `lib` contains all dependencies, and `etc` contains an example configuration file `eloqdoc.conf`. Switch to `eloqdoc-rocksdb` to verify that.
 
 ```bash
 cd $HOME/eloqdoc-rocksdb && ls
@@ -86,21 +86,21 @@ cd $HOME/eloqdoc-rocksdb && ls
 mkdir db logs
 ```
 
-**Step-4**, modify  `etc/mongod.conf`. Assume your `$HOME` is `/home/eloq`, then
+**Step-4**, modify  `etc/eloqdoc.conf`. Assume your `$HOME` is `/home/eloq`, then
 
-* Set `systemLog.path` to `/home/eloq/eloqdoc-rocksdb/logs/mongod.log`.
+* Set `systemLog.path` to `/home/eloq/eloqdoc-rocksdb/logs/eloqdoc.log`.
 * Set `storage.dbPath` to `/home/eloq/eloqdoc-rocksdb/db`.
 
 **Step-5**, start the server with:
 
 ```bash
-./bin/mongod --config ./etc/mongod.conf
+./bin/eloqdoc --config ./etc/eloqdoc.conf
 ```
 
 **Step-6**, open another terminal and run mongo client.
 
 ```bash
-./bin/mongo --eval "db.t1.save({k: 1}); db.t1.find();"
+./bin/eloqdoc-cli --eval "db.t1.save({k: 1}); db.t1.find();"
 ```
 
 It should output
@@ -130,7 +130,7 @@ mkdir $HOME/eloqdoc-rocksdbcloud && tar -xf eloqdoc-0.2.6-ubuntu22-amd64.tar.gz 
 ```
 
 After uncompress the package, you should see three directories: `bin`, `lib`, and `etc`.
-`bin` contains all executable files, `lib` contains all dependencies, and `etc` contains an example configuration file `mongod.conf`. Switch to `eloqdoc-rocksdbcloud` to verify that.
+`bin` contains all executable files, `lib` contains all dependencies, and `etc` contains an example configuration file `eloqdoc.conf`. Switch to `eloqdoc-rocksdbcloud` to verify that.
 
 ```bash
 cd $HOME/eloqdoc-rocksdbcloud && ls
@@ -154,26 +154,26 @@ chmod +x minio
 
 By default, `minio` listens on `http://127.0.0.1:9000`, whose default credentials is `minioadmin:minioadmin`,.
 
-**Step-5**, go back to `$HOME/eloqdoc-rocksdbcloud` and modify `etc/mongod.conf`. Assume your `$HOME` is `/home/eloq`.
+**Step-5**, go back to `$HOME/eloqdoc-rocksdbcloud` and modify `etc/eloqdoc.conf`. Assume your `$HOME` is `/home/eloq`.
 
 ```bash
 cd $HOME/eloqdoc-rocksdbcloud
 ```
 
-* Set `systemLog.path` to `/home/eloq/eloqdoc-rocksdbcloud/logs/mongod.log`.
+* Set `systemLog.path` to `/home/eloq/eloqdoc-rocksdbcloud/logs/eloqdoc.log`.
 * Set `storage.dbPath` to `/home/eloq/eloqdoc-rocksdbcloud/db`.
-* `etc/mongod.conf` has configured minio as its cloud storage, and needs no modification.
+* `etc/eloqdoc.conf` has configured minio as its cloud storage, and needs no modification.
 
 **Step-6**, start the server with:
 
 ```bash
-./bin/mongod --config ./etc/mongod.conf
+./bin/eloqdoc --config ./etc/eloqdoc.conf
 ```
 
 **Step-7**, open another terminal and run mongo client.
 
 ```bash
-./bin/mongo --eval "db.t1.save({k: 1}); db.t1.find();"
+./bin/eloqdoc-cli --eval "db.t1.save({k: 1}); db.t1.find();"
 ```
 
 It should output

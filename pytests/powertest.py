@@ -1674,7 +1674,7 @@ def resmoke_client(  # pylint: disable=too-many-arguments
     """Start resmoke client from work_dir, connecting to host_port and executes js_test."""
     log_output = ">> {} 2>&1".format(log_file) if log_file else ""
     cmds = ("cd {}; "
-            "python buildscripts/resmoke.py"
+            "python scripts/buildscripts/resmoke.py"
             " --mongo {}"
             " --suites {}"
             " --shellConnString mongodb://{}"
@@ -1880,7 +1880,7 @@ Examples:
 
     mongodb_options.add_option("--logPath", dest="log_path",
                                help="Log path, on remote host, if unspecified"
-                               " it will be '<rootDir>/log/mongod.log'", default=None)
+                               " it will be '<rootDir>/log/eloqdoc.log'", default=None)
 
     # mongod options
     mongod_options.add_option("--replSet", dest="repl_set",
@@ -1930,7 +1930,7 @@ Examples:
                               help="The path to the CRUD client script on the local host"
                               " [default: '%default'].", default="jstests/hooks/crud_client.js")
 
-    with_external_server = "buildscripts/resmokeconfig/suites/with_external_server.yml"
+    with_external_server = "scripts/buildscripts/resmokeconfig/suites/with_external_server.yml"
     client_options.add_option("--configCrudClient", dest="config_crud_client",
                               help="The path to the CRUD client configuration YML file on the"
                               " local host. This is the resmoke.py suite file. If unspecified,"
@@ -2111,7 +2111,7 @@ Examples:
     if not options.db_path:
         options.db_path = posixpath.join(options.root_dir, "data", "db")
     if not options.log_path:
-        options.log_path = posixpath.join(options.root_dir, "log", "mongod.log")
+        options.log_path = posixpath.join(options.root_dir, "log", "eloqdoc.log")
     mongod_options_map = parse_options(options.mongod_options)
     set_fcv_cmd = "set_fcv" if options.fcv_version is not None else ""
     remove_lock_file_cmd = "remove_lock_file" if options.remove_lock_file else ""
@@ -2166,7 +2166,7 @@ Examples:
     if not os.path.isfile(options.config_crud_client):
         LOGGER.error("configCrudClient %s does not exist", options.config_crud_client)
         local_exit(1)
-    with_external_server = "buildscripts/resmokeconfig/suites/with_external_server.yml"
+    with_external_server = "scripts/buildscripts/resmokeconfig/suites/with_external_server.yml"
     fsm_client = "jstests/libs/fsm_serial_client.js"
     fsm_workload_files = []
     for fsm_workload_file in options.fsm_workload_files:

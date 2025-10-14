@@ -56,26 +56,26 @@ mkdir -p $HOME/eloqdoc-cloud-b/db $HOME/eloqdoc-cloud-b/etc $HOME/eloqdoc-cloud-
 mkdir -p $HOME/eloqdoc-cloud-c/db $HOME/eloqdoc-cloud-c/etc $HOME/eloqdoc-cloud-c/logs
 ```
 
-Copy `concourse/artifact/ELOQDSS_ROCKSDB_CLOUD_S3/mongod_cluster_a.conf` to `$HOME/eloqdoc-cloud-a/etc/mongod.conf`.
+Copy `concourse/artifact/ELOQDSS_ROCKSDB_CLOUD_S3/eloqdoc_cluster_a.conf` to `$HOME/eloqdoc-cloud-a/etc/eloqdoc.conf`.
 
-Copy `concourse/artifact/ELOQDSS_ROCKSDB_CLOUD_S3/mongod_cluster_b.conf` to `$HOME/eloqdoc-cloud-b/etc/mongod.conf`.
+Copy `concourse/artifact/ELOQDSS_ROCKSDB_CLOUD_S3/eloqdoc_cluster_b.conf` to `$HOME/eloqdoc-cloud-b/etc/eloqdoc.conf`.
 
-Copy `concourse/artifact/ELOQDSS_ROCKSDB_CLOUD_S3/mongod_cluster_c.conf` to `$HOME/eloqdoc-cloud-c/etc/mongod.conf`.
+Copy `concourse/artifact/ELOQDSS_ROCKSDB_CLOUD_S3/eloqdoc_cluster_c.conf` to `$HOME/eloqdoc-cloud-c/etc/eloqdoc.conf`.
 
 Edit data path, log path, and S3 configuration in each file according to your environment.
 
 ## 4. Bootstrap
 
 ```bash
-mongod --eloqBootstrap 1 --config $HOME/eloqdoc-cloud-a/etc/mongod.conf
+mongod --eloqBootstrap 1 --config $HOME/eloqdoc-cloud-a/etc/eloqdoc.conf
 ```
 
 ## 5. Launch EloqDoc compute nodes
 
 ```bash
-nohup mongod --pidfilepath $HOME/eloqdoc-cloud-a/db/mongod.pid --config $HOME/eloqdoc-cloud-a/etc/mongod.conf &> $HOME/eloqdoc-cloud-a/logs/mongod.out &
-nohup mongod --pidfilepath $HOME/eloqdoc-cloud-b/db/mongod.pid --config $HOME/eloqdoc-cloud-b/etc/mongod.conf &> $HOME/eloqdoc-cloud-b/logs/mongod.out &
-nohup mongod --pidfilepath $HOME/eloqdoc-cloud-c/db/mongod.pid --config $HOME/eloqdoc-cloud-c/etc/mongod.conf &> $HOME/eloqdoc-cloud-c/logs/mongod.out &
+nohup mongod --pidfilepath $HOME/eloqdoc-cloud-a/db/mongod.pid --config $HOME/eloqdoc-cloud-a/etc/eloqdoc.conf &> $HOME/eloqdoc-cloud-a/logs/mongod.out &
+nohup mongod --pidfilepath $HOME/eloqdoc-cloud-b/db/mongod.pid --config $HOME/eloqdoc-cloud-b/etc/eloqdoc.conf &> $HOME/eloqdoc-cloud-b/logs/mongod.out &
+nohup mongod --pidfilepath $HOME/eloqdoc-cloud-c/db/mongod.pid --config $HOME/eloqdoc-cloud-c/etc/eloqdoc.conf &> $HOME/eloqdoc-cloud-c/logs/mongod.out &
 ```
 
 ## 6. Configure an L4 proxy

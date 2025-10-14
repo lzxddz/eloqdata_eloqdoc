@@ -55,6 +55,6 @@ To run the quality assurance tests, you need to have the latest stable version o
 
 ```
 cd test/qa-tests
-python buildscripts/smoke.py bson export files import oplog restore stat top
+python scripts/buildscripts/smoke.py bson export files import oplog restore stat top
 ```
 _Some tests require older binaries that are named accordingly (e.g. `mongod-2.4`, `mongod-2.6`, etc). You can use [setup_multiversion_mongodb.py](test/qa-tests/buildscripts/setup_multiversion_mongodb.py) to download those binaries_

@@ -172,7 +172,7 @@ cmake --install "$ELOQDOC_SRC/src/mongo/db/modules/eloq/build"
 echo "Building MongoDB via scons (OPEN_LOG_SERVICE=1)"
 export WITH_DATA_STORE=${DATA_STORE_TYPE}
 SCONS_VARIANT=${BUILD_TYPE}
-python2 buildscripts/scons.py \
+python2 scripts/buildscripts/scons.py \
     MONGO_VERSION=4.0.3 \
     VARIANT_DIR=${SCONS_VARIANT} \
     LIBPATH=/usr/local/lib \
@@ -189,8 +189,8 @@ python2 buildscripts/scons.py \
     install-core
 
 # Collect runtime libraries
-copy_libraries ${DEST_DIR}/bin/mongo ${DEST_DIR}/lib
-copy_libraries ${DEST_DIR}/bin/mongod ${DEST_DIR}/lib
+copy_libraries ${DEST_DIR}/bin/eloqdoc-cli ${DEST_DIR}/lib
+copy_libraries ${DEST_DIR}/bin/eloqdoc ${DEST_DIR}/lib
 if [ -f ${DEST_DIR}/lib/libstorage_eloq.so ]; then
   copy_libraries ${DEST_DIR}/lib/libstorage_eloq.so ${DEST_DIR}/lib
 fi
@@ -199,17 +199,17 @@ if [ -f ${DEST_DIR}/bin/host_manager ]; then
 fi
 
 # Fix rpath for executables
-patchelf --set-rpath '$ORIGIN/../lib' ${DEST_DIR}/bin/mongo
-patchelf --set-rpath '$ORIGIN/../lib' ${DEST_DIR}/bin/mongod
+patchelf --set-rpath '$ORIGIN/../lib' ${DEST_DIR}/bin/eloqdoc-cli
+patchelf --set-rpath '$ORIGIN/../lib' ${DEST_DIR}/bin/eloqdoc
 if [ -f ${DEST_DIR}/bin/host_manager ]; then
   patchelf --set-rpath '$ORIGIN/../lib' ${DEST_DIR}/bin/host_manager
 fi
 
 # Preload libmimalloc and libbrpc at launch.
-patchelf --remove-needed libmimalloc.so.2 ${DEST_DIR}/bin/mongod
-patchelf --remove-needed libbrpc.so ${DEST_DIR}/bin/mongod
-patchelf --add-needed libbrpc.so ${DEST_DIR}/bin/mongod
-patchelf --add-needed libmimalloc.so.2 ${DEST_DIR}/bin/mongod
+patchelf --remove-needed libmimalloc.so.2 ${DEST_DIR}/bin/eloqdoc
+patchelf --remove-needed libbrpc.so ${DEST_DIR}/bin/eloqdoc
+patchelf --add-needed libbrpc.so ${DEST_DIR}/bin/eloqdoc
+patchelf --add-needed libmimalloc.so.2 ${DEST_DIR}/bin/eloqdoc
 
 # Config files
 cp ${ELOQDOC_SRC}/concourse/artifact/${DATA_STORE_TYPE}/* ${DEST_DIR}/etc

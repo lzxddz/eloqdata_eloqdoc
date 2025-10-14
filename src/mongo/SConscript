@@ -356,7 +356,8 @@ if env.TargetOSIs('windows'):
     env.Depends("db/db.res", generatedDbManifest)
 
 mongod = env.Program(
-    target="mongod",
+    # target="mongod",
+    target="eloqdoc",
     source=[
         "db/dbmain.cpp",
     ] + env.WindowsResourceFile("db/db.rc"),
@@ -374,7 +375,8 @@ mongod = env.Program(
 hygienic = get_option('install-mode') == 'hygienic'
 
 if hygienic:
-    env.Default('$INSTALL_DIR/bin/mongod$PROGSUFFIX')
+    # env.Default('$INSTALL_DIR/bin/mongod$PROGSUFFIX')
+    env.Default('$INSTALL_DIR/bin/eloqdoc$PROGSUFFIX')
 else:
     env.Default(env.Install('#/', mongod))
 
@@ -512,7 +514,8 @@ if not has_option('noshell') and usemozjs:
         shellEnv.Depends("shell/shell.res", generatedMongoManifest)
 
     mongo_shell = shellEnv.Program(
-        "mongo",
+        # "mongo",
+        "eloqdoc-cli",
         [
             "shell/dbshell.cpp",
             "shell/mongodbcr.cpp",
@@ -624,16 +627,20 @@ if has_option("use-new-tools"):
 if not hygienic:
     env.Alias("tools", "#/" + add_exe("mongobridge"))
 
-installBinary( env, "mongod" )
+# installBinary( env, "mongod" )
+installBinary( env, "eloqdoc" )
 installBinary( env, "mongos" )
 
 if shellEnv is not None:
-    installBinary( shellEnv, "mongo" )
+    # installBinary( shellEnv, "mongo" )
+    installBinary( shellEnv, "eloqdoc-cli" )
     if not hygienic:
-        env.Alias( "core", [ '#/%s' % b for b in [ add_exe( "mongo" ) ] ] )
+        # env.Alias( "core", [ '#/%s' % b for b in [ add_exe( "mongo" ) ] ] )
+        env.Alias( "core", [ '#/%s' % b for b in [ add_exe( "eloqdoc-cli" ) ] ] )
 
 if not hygienic:
-    env.Alias( "core", [ '#/%s' % b for b in [ add_exe( "mongod" ), add_exe( "mongos" ) ] ] )
+    # env.Alias( "core", [ '#/%s' % b for b in [ add_exe( "mongod" ), add_exe( "mongos" ) ] ] )
+    env.Alias( "core", [ '#/%s' % b for b in [ add_exe( "eloqdoc" ), add_exe( "mongos" ) ] ] )
 
 # Stage the top-level mongodb banners
 distsrc = env.Dir('#distsrc')
@@ -713,7 +720,7 @@ if env.TargetOSIs('posix'):
 if has_option("use-new-tools"):
     env.Command(
         target='#/${SERVER_ARCHIVE}',
-        source=['#buildscripts/make_archive.py'] + env["MODULE_BANNERS"] + env["ARCHIVE_ADDITIONS"] + distBinaries,
+        source=['#scripts/buildscripts/make_archive.py'] + env["MODULE_BANNERS"] + env["ARCHIVE_ADDITIONS"] + distBinaries,
         action=' '.join(
             ['$PYTHON ${SOURCES[0]} -o $TARGET'] +
             archive_addition_transforms +
@@ -741,7 +748,7 @@ else:
 
 debug_symbols_dist = env.Command(
     target='#/${SERVER_DIST_BASENAME}-debugsymbols${DIST_ARCHIVE_SUFFIX}',
-    source=['#buildscripts/make_archive.py'] + distDebugSymbols,
+    source=['#scripts/buildscripts/make_archive.py'] + distDebugSymbols,
     action=' '.join(
         [
             '$PYTHON ${SOURCES[0]} -o $TARGET',

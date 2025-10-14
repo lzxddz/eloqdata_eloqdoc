@@ -27,7 +27,7 @@ generateJSErrorCodes = env.Command(
     action=['$PYTHON ${SOURCES[0]} ${SOURCES[1]} ${SOURCES[2]}=${TARGETS[0]}'])
 env.Alias('generated-sources', generateJSErrorCodes)
 
-# Files added here need to be added in scripting/engine.cpp and buildscripts/vcxproj.header as well.
+# Files added here need to be added in scripting/engine.cpp and scripts/buildscripts/vcxproj.header as well.
 js_header = env.JSHeader(
     target="mongo.cpp",
     source=[
@@ -52,7 +52,7 @@ js_header = env.JSHeader(
 
 env.Alias('generated-sources', js_header)
 
-# Files added here need to be added in shell/shell_utils.cpp and buildscripts/vcxproj.header as
+# Files added here need to be added in shell/shell_utils.cpp and scripts/buildscripts/vcxproj.header as
 # well.
 env.JSHeader(
     target="mongo-server.cpp",

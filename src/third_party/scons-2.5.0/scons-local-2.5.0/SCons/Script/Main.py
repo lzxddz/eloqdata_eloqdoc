@@ -676,14 +676,14 @@ def _create_path(plist):
             path = path + '/' + d
     return path
 
-def _load_site_scons_dir(topdir, site_dir_name=None):
-    """Load the site_scons dir under topdir.
-    Prepends site_scons to sys.path, imports site_scons/site_init.py,
-    and prepends site_scons/site_tools to default toolpath."""
+def _load_scons_dir(topdir, site_dir_name=None):
+    """Load the scons dir under topdir.
+    Prepends scons to sys.path, imports scons/site_init.py,
+    and prepends scons/site_tools to default toolpath."""
     if site_dir_name:
         err_if_not_found = True       # user specified: err if missing
     else:
-        site_dir_name = "site_scons"
+        site_dir_name = "scons"
         err_if_not_found = False
 
     site_dir = os.path.join(topdir, site_dir_name)
@@ -751,8 +751,8 @@ def _load_site_scons_dir(topdir, site_dir_name=None):
         # prepend to DefaultToolpath
         SCons.Tool.DefaultToolpath.insert(0, os.path.abspath(site_tools_dir))
 
-def _load_all_site_scons_dirs(topdir, verbose=None):
-    """Load all of the predefined site_scons dir.
+def _load_all_scons_dirs(topdir, verbose=None):
+    """Load all of the predefined scons dir.
     Order is significant; we load them in order from most generic
     (machine-wide) to most specific (topdir).
     The verbose argument is only for testing.
@@ -793,10 +793,10 @@ def _load_all_site_scons_dirs(topdir, verbose=None):
     for d in dirs:
         if verbose:    # this is used by unit tests.
             print "Loading site dir ", d
-        _load_site_scons_dir(d)
+        _load_scons_dir(d)
 
-def test_load_all_site_scons_dirs(d):
-    _load_all_site_scons_dirs(d, True)
+def test_load_all_scons_dirs(d):
+    _load_all_scons_dirs(d, True)
 
 def version_string(label, module):
     version = module.__version__
@@ -938,9 +938,9 @@ def _main(parser):
         progress_display.set_mode(0)
 
     if options.site_dir:
-        _load_site_scons_dir(d.get_internal_path(), options.site_dir)
+        _load_scons_dir(d.get_internal_path(), options.site_dir)
     elif not options.no_site_dir:
-        _load_all_site_scons_dirs(d.get_internal_path())
+        _load_all_scons_dirs(d.get_internal_path())
 
     if options.include_dir:
         sys.path = options.include_dir + sys.path

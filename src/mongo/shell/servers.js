@@ -600,7 +600,7 @@ var MongoRunner, _startMongod, startMongoProgram, runMongoProgram, startMongoPro
         _removeSetParameterIfBeforeVersion(opts, "numInitialSyncConnectAttempts", "3.3.12");
 
         if (!opts.logFile && opts.useLogFiles) {
-            opts.logFile = opts.dbpath + "/mongod.log";
+            opts.logFile = opts.dbpath + "/eloqdoc.log";
         } else if (opts.logFile) {
             opts.logFile = MongoRunner.toRealFile(opts.logFile, opts.pathOpts);
         }

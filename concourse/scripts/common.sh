@@ -75,7 +75,7 @@ compile_and_install() {
       # Detect CPU cores for optimal parallel builds
       # CPU_CORE_SIZE=$(nproc 2>/dev/null || grep -c ^processor /proc/cpuinfo 2>/dev/null || echo 4)
       CPU_CORE_SIZE=4
-      OPEN_LOG_SERVICE=ON python2 buildscripts/scons.py MONGO_VERSION=4.0.3 \
+      OPEN_LOG_SERVICE=ON python2 scripts/buildscripts/scons.py MONGO_VERSION=4.0.3 \
             VARIANT_DIR=Debug \
             LIBPATH=/usr/local/lib \
             CXXFLAGS="-Wno-nonnull -Wno-class-memaccess -Wno-interference-size -Wno-redundant-move" \
@@ -126,7 +126,7 @@ compile_and_install_ent() {
       # CPU_CORE_SIZE=$(nproc 2>/dev/null || grep -c ^processor /proc/cpuinfo 2>/dev/null || echo 4)
       CPU_CORE_SIZE=4
       env OPEN_LOG_SERVICE=0 WITH_DATA_STORE=ELOQDSS_ROCKSDB_CLOUD_S3 WITH_LOG_STATE=ROCKSDB_CLOUD_S3 FORK_HM_PROCESS=1 \
-      python2 buildscripts/scons.py MONGO_VERSION=4.0.3 \
+      python2 scripts/buildscripts/scons.py MONGO_VERSION=4.0.3 \
             VARIANT_DIR=Debug \
             LIBPATH=/usr/local/lib \
             CXXFLAGS="-Wno-nonnull -Wno-class-memaccess -Wno-interference-size -Wno-redundant-move" \
@@ -155,7 +155,7 @@ launch_mongod() {
       mkdir -p "$PREFIX/log" "$PREFIX/data"
       sed -i "s|rocksdbCloudEndpointUrl: \"http://[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+:[0-9]\+\"|rocksdbCloudEndpointUrl: \"${MINIO_ENDPOINT}\"|g" /home/eloq/workspace/mongo/concourse/scripts/store_rocksdb_cloud.yaml
       sed -i "s|txlogRocksDBCloudEndpointUrl: \"http://[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+:[0-9]\+\"|txlogRocksDBCloudEndpointUrl: \"${MINIO_ENDPOINT}\"|g" /home/eloq/workspace/mongo/concourse/scripts/store_rocksdb_cloud.yaml
-      nohup $PREFIX/bin/mongod \
+      nohup $PREFIX/bin/eloqdoc \
             --config ./concourse/scripts/store_rocksdb_cloud.yaml \
             --eloqRocksdbCloudBucketName="$bucket_name" \
             --eloqRocksdbCloudBucketPrefix="$bucket_prefix" \
@@ -177,7 +177,7 @@ launch_mongod_fast() {
       mkdir -p "$PREFIX/log" "$PREFIX/data"
       sed -i "s|rocksdbCloudEndpointUrl: \"http://[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+:[0-9]\+\"|rocksdbCloudEndpointUrl: \"${MINIO_ENDPOINT}\"|g" /home/eloq/workspace/mongo/concourse/scripts/store_rocksdb_cloud.yaml
       sed -i "s|txlogRocksDBCloudEndpointUrl: \"http://[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+:[0-9]\+\"|txlogRocksDBCloudEndpointUrl: \"${MINIO_ENDPOINT}\"|g" /home/eloq/workspace/mongo/concourse/scripts/store_rocksdb_cloud.yaml
-      nohup $PREFIX/bin/mongod \
+      nohup $PREFIX/bin/eloqdoc \
             --config ./concourse/scripts/store_rocksdb_cloud.yaml \
             --eloqSkipRedoLog=1 \
             --eloqRocksdbCloudBucketName="$bucket_name" \
@@ -188,14 +188,14 @@ launch_mongod_fast() {
 }
 
 shutdown_mongod() {
-      $PREFIX/bin/mongo admin --eval "db.shutdownServer()"
+      $PREFIX/bin/eloqdoc-cli admin --eval "db.shutdownServer()"
 }
 
 try_connect() {
       set +e
       mongo_ready=0
       for ((i = 1; i < 30; i++)); do
-            $PREFIX/bin/mongo --eval "db.runCommand({ping: 1})" &>/dev/null
+            $PREFIX/bin/eloqdoc-cli --eval "db.runCommand({ping: 1})" &>/dev/null
             if [ $? -eq 0 ]; then
                   echo "MongoDB is up and running!"
                   mongo_ready=1
@@ -217,7 +217,7 @@ try_connect() {
 run_jstests() {
       echo "run jstests"
       env PATH=$PREFIX/bin:$PATH \
-      python2 buildscripts/resmoke.py --mongo=$PREFIX/bin/mongo --suites=eloq_basic,eloq_core --shellPort=27017 --continueOnFailure
+      python2 scripts/buildscripts/resmoke.py --mongo=$PREFIX/bin/eloqdoc-cli --suites=eloq_basic,eloq_core --shellPort=27017 --continueOnFailure
 }
 
 run_tpcc() {

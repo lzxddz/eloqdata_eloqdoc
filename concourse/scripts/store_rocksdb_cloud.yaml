@@ -1,7 +1,7 @@
 systemLog:
   verbosity: 0
   destination: file
-  path: "/home/eloq/workspace/mongo/install/log/mongod.log"
+  path: "/home/eloq/workspace/mongo/install/log/eloqdoc.log"
   component:
     ftdc:
       verbosity: 0

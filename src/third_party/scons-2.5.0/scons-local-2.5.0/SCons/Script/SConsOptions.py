@@ -777,7 +777,7 @@ def Parser(version):
     op.add_option('--no-site-dir',
                   dest='no_site_dir', default=False,
                   action="store_true",
-                  help="Don't search or use the usual site_scons dir.")
+                  help="Don't search or use the usual scons dir.")
 
     op.add_option('--profile',
                   nargs=1,
@@ -810,7 +810,7 @@ def Parser(version):
                   nargs=1,
                   dest='site_dir', default=None,
                   action="store",
-                  help="Use DIR instead of the usual site_scons dir.",
+                  help="Use DIR instead of the usual scons dir.",
                   metavar="DIR")
 
     op.add_option('--stack-size',

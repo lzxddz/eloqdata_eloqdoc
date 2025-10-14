@@ -7,7 +7,7 @@
     function runTest(bindIP, expectOk) {
         jsTest.log("".concat("Testing with bindIP=[", bindIP, "], expectOk=[", expectOk, "]"));
 
-        const logpath = "".concat(MongoRunner.dataDir, "/mongod.log");
+        const logpath = "".concat(MongoRunner.dataDir, "/eloqdoc.log");
 
         let pid = startMongoProgramNoConnect("mongod",
                                              "--ipv6",
