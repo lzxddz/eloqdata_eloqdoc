@@ -248,7 +248,7 @@ python2 scripts/buildscripts/scons.py \
 
 # Collect runtime libraries for binaries
 copy_libraries ${DEST_DIR}/bin/eloqdoc-cli ${DEST_DIR}/lib
-copy_libraries ${DEST_DIR}/bin/eloqdoc${DEST_DIR}/lib
+copy_libraries ${DEST_DIR}/bin/eloqdoc ${DEST_DIR}/lib
 if [ -f ${DEST_DIR}/lib/libstorage_eloq.so ]; then
   copy_libraries ${DEST_DIR}/lib/libstorage_eloq.so ${DEST_DIR}/lib
 fi
