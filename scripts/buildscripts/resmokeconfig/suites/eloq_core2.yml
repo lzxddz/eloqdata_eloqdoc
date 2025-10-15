@@ -2,13 +2,13 @@ test_kind: js_test
 
 selector:
   roots:
-  - jstests/core/distinct1.js
-  - jstests/core/distinct2.js
-  - jstests/core/distinct3.js
-  - jstests/core/distinct4.js
+  - tests/jstests/core/distinct1.js
+  - tests/jstests/core/distinct2.js
+  - tests/jstests/core/distinct3.js
+  - tests/jstests/core/distinct4.js
   exclude_files:
   # Transactions have been supported on MongoDB standalone node.
-  # - jstests/core/txns/**/*.js
+  # - tests/jstests/core/txns/**/*.js
 executor:
   archive:
     hooks:
@@ -16,7 +16,7 @@ executor:
   config:
     shell_options:
       readMode: commands
-      eval: load("jstests/libs/override_methods/detect_spawning_own_mongod.js");
+      eval: load("tests/jstests/libs/override_methods/detect_spawning_own_mongod.js");
   hooks:
   # - class: ValidateCollections
   #   shell_options:

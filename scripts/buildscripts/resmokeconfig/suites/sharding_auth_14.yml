@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile jstests/libs/authTestsKey
+- &keyFile tests/jstests/libs/authTestsKey
 - &keyFileData Thiskeyisonlyforrunningthesuitewithauthenticationdontuseitinanytestsdirectly
 
 test_kind: js_test
@@ -18,29 +18,29 @@ selector:
   #   13 minutes to run on linux-64-debug
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/write_cmd_auto_split.js
-  - jstests/sharding/shard6.js
-  - jstests/sharding/index1.js
-  - jstests/sharding/migration_id_index.js
-  - jstests/sharding/change_streams_whole_db.js
-  - jstests/sharding/change_stream_enforce_max_time_ms_on_mongos.js
-  - jstests/sharding/unowned_doc_filtering.js
-  - jstests/sharding/causal_consistency_shell_support.js
-  - jstests/sharding/noUpdateButN1inAnotherCollection.js
-  - jstests/sharding/findandmodify2.js
-  - jstests/sharding/shard_aware_init_secondaries.js
-  - jstests/sharding/sharding_system_namespaces.js
-  - jstests/sharding/move_chunk_open_cursors.js
-  - jstests/sharding/cursor_cleanup.js
-  - jstests/sharding/cleanup_orphaned_cmd_hashed.js
-  - jstests/sharding/basic_split.js
-  - jstests/sharding/merge_chunks_test_with_md_ops.js
-  - jstests/sharding/find_getmore_cmd.js
-  - jstests/sharding/cleanup_orphaned_cmd_prereload.js
-  - jstests/sharding/cursor_valid_after_shard_stepdown.js
-  - jstests/sharding/trace_missing_docs_test.js
-  - jstests/sharding/key_string.js
-  - jstests/sharding/geo_near_sort.js
+  - tests/jstests/sharding/write_cmd_auto_split.js
+  - tests/jstests/sharding/shard6.js
+  - tests/jstests/sharding/index1.js
+  - tests/jstests/sharding/migration_id_index.js
+  - tests/jstests/sharding/change_streams_whole_db.js
+  - tests/jstests/sharding/change_stream_enforce_max_time_ms_on_mongos.js
+  - tests/jstests/sharding/unowned_doc_filtering.js
+  - tests/jstests/sharding/causal_consistency_shell_support.js
+  - tests/jstests/sharding/noUpdateButN1inAnotherCollection.js
+  - tests/jstests/sharding/findandmodify2.js
+  - tests/jstests/sharding/shard_aware_init_secondaries.js
+  - tests/jstests/sharding/sharding_system_namespaces.js
+  - tests/jstests/sharding/move_chunk_open_cursors.js
+  - tests/jstests/sharding/cursor_cleanup.js
+  - tests/jstests/sharding/cleanup_orphaned_cmd_hashed.js
+  - tests/jstests/sharding/basic_split.js
+  - tests/jstests/sharding/merge_chunks_test_with_md_ops.js
+  - tests/jstests/sharding/find_getmore_cmd.js
+  - tests/jstests/sharding/cleanup_orphaned_cmd_prereload.js
+  - tests/jstests/sharding/cursor_valid_after_shard_stepdown.js
+  - tests/jstests/sharding/trace_missing_docs_test.js
+  - tests/jstests/sharding/key_string.js
+  - tests/jstests/sharding/geo_near_sort.js
 
 executor:
   config:

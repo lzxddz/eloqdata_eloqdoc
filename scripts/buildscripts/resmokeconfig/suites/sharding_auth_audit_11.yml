@@ -8,7 +8,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile jstests/libs/authTestsKey
+- &keyFile tests/jstests/libs/authTestsKey
 - &keyFileData Thiskeyisonlyforrunningthesuitewithauthenticationdontuseitinanytestsdirectly
 
 test_kind: js_test
@@ -18,26 +18,26 @@ selector:
   #   8 minutes to run on enterprise-rhel-62-64-bit
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/coll_epoch_test1.js
-  - jstests/sharding/lookup_change_stream_post_image_compound_shard_key.js
-  - jstests/sharding/explain_cmd.js
-  - jstests/sharding/secondary_shard_version_protocol_with_causal_consistency.js
-  - jstests/sharding/max_time_ms_sharded.js
-  - jstests/sharding/mrShardedOutput.js
-  - jstests/sharding/secondary_shard_versioning.js
-  - jstests/sharding/views.js
-  - jstests/sharding/session_info_in_oplog.js
-  - jstests/sharding/large_skip_one_shard.js
-  - jstests/sharding/shard4.js
-  - jstests/sharding/count1.js
-  - jstests/sharding/count2.js
-  - jstests/sharding/hash_shard_num_chunks.js
-  - jstests/sharding/features1.js
-  - jstests/sharding/exact_shard_key_target.js
-  - jstests/sharding/movePrimary1.js
-  - jstests/sharding/validate_collection.js
-  - jstests/sharding/move_primary_clone_test.js
-  - jstests/sharding/resume_change_stream_on_subset_of_shards.js
+  - tests/jstests/sharding/coll_epoch_test1.js
+  - tests/jstests/sharding/lookup_change_stream_post_image_compound_shard_key.js
+  - tests/jstests/sharding/explain_cmd.js
+  - tests/jstests/sharding/secondary_shard_version_protocol_with_causal_consistency.js
+  - tests/jstests/sharding/max_time_ms_sharded.js
+  - tests/jstests/sharding/mrShardedOutput.js
+  - tests/jstests/sharding/secondary_shard_versioning.js
+  - tests/jstests/sharding/views.js
+  - tests/jstests/sharding/session_info_in_oplog.js
+  - tests/jstests/sharding/large_skip_one_shard.js
+  - tests/jstests/sharding/shard4.js
+  - tests/jstests/sharding/count1.js
+  - tests/jstests/sharding/count2.js
+  - tests/jstests/sharding/hash_shard_num_chunks.js
+  - tests/jstests/sharding/features1.js
+  - tests/jstests/sharding/exact_shard_key_target.js
+  - tests/jstests/sharding/movePrimary1.js
+  - tests/jstests/sharding/validate_collection.js
+  - tests/jstests/sharding/move_primary_clone_test.js
+  - tests/jstests/sharding/resume_change_stream_on_subset_of_shards.js
 
 executor:
   config:

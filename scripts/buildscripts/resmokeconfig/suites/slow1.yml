@@ -2,7 +2,7 @@ test_kind: js_test
 
 selector:
   roots:
-  - jstests/slow1/*.js
+  - tests/jstests/slow1/*.js
 
 executor:
   archive:

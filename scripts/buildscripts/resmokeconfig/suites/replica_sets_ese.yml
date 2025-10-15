@@ -1,15 +1,15 @@
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile src/mongo/db/modules/enterprise/jstests/encryptdb/libs/ekf2
+- &keyFile src/mongo/db/modules/enterprise/tests/jstests/encryptdb/libs/ekf2
 
 test_kind: js_test
 
 selector:
   roots:
-  - jstests/replsets/*.js
+  - tests/jstests/replsets/*.js
   exclude_files:
   # Disable config_server_checks.js since it starts mmap servers.
-  - jstests/replsets/config_server_checks.js
+  - tests/jstests/replsets/config_server_checks.js
 
 executor:
   config:

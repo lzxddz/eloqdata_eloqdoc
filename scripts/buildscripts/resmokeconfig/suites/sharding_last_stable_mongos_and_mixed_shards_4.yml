@@ -12,25 +12,25 @@ selector:
   # The following tests take approximately
   #   19 minutes to run on enterprise-rhel-62-64-bit
   roots:
-  - jstests/sharding/mongos_shard_failure_tolerance.js
-  - jstests/sharding/addshard4.js
-  - jstests/sharding/recovering_slaveok.js
-  - jstests/sharding/jumbo1.js
-  - jstests/sharding/sharding_rs2.js
-  - jstests/sharding/addshard2.js
-  - jstests/sharding/auto_rebalance_parallel_replica_sets.js
-  - jstests/sharding/move_chunk_insert_with_write_retryability.js
-  - jstests/sharding/replmonitor_bad_seed.js
-  - jstests/sharding/move_chunk_remove_with_write_retryability.js
-  - jstests/sharding/move_chunk_update_with_write_retryability.js
-  - jstests/sharding/drop_sharded_db.js
-  - jstests/sharding/key_rotation.js
-  - jstests/sharding/stale_mongos_updates_and_removes.js
-  - jstests/sharding/sharding_balance1.js
-  - jstests/sharding/shard_identity_rollback.js
-  - jstests/sharding/commands_that_write_accept_wc_shards.js
-  - jstests/sharding/query_after_multi_write.js
-  - jstests/sharding/find_and_modify_after_multi_write.js
+  - tests/jstests/sharding/mongos_shard_failure_tolerance.js
+  - tests/jstests/sharding/addshard4.js
+  - tests/jstests/sharding/recovering_slaveok.js
+  - tests/jstests/sharding/jumbo1.js
+  - tests/jstests/sharding/sharding_rs2.js
+  - tests/jstests/sharding/addshard2.js
+  - tests/jstests/sharding/auto_rebalance_parallel_replica_sets.js
+  - tests/jstests/sharding/move_chunk_insert_with_write_retryability.js
+  - tests/jstests/sharding/replmonitor_bad_seed.js
+  - tests/jstests/sharding/move_chunk_remove_with_write_retryability.js
+  - tests/jstests/sharding/move_chunk_update_with_write_retryability.js
+  - tests/jstests/sharding/drop_sharded_db.js
+  - tests/jstests/sharding/key_rotation.js
+  - tests/jstests/sharding/stale_mongos_updates_and_removes.js
+  - tests/jstests/sharding/sharding_balance1.js
+  - tests/jstests/sharding/shard_identity_rollback.js
+  - tests/jstests/sharding/commands_that_write_accept_wc_shards.js
+  - tests/jstests/sharding/query_after_multi_write.js
+  - tests/jstests/sharding/find_and_modify_after_multi_write.js
 
 executor:
   config:

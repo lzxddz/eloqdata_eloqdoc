@@ -8,7 +8,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile jstests/libs/authTestsKey
+- &keyFile tests/jstests/libs/authTestsKey
 - &keyFileData Thiskeyisonlyforrunningthesuitewithauthenticationdontuseitinanytestsdirectly
 
 test_kind: js_test
@@ -18,25 +18,25 @@ selector:
   #   9 minutes to run on enterprise-rhel-62-64-bit
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/in_memory_sort_limit.js
-  - jstests/sharding/diffservers1.js
-  - jstests/sharding/shard_targeting.js
-  - jstests/sharding/change_streams_unsharded_becomes_sharded.js
-  - jstests/sharding/migrateBig.js
-  - jstests/sharding/geo_near_random1.js
-  - jstests/sharding/kill_pinned_cursor.js
-  - jstests/sharding/mapReduce_inSharded_outSharded.js
-  - jstests/sharding/shard_insert_getlasterror_w2.js
-  - jstests/sharding/names.js
-  - jstests/sharding/merge_chunks_test.js
-  - jstests/sharding/upsert_sharded.js
-  - jstests/sharding/shard2.js
-  - jstests/sharding/prefix_shard_key.js
-  - jstests/sharding/features2.js
-  - jstests/sharding/group_slaveok.js
-  - jstests/sharding/cursor_timeout.js
-  - jstests/sharding/mongos_validate_writes.js
-  - jstests/sharding/empty_doc_results.js
+  - tests/jstests/sharding/in_memory_sort_limit.js
+  - tests/jstests/sharding/diffservers1.js
+  - tests/jstests/sharding/shard_targeting.js
+  - tests/jstests/sharding/change_streams_unsharded_becomes_sharded.js
+  - tests/jstests/sharding/migrateBig.js
+  - tests/jstests/sharding/geo_near_random1.js
+  - tests/jstests/sharding/kill_pinned_cursor.js
+  - tests/jstests/sharding/mapReduce_inSharded_outSharded.js
+  - tests/jstests/sharding/shard_insert_getlasterror_w2.js
+  - tests/jstests/sharding/names.js
+  - tests/jstests/sharding/merge_chunks_test.js
+  - tests/jstests/sharding/upsert_sharded.js
+  - tests/jstests/sharding/shard2.js
+  - tests/jstests/sharding/prefix_shard_key.js
+  - tests/jstests/sharding/features2.js
+  - tests/jstests/sharding/group_slaveok.js
+  - tests/jstests/sharding/cursor_timeout.js
+  - tests/jstests/sharding/mongos_validate_writes.js
+  - tests/jstests/sharding/empty_doc_results.js
 
 executor:
   config:

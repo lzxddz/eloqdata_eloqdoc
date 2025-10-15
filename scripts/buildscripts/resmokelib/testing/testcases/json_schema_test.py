@@ -18,7 +18,7 @@ class JSONSchemaTestCase(jsrunnerfile.JSRunnerFileTestCase):
 
         jsrunnerfile.JSRunnerFileTestCase.__init__(
             self, logger, "JSON Schema test", json_filename,
-            test_runner_file="jstests/libs/json_schema_test_runner.js",
+            test_runner_file="tests/jstests/libs/json_schema_test_runner.js",
             shell_executable=shell_executable, shell_options=shell_options)
 
     @property

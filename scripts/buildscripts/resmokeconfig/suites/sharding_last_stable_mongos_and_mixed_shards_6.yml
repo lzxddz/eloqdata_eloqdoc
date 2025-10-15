@@ -12,34 +12,34 @@ selector:
   # The following tests take approximately
   #   19 minutes to run on enterprise-rhel-62-64-bit
   roots:
-  - jstests/sharding/shard_collection_basic.js
-  - jstests/sharding/autosplit_with_balancer.js
-  - jstests/sharding/migrateBig.js
-  - jstests/sharding/migrateBig_balancer.js
-  - jstests/sharding/mapReduce_inSharded.js
-  - jstests/sharding/cursor_valid_after_shard_stepdown.js
-  - jstests/sharding/movechunk_parallel.js
-  - jstests/sharding/read_committed_lookup.js
-  - jstests/sharding/mr_shard_version.js
-  - jstests/sharding/key_many.js
-  - jstests/sharding/autosplit_heuristics.js
-  - jstests/sharding/lagged_config_secondary.js
-  - jstests/sharding/cleanup_orphaned_basic.js
-  - jstests/sharding/unowned_doc_filtering.js
-  - jstests/sharding/basic_sharding_params.js
-  - jstests/sharding/shard_aware_init_secondaries.js
-  - jstests/sharding/mapReduce_inSharded_outSharded.js
-  - jstests/sharding/large_chunk.js
-  - jstests/sharding/migration_move_chunk_after_receive.js
-  - jstests/sharding/linearizable_read_concern.js
-  - jstests/sharding/migration_id_index.js
-  - jstests/sharding/explain_agg_read_pref.js
-  - jstests/sharding/session_info_in_oplog.js
-  - jstests/sharding/secondary_shard_version_protocol_with_causal_consistency.js
-  - jstests/sharding/retryable_writes.js
-  - jstests/sharding/view_rewrite.js
-  - jstests/sharding/hash_shard1.js
-  - jstests/sharding/split_with_force.js
+  - tests/jstests/sharding/shard_collection_basic.js
+  - tests/jstests/sharding/autosplit_with_balancer.js
+  - tests/jstests/sharding/migrateBig.js
+  - tests/jstests/sharding/migrateBig_balancer.js
+  - tests/jstests/sharding/mapReduce_inSharded.js
+  - tests/jstests/sharding/cursor_valid_after_shard_stepdown.js
+  - tests/jstests/sharding/movechunk_parallel.js
+  - tests/jstests/sharding/read_committed_lookup.js
+  - tests/jstests/sharding/mr_shard_version.js
+  - tests/jstests/sharding/key_many.js
+  - tests/jstests/sharding/autosplit_heuristics.js
+  - tests/jstests/sharding/lagged_config_secondary.js
+  - tests/jstests/sharding/cleanup_orphaned_basic.js
+  - tests/jstests/sharding/unowned_doc_filtering.js
+  - tests/jstests/sharding/basic_sharding_params.js
+  - tests/jstests/sharding/shard_aware_init_secondaries.js
+  - tests/jstests/sharding/mapReduce_inSharded_outSharded.js
+  - tests/jstests/sharding/large_chunk.js
+  - tests/jstests/sharding/migration_move_chunk_after_receive.js
+  - tests/jstests/sharding/linearizable_read_concern.js
+  - tests/jstests/sharding/migration_id_index.js
+  - tests/jstests/sharding/explain_agg_read_pref.js
+  - tests/jstests/sharding/session_info_in_oplog.js
+  - tests/jstests/sharding/secondary_shard_version_protocol_with_causal_consistency.js
+  - tests/jstests/sharding/retryable_writes.js
+  - tests/jstests/sharding/view_rewrite.js
+  - tests/jstests/sharding/hash_shard1.js
+  - tests/jstests/sharding/split_with_force.js
 
 executor:
   config:

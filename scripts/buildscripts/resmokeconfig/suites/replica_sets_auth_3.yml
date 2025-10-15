@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile jstests/libs/authTestsKey
+- &keyFile tests/jstests/libs/authTestsKey
 - &keyFileData Thiskeyisonlyforrunningthesuitewithauthenticationdontuseitinanytestsdirectly
 
 test_kind: js_test
@@ -18,34 +18,34 @@ selector:
   #   13 minutes to run on linux-64-debug
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/replsets/too_stale_secondary.js
-  - jstests/replsets/drain.js
-  - jstests/replsets/initial_sync_with_write_load.js
-  - jstests/replsets/step_down_during_draining2.js
-  - jstests/replsets/write_concern_after_stepdown.js
-  - jstests/replsets/read_after_optime.js
-  - jstests/replsets/read_committed_after_rollback.js
-  - jstests/replsets/stepdown_needs_electable_secondary.js
-  - jstests/replsets/replsetrestart1.js
-  - jstests/replsets/initial_sync2.js
-  - jstests/replsets/replsetarb2.js
-  - jstests/replsets/restore_term.js
-  - jstests/replsets/chaining_removal.js
-  - jstests/replsets/last_vote.js
-  - jstests/replsets/await_replication_timeout.js
-  - jstests/replsets/shutdown_primary.js
-  - jstests/replsets/initial_sync_fcv.js
-  - jstests/replsets/replset1.js
-  - jstests/replsets/stepdown_needs_majority.js
-  - jstests/replsets/sync2.js
-  - jstests/replsets/retryable_write_concern.js
-  - jstests/replsets/operation_time_read_and_write_concern.js
-  - jstests/replsets/slavedelay3.js
-  - jstests/replsets/initial_sync4.js
-  - jstests/replsets/noop_writes_wait_for_write_concern.js
+  - tests/jstests/replsets/too_stale_secondary.js
+  - tests/jstests/replsets/drain.js
+  - tests/jstests/replsets/initial_sync_with_write_load.js
+  - tests/jstests/replsets/step_down_during_draining2.js
+  - tests/jstests/replsets/write_concern_after_stepdown.js
+  - tests/jstests/replsets/read_after_optime.js
+  - tests/jstests/replsets/read_committed_after_rollback.js
+  - tests/jstests/replsets/stepdown_needs_electable_secondary.js
+  - tests/jstests/replsets/replsetrestart1.js
+  - tests/jstests/replsets/initial_sync2.js
+  - tests/jstests/replsets/replsetarb2.js
+  - tests/jstests/replsets/restore_term.js
+  - tests/jstests/replsets/chaining_removal.js
+  - tests/jstests/replsets/last_vote.js
+  - tests/jstests/replsets/await_replication_timeout.js
+  - tests/jstests/replsets/shutdown_primary.js
+  - tests/jstests/replsets/initial_sync_fcv.js
+  - tests/jstests/replsets/replset1.js
+  - tests/jstests/replsets/stepdown_needs_majority.js
+  - tests/jstests/replsets/sync2.js
+  - tests/jstests/replsets/retryable_write_concern.js
+  - tests/jstests/replsets/operation_time_read_and_write_concern.js
+  - tests/jstests/replsets/slavedelay3.js
+  - tests/jstests/replsets/initial_sync4.js
+  - tests/jstests/replsets/noop_writes_wait_for_write_concern.js
   exclude_files:
   # Skip any tests that run with auth explicitly.
-  - jstests/replsets/*[aA]uth*.js
+  - tests/jstests/replsets/*[aA]uth*.js
 
 executor:
   config:

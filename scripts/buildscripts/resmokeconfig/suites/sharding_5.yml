@@ -11,21 +11,21 @@ selector:
   #   15 minutes to run on enterprise-rhel-62-64-bit
   #   19 minutes to run on linux-64-debug
   roots:
-  - jstests/sharding/jumbo1.js
-  - jstests/sharding/mongos_no_replica_set_refresh.js
-  - jstests/sharding/sharding_migrate_cursor1.js
-  - jstests/sharding/repl_monitor_refresh.js
-  - jstests/sharding/aggregation_currentop.js
-  - jstests/sharding/shard_kill_and_pooling.js
-  - jstests/sharding/sharding_rs1.js
-  - jstests/sharding/test_stacked_migration_cleanup.js
-  - jstests/sharding/sharding_balance1.js
-  - jstests/sharding/shard_existing_coll_chunk_count.js
-  - jstests/sharding/convert_to_and_from_sharded.js
-  - jstests/sharding/sharding_rs2.js
-  - jstests/sharding/multi_coll_drop.js
-  - jstests/sharding/mongos_shard_failure_tolerance.js
-  - jstests/sharding/index_and_collection_option_propagation.js
+  - tests/jstests/sharding/jumbo1.js
+  - tests/jstests/sharding/mongos_no_replica_set_refresh.js
+  - tests/jstests/sharding/sharding_migrate_cursor1.js
+  - tests/jstests/sharding/repl_monitor_refresh.js
+  - tests/jstests/sharding/aggregation_currentop.js
+  - tests/jstests/sharding/shard_kill_and_pooling.js
+  - tests/jstests/sharding/sharding_rs1.js
+  - tests/jstests/sharding/test_stacked_migration_cleanup.js
+  - tests/jstests/sharding/sharding_balance1.js
+  - tests/jstests/sharding/shard_existing_coll_chunk_count.js
+  - tests/jstests/sharding/convert_to_and_from_sharded.js
+  - tests/jstests/sharding/sharding_rs2.js
+  - tests/jstests/sharding/multi_coll_drop.js
+  - tests/jstests/sharding/mongos_shard_failure_tolerance.js
+  - tests/jstests/sharding/index_and_collection_option_propagation.js
 
 executor:
   config:

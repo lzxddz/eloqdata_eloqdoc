@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile src/mongo/db/modules/enterprise/jstests/encryptdb/libs/ekf2
+- &keyFile src/mongo/db/modules/enterprise/tests/jstests/encryptdb/libs/ekf2
 
 test_kind: js_test
 
@@ -16,18 +16,18 @@ selector:
   #   11 minutes to run on enterprise-rhel-62-64-bit
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/query_after_multi_write.js
-  - jstests/sharding/mongos_no_replica_set_refresh.js
-  - jstests/sharding/all_config_servers_blackholed_from_mongos.js
-  - jstests/sharding/repl_monitor_refresh.js
-  - jstests/sharding/addshard4.js
-  - jstests/sharding/index_and_collection_option_propagation.js
-  - jstests/sharding/safe_secondary_reads_single_migration_suspend_range_deletion.js
-  - jstests/sharding/sharding_migrate_cursor1.js
-  - jstests/sharding/authCommands.js
-  - jstests/sharding/move_chunk_update_with_write_retryability.js
-  - jstests/sharding/database_and_shard_versioning_all_commands.js
-  - jstests/sharding/shard_existing_coll_chunk_count.js
+  - tests/jstests/sharding/query_after_multi_write.js
+  - tests/jstests/sharding/mongos_no_replica_set_refresh.js
+  - tests/jstests/sharding/all_config_servers_blackholed_from_mongos.js
+  - tests/jstests/sharding/repl_monitor_refresh.js
+  - tests/jstests/sharding/addshard4.js
+  - tests/jstests/sharding/index_and_collection_option_propagation.js
+  - tests/jstests/sharding/safe_secondary_reads_single_migration_suspend_range_deletion.js
+  - tests/jstests/sharding/sharding_migrate_cursor1.js
+  - tests/jstests/sharding/authCommands.js
+  - tests/jstests/sharding/move_chunk_update_with_write_retryability.js
+  - tests/jstests/sharding/database_and_shard_versioning_all_commands.js
+  - tests/jstests/sharding/shard_existing_coll_chunk_count.js
 
 executor:
   config:

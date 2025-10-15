@@ -32,15 +32,15 @@ class TestTagsConfig(unittest.TestCase):
     def test_list_test_patterns(self):
         patterns = self.conf.get_test_patterns("js_test")
         self.assertEqual(2, len(patterns))
-        self.assertIn("jstests/core/example.js", patterns)
-        self.assertIn("jstests/core/all*.js", patterns)
+        self.assertIn("tests/jstests/core/example.js", patterns)
+        self.assertIn("tests/jstests/core/all*.js", patterns)
 
     def test_list_test_patterns_unknown_kind(self):
         patterns = self.conf.get_test_patterns("java_test")
         self.assertEqual([], patterns)
 
     def test_list_tags(self):
-        tags = self.conf.get_tags("js_test", "jstests/core/example.js")
+        tags = self.conf.get_tags("js_test", "tests/jstests/core/example.js")
         self.assertEqual(3, len(tags))
         self.assertIn("tag1", tags)
         self.assertIn("tag2", tags)
@@ -51,7 +51,7 @@ class TestTagsConfig(unittest.TestCase):
         self.assertEqual([], tags2)
 
     def test_list_tags_unknown_pattern(self):
-        tags = self.conf.get_tags("js_test", "jstests/core/unknown.js")
+        tags = self.conf.get_tags("js_test", "tests/jstests/core/unknown.js")
         self.assertEqual([], tags)
 
     def test_add_tag_to_existing_list(self):
@@ -68,7 +68,7 @@ class TestTagsConfig(unittest.TestCase):
 
     def test_add_tag_to_new_list(self):
         test_kind = "js_test"
-        test_pattern = "jstests/core/drop.js"
+        test_pattern = "tests/jstests/core/drop.js"
         new_tag = "tag100"
         patterns = self.conf.get_test_patterns(test_kind)
         self.assertNotIn(test_pattern, patterns)
@@ -80,7 +80,7 @@ class TestTagsConfig(unittest.TestCase):
 
     def test_add_tag_to_empty_pattern(self):
         test_kind = "db_test"
-        test_pattern = "jstests/disk/quota.js"
+        test_pattern = "tests/jstests/disk/quota.js"
         new_tag = "tag2"
         patterns = self.conf.get_test_patterns(test_kind)
         self.assertNotIn(test_pattern, patterns)
@@ -92,7 +92,7 @@ class TestTagsConfig(unittest.TestCase):
 
     def test_remove_tag(self):
         test_kind = "js_test"
-        test_pattern = "jstests/core/example.js"
+        test_pattern = "tests/jstests/core/example.js"
         tag = "tag1"
         tags = self.conf.get_tags(test_kind, test_pattern)
         self.assertIn(tag, tags)
@@ -104,7 +104,7 @@ class TestTagsConfig(unittest.TestCase):
 
     def test_remove_unknown_tag(self):
         test_kind = "js_test"
-        test_pattern = "jstests/core/example.js"
+        test_pattern = "tests/jstests/core/example.js"
         tag = "tag18"
         tags = self.conf.get_tags(test_kind, test_pattern)
         self.assertNotIn(tag, tags)
@@ -116,7 +116,7 @@ class TestTagsConfig(unittest.TestCase):
 
     def test_remove_tag_and_clean(self):
         test_kind = "js_test"
-        test_pattern = "jstests/core/all*.js"
+        test_pattern = "tests/jstests/core/all*.js"
         tags = self.conf.get_tags(test_kind, test_pattern)
         self.assertEqual(2, len(tags))
 
@@ -130,14 +130,14 @@ class TestTagsConfig(unittest.TestCase):
 
     def test_remove_pattern(self):
         test_kind = "js_test"
-        test_pattern = "jstests/core/example.js"
+        test_pattern = "tests/jstests/core/example.js"
         self.assertIn(test_pattern, self.conf.get_test_patterns(test_kind))
         self.conf.remove_test_pattern(test_kind, test_pattern)
         self.assertNotIn(test_pattern, self.conf.get_test_patterns(test_kind))
 
     def test_tag_order(self):
         test_kind = "js_test"
-        test_pattern = "jstests/core/example.js"
+        test_pattern = "tests/jstests/core/example.js"
         tags = self.conf.get_tags(test_kind, test_pattern)
 
         self.assertEqual(["tag1", "tag2", "tag3"], tags)
@@ -154,7 +154,7 @@ class TestTagsConfig(unittest.TestCase):
 
     def test_tag_order_custom_cmp(self):
         test_kind = "js_test"
-        test_pattern = "jstests/core/example.js"
+        test_pattern = "tests/jstests/core/example.js"
 
         def custom_cmp(tag_a, tag_b):
             return cmp(tag_a.split("|"), tag_b.split("|"))
@@ -177,26 +177,26 @@ class TestTagsConfig(unittest.TestCase):
     def test_is_modified_after_add(self):
         self.assertFalse(self.conf.is_modified())
         # add an existing tag
-        self.conf.add_tag("js_test", "jstests/core/example.js", "tag1")
+        self.conf.add_tag("js_test", "tests/jstests/core/example.js", "tag1")
         self.assertFalse(self.conf.is_modified())
         # add a new tag
-        self.conf.add_tag("js_test", "jstests/core/example.js", "tag4")
+        self.conf.add_tag("js_test", "tests/jstests/core/example.js", "tag4")
         self.assertTrue(self.conf.is_modified())
 
     def test_is_modified_after_remove(self):
         self.assertFalse(self.conf.is_modified())
         # remove an unknown tag
-        self.conf.remove_tag("js_test", "jstests/core/example.js", "tag4")
+        self.conf.remove_tag("js_test", "tests/jstests/core/example.js", "tag4")
         self.assertFalse(self.conf.is_modified())
         # remove an existing tag
-        self.conf.remove_tag("js_test", "jstests/core/example.js", "tag1")
+        self.conf.remove_tag("js_test", "tests/jstests/core/example.js", "tag1")
         self.assertTrue(self.conf.is_modified())
 
     def test_is_modified_after_add_remove(self):
         self.assertFalse(self.conf.is_modified())
         # add a new tag
-        self.conf.add_tag("js_test", "jstests/core/example.js", "tag4")
+        self.conf.add_tag("js_test", "tests/jstests/core/example.js", "tag4")
         self.assertTrue(self.conf.is_modified())
         # remove the tag
-        self.conf.remove_tag("js_test", "jstests/core/example.js", "tag4")
+        self.conf.remove_tag("js_test", "tests/jstests/core/example.js", "tag4")
         self.assertFalse(self.conf.is_modified())

@@ -2,7 +2,7 @@ test_kind: js_test
 
 selector:
   roots:
-  - jstests/parallel/*.js
+  - tests/jstests/parallel/*.js
 
 executor:
   archive:

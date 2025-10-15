@@ -8,7 +8,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile jstests/libs/authTestsKey
+- &keyFile tests/jstests/libs/authTestsKey
 - &keyFileData Thiskeyisonlyforrunningthesuitewithauthenticationdontuseitinanytestsdirectly
 
 test_kind: js_test
@@ -18,28 +18,28 @@ selector:
   #   9 minutes to run on enterprise-rhel-62-64-bit
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/lagged_config_secondary.js
-  - jstests/sharding/features3.js
-  - jstests/sharding/pending_chunk.js
-  - jstests/sharding/geo_near_sharded.js
-  - jstests/sharding/cursor1.js
-  - jstests/sharding/unowned_doc_filtering.js
-  - jstests/sharding/addshard5.js
-  - jstests/sharding/advance_logical_time_with_valid_signature.js
-  - jstests/sharding/limit_push.js
-  - jstests/sharding/agg_sort.js
-  - jstests/sharding/findandmodify2.js
-  - jstests/sharding/migration_id_index.js
-  - jstests/sharding/change_streams_whole_db.js
-  - jstests/sharding/change_stream_enforce_max_time_ms_on_mongos.js
-  - jstests/sharding/causal_consistency_shell_support.js
-  - jstests/sharding/move_chunk_open_cursors.js
-  - jstests/sharding/noUpdateButN1inAnotherCollection.js
-  - jstests/sharding/merge_chunks_test_with_md_ops.js
-  - jstests/sharding/shard_aware_init_secondaries.js
-  - jstests/sharding/cleanup_orphaned_cmd_prereload.js
-  - jstests/sharding/sharding_system_namespaces.js
-  - jstests/sharding/cursor_cleanup.js
+  - tests/jstests/sharding/lagged_config_secondary.js
+  - tests/jstests/sharding/features3.js
+  - tests/jstests/sharding/pending_chunk.js
+  - tests/jstests/sharding/geo_near_sharded.js
+  - tests/jstests/sharding/cursor1.js
+  - tests/jstests/sharding/unowned_doc_filtering.js
+  - tests/jstests/sharding/addshard5.js
+  - tests/jstests/sharding/advance_logical_time_with_valid_signature.js
+  - tests/jstests/sharding/limit_push.js
+  - tests/jstests/sharding/agg_sort.js
+  - tests/jstests/sharding/findandmodify2.js
+  - tests/jstests/sharding/migration_id_index.js
+  - tests/jstests/sharding/change_streams_whole_db.js
+  - tests/jstests/sharding/change_stream_enforce_max_time_ms_on_mongos.js
+  - tests/jstests/sharding/causal_consistency_shell_support.js
+  - tests/jstests/sharding/move_chunk_open_cursors.js
+  - tests/jstests/sharding/noUpdateButN1inAnotherCollection.js
+  - tests/jstests/sharding/merge_chunks_test_with_md_ops.js
+  - tests/jstests/sharding/shard_aware_init_secondaries.js
+  - tests/jstests/sharding/cleanup_orphaned_cmd_prereload.js
+  - tests/jstests/sharding/sharding_system_namespaces.js
+  - tests/jstests/sharding/cursor_cleanup.js
 
 executor:
   config:

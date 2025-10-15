@@ -17,7 +17,7 @@ class MultiStmtTxnTestCase(jsrunnerfile.JSRunnerFileTestCase):
         """Initilize MultiStmtTxnTestCase."""
         jsrunnerfile.JSRunnerFileTestCase.__init__(
             self, logger, "Multi-statement Transaction Passthrough", multi_stmt_txn_test_file,
-            test_runner_file="jstests/libs/txns/txn_passthrough_runner.js",
+            test_runner_file="tests/jstests/libs/txns/txn_passthrough_runner.js",
             shell_executable=shell_executable, shell_options=shell_options)
 
     @property

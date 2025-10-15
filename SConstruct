@@ -1870,7 +1870,7 @@ if env['TARGET_ARCH'] == 'i386':
 # Needed for auth tests since key files are stored in git with mode 644.
 if not env.TargetOSIs('windows'):
     for keysuffix in [ "1" , "2" ]:
-        keyfile = "jstests/libs/key%s" % keysuffix
+        keyfile = "tests/jstests/libs/key%s" % keysuffix
         os.chmod( keyfile , stat.S_IWUSR|stat.S_IRUSR )
 
 # boostSuffixList is used when using system boost to select a search sequence
@@ -3497,7 +3497,7 @@ env.AddMethod(env_windows_resource_file, 'WindowsResourceFile')
 
 def doLint( env , target , source ):
     import buildscripts.eslint
-    if not buildscripts.eslint.lint(None, dirmode=True, glob=["jstests/", "src/mongo/"]):
+    if not buildscripts.eslint.lint(None, dirmode=True, glob=["tests/jstests/", "src/mongo/"]):
         raise Exception("ESLint errors")
 
     import buildscripts.clang_format

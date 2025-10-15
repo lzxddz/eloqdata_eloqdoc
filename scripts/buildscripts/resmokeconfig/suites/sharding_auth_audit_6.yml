@@ -8,7 +8,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile jstests/libs/authTestsKey
+- &keyFile tests/jstests/libs/authTestsKey
 - &keyFileData Thiskeyisonlyforrunningthesuitewithauthenticationdontuseitinanytestsdirectly
 
 test_kind: js_test
@@ -18,19 +18,19 @@ selector:
   #   11 minutes to run on enterprise-rhel-62-64-bit
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/shard_existing_coll_chunk_count.js
-  - jstests/sharding/jumbo1.js
-  - jstests/sharding/database_and_shard_versioning_all_commands.js
-  - jstests/sharding/balance_repl.js
-  - jstests/sharding/move_chunk_insert_with_write_retryability.js
-  - jstests/sharding/addshard2.js
-  - jstests/sharding/change_stream_update_lookup_read_concern.js
-  - jstests/sharding/move_chunk_remove_with_write_retryability.js
-  - jstests/sharding/safe_secondary_reads_single_migration_waitForDelete.js
-  - jstests/sharding/shard_identity_config_update.js
-  - jstests/sharding/count_slaveok.js
-  - jstests/sharding/hash_shard1.js
-  - jstests/sharding/shard_identity_rollback.js
+  - tests/jstests/sharding/shard_existing_coll_chunk_count.js
+  - tests/jstests/sharding/jumbo1.js
+  - tests/jstests/sharding/database_and_shard_versioning_all_commands.js
+  - tests/jstests/sharding/balance_repl.js
+  - tests/jstests/sharding/move_chunk_insert_with_write_retryability.js
+  - tests/jstests/sharding/addshard2.js
+  - tests/jstests/sharding/change_stream_update_lookup_read_concern.js
+  - tests/jstests/sharding/move_chunk_remove_with_write_retryability.js
+  - tests/jstests/sharding/safe_secondary_reads_single_migration_waitForDelete.js
+  - tests/jstests/sharding/shard_identity_config_update.js
+  - tests/jstests/sharding/count_slaveok.js
+  - tests/jstests/sharding/hash_shard1.js
+  - tests/jstests/sharding/shard_identity_rollback.js
 
 executor:
   config:

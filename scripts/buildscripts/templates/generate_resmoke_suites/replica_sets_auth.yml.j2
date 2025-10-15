@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile jstests/libs/authTestsKey
+- &keyFile tests/jstests/libs/authTestsKey
 - &keyFileData Thiskeyisonlyforrunningthesuitewithauthenticationdontuseitinanytestsdirectly
 
 test_kind: js_test
@@ -24,12 +24,12 @@ selector:
   - {{ test }}
 {% endfor %}
 {% if is_misc is defined %}
-  - jstests/replsets/*.js
+  - tests/jstests/replsets/*.js
   exclude_files:
   # Skip any tests that run with auth explicitly.
-  - jstests/replsets/*[aA]uth*.js
+  - tests/jstests/replsets/*[aA]uth*.js
   # Also skip tests that require a ScopedThread, because ScopedThreads don't inherit credentials.
-  - jstests/replsets/interrupted_batch_insert.js
+  - tests/jstests/replsets/interrupted_batch_insert.js
 {% if excluded_tests is defined %}
 {% for test in excluded_tests %}
   - {{ test }}

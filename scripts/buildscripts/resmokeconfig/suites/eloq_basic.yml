@@ -2,7 +2,7 @@ test_kind: js_test
 
 selector:
   roots:
-  - jstests/eloq_basic/*.js
+  - tests/jstests/eloq_basic/*.js
 executor:
   archive:
     hooks:
@@ -10,7 +10,7 @@ executor:
   config:
     shell_options:
       readMode: commands
-      eval: load("jstests/libs/override_methods/detect_spawning_own_mongod.js");
+      eval: load("tests/jstests/libs/override_methods/detect_spawning_own_mongod.js");
   hooks:
   - class: ValidateCollections
     shell_options:

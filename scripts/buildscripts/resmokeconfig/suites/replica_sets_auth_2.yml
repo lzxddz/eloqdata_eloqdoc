@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile jstests/libs/authTestsKey
+- &keyFile tests/jstests/libs/authTestsKey
 - &keyFileData Thiskeyisonlyforrunningthesuitewithauthenticationdontuseitinanytestsdirectly
 
 test_kind: js_test
@@ -18,26 +18,26 @@ selector:
   #   14 minutes to run on linux-64-debug
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/replsets/stepdown.js
-  - jstests/replsets/sync_passive.js
-  - jstests/replsets/rollback_with_socket_error_then_steady_state.js
-  - jstests/replsets/server8070.js
-  - jstests/replsets/zero_vote_arbiter.js
-  - jstests/replsets/write_concern_after_stepdown_and_stepup.js
-  - jstests/replsets/initial_sync_drop_collection.js
-  - jstests/replsets/rollback_crud_op_sequences.js
-  - jstests/replsets/rollback_ddl_op_sequences.js
-  - jstests/replsets/rollback_views.js
-  - jstests/replsets/read_committed_stale_history.js
-  - jstests/replsets/replsetfreeze.js
-  - jstests/replsets/catchup_takeover_two_nodes_ahead.js
-  - jstests/replsets/rollback_creates_rollback_directory.js
-  - jstests/replsets/rollback_different_h.js
-  - jstests/replsets/stepdown_kill_other_ops.js
-  - jstests/replsets/retryable_writes_failover.js
+  - tests/jstests/replsets/stepdown.js
+  - tests/jstests/replsets/sync_passive.js
+  - tests/jstests/replsets/rollback_with_socket_error_then_steady_state.js
+  - tests/jstests/replsets/server8070.js
+  - tests/jstests/replsets/zero_vote_arbiter.js
+  - tests/jstests/replsets/write_concern_after_stepdown_and_stepup.js
+  - tests/jstests/replsets/initial_sync_drop_collection.js
+  - tests/jstests/replsets/rollback_crud_op_sequences.js
+  - tests/jstests/replsets/rollback_ddl_op_sequences.js
+  - tests/jstests/replsets/rollback_views.js
+  - tests/jstests/replsets/read_committed_stale_history.js
+  - tests/jstests/replsets/replsetfreeze.js
+  - tests/jstests/replsets/catchup_takeover_two_nodes_ahead.js
+  - tests/jstests/replsets/rollback_creates_rollback_directory.js
+  - tests/jstests/replsets/rollback_different_h.js
+  - tests/jstests/replsets/stepdown_kill_other_ops.js
+  - tests/jstests/replsets/retryable_writes_failover.js
   exclude_files:
   # Skip any tests that run with auth explicitly.
-  - jstests/replsets/*[aA]uth*.js
+  - tests/jstests/replsets/*[aA]uth*.js
 
 executor:
   config:

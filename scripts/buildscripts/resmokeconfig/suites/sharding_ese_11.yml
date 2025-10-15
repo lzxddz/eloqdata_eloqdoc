@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile src/mongo/db/modules/enterprise/jstests/encryptdb/libs/ekf2
+- &keyFile src/mongo/db/modules/enterprise/tests/jstests/encryptdb/libs/ekf2
 
 test_kind: js_test
 
@@ -16,25 +16,25 @@ selector:
   #   9 minutes to run on enterprise-rhel-62-64-bit
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/read_committed_lookup.js
-  - jstests/sharding/lookup_change_stream_post_image_hashed_shard_key.js
-  - jstests/sharding/mongos_does_not_gossip_logical_time_without_keys.js
-  - jstests/sharding/write_commands_sharding_state.js
-  - jstests/sharding/kill_pinned_cursor.js
-  - jstests/sharding/in_memory_sort_limit.js
-  - jstests/sharding/migrateBig.js
-  - jstests/sharding/shard2.js
-  - jstests/sharding/shard_insert_getlasterror_w2.js
-  - jstests/sharding/diffservers1.js
-  - jstests/sharding/shard_targeting.js
-  - jstests/sharding/geo_near_random1.js
-  - jstests/sharding/mapReduce_inSharded_outSharded.js
-  - jstests/sharding/change_streams_unsharded_becomes_sharded.js
-  - jstests/sharding/merge_chunks_test.js
-  - jstests/sharding/cleanup_orphaned_cmd_during_movechunk.js
-  - jstests/sharding/empty_doc_results.js
-  - jstests/sharding/prefix_shard_key.js
-  - jstests/sharding/upsert_sharded.js
+  - tests/jstests/sharding/read_committed_lookup.js
+  - tests/jstests/sharding/lookup_change_stream_post_image_hashed_shard_key.js
+  - tests/jstests/sharding/mongos_does_not_gossip_logical_time_without_keys.js
+  - tests/jstests/sharding/write_commands_sharding_state.js
+  - tests/jstests/sharding/kill_pinned_cursor.js
+  - tests/jstests/sharding/in_memory_sort_limit.js
+  - tests/jstests/sharding/migrateBig.js
+  - tests/jstests/sharding/shard2.js
+  - tests/jstests/sharding/shard_insert_getlasterror_w2.js
+  - tests/jstests/sharding/diffservers1.js
+  - tests/jstests/sharding/shard_targeting.js
+  - tests/jstests/sharding/geo_near_random1.js
+  - tests/jstests/sharding/mapReduce_inSharded_outSharded.js
+  - tests/jstests/sharding/change_streams_unsharded_becomes_sharded.js
+  - tests/jstests/sharding/merge_chunks_test.js
+  - tests/jstests/sharding/cleanup_orphaned_cmd_during_movechunk.js
+  - tests/jstests/sharding/empty_doc_results.js
+  - tests/jstests/sharding/prefix_shard_key.js
+  - tests/jstests/sharding/upsert_sharded.js
 
 executor:
   config:

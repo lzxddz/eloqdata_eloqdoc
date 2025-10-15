@@ -260,11 +260,11 @@ def main():
     """Execute Main entry point."""
     success = False
     usage = "%prog [-e <eslint>] [-d] lint|lint-patch|fix [glob patterns] "
-    description = "lint runs ESLint on provided patterns or all .js files under jstests/ "\
+    description = "lint runs ESLint on provided patterns or all .js files under tests/jstests/ "\
                   "and src/mongo. lint-patch runs ESLint against .js files modified in the "\
                   "provided patch file (for upload.py). "\
                   "fix runs ESLint with --fix on provided patterns "\
-                  "or files under jstests/ and src/mongo."
+                  "or files under tests/jstests/ and src/mongo."
     epilog = "*Unless you specify -d a separate ESLint process will be launched for every file"
     parser = OptionParser()
     parser = OptionParser(usage=usage, description=description, epilog=epilog)
@@ -285,7 +285,7 @@ def main():
         command = args[1]
         searchlist = args[2:]
         if not searchlist:
-            searchlist = ["jstests/", "src/mongo/"]
+            searchlist = ["tests/jstests/", "src/mongo/"]
 
         if command == "lint":
             success = lint(options.eslint, options.dirmode, searchlist)

@@ -2,22 +2,22 @@ test_kind: js_test
 
 selector:
   roots:
-  - jstests/aggregation/**/*.js
+  - tests/jstests/aggregation/**/*.js
   exclude_files:
-  - jstests/aggregation/extras/*.js
-  - jstests/aggregation/data/*.js
-  - jstests/aggregation/sources/lookup/lookup_absorb_match.js
+  - tests/jstests/aggregation/extras/*.js
+  - tests/jstests/aggregation/data/*.js
+  - tests/jstests/aggregation/sources/lookup/lookup_absorb_match.js
   # crash
-  - jstests/aggregation/bugs/match.js
-  - jstests/aggregation/bugs/server10530.js
-  - jstests/aggregation/bugs/server18427.js
-  - jstests/aggregation/bugs/server22580.js
-  - jstests/aggregation/bugs/server26462.js
-  - jstests/aggregation/bugs/server3253.js
-  - jstests/aggregation/sources/graphLookup/error.js
-  - jstests/aggregation/sources/match/expr_match.js
-  - jstests/aggregation/sources/out/required_last_position.js
-  - jstests/aggregation/sources/sort/collation_sort_japanese.js
+  - tests/jstests/aggregation/bugs/match.js
+  - tests/jstests/aggregation/bugs/server10530.js
+  - tests/jstests/aggregation/bugs/server18427.js
+  - tests/jstests/aggregation/bugs/server22580.js
+  - tests/jstests/aggregation/bugs/server26462.js
+  - tests/jstests/aggregation/bugs/server3253.js
+  - tests/jstests/aggregation/sources/graphLookup/error.js
+  - tests/jstests/aggregation/sources/match/expr_match.js
+  - tests/jstests/aggregation/sources/out/required_last_position.js
+  - tests/jstests/aggregation/sources/sort/collation_sort_japanese.js
   exclude_with_any_tags:
   - assumes_superuser_permissions
   - requires_eval_command

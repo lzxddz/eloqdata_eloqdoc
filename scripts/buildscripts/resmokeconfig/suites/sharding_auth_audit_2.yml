@@ -8,7 +8,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile jstests/libs/authTestsKey
+- &keyFile tests/jstests/libs/authTestsKey
 - &keyFileData Thiskeyisonlyforrunningthesuitewithauthenticationdontuseitinanytestsdirectly
 
 test_kind: js_test
@@ -18,13 +18,13 @@ selector:
   #   13 minutes to run on enterprise-rhel-62-64-bit
   #   18 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/config_rs_no_primary.js
-  - jstests/sharding/read_pref.js
-  - jstests/sharding/read_pref_cmd.js
-  - jstests/sharding/primary_config_server_blackholed_from_mongos.js
-  - jstests/sharding/bulk_shard_insert.js
-  - jstests/sharding/startup_with_all_configs_down.js
-  - jstests/sharding/enforce_zone_policy.js
+  - tests/jstests/sharding/config_rs_no_primary.js
+  - tests/jstests/sharding/read_pref.js
+  - tests/jstests/sharding/read_pref_cmd.js
+  - tests/jstests/sharding/primary_config_server_blackholed_from_mongos.js
+  - tests/jstests/sharding/bulk_shard_insert.js
+  - tests/jstests/sharding/startup_with_all_configs_down.js
+  - tests/jstests/sharding/enforce_zone_policy.js
 
 executor:
   config:

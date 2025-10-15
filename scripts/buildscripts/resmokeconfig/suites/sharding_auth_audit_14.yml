@@ -8,7 +8,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile jstests/libs/authTestsKey
+- &keyFile tests/jstests/libs/authTestsKey
 - &keyFileData Thiskeyisonlyforrunningthesuitewithauthenticationdontuseitinanytestsdirectly
 
 test_kind: js_test
@@ -18,30 +18,30 @@ selector:
   #   9 minutes to run on enterprise-rhel-62-64-bit
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/cleanup_orphaned_cmd_hashed.js
-  - jstests/sharding/basic_split.js
-  - jstests/sharding/find_getmore_cmd.js
-  - jstests/sharding/cursor_valid_after_shard_stepdown.js
-  - jstests/sharding/trace_missing_docs_test.js
-  - jstests/sharding/key_string.js
-  - jstests/sharding/index1.js
-  - jstests/sharding/geo_near_sort.js
-  - jstests/sharding/aggregations_in_session.js
-  - jstests/sharding/migration_failure.js
-  - jstests/sharding/mapReduce_outSharded.js
-  - jstests/sharding/multi_mongos2a.js
-  - jstests/sharding/accurate_count_with_predicate.js
-  - jstests/sharding/remove3.js
-  - jstests/sharding/change_streams_establishment_finds_new_shards.js
-  - jstests/sharding/inserts_consistent.js
-  - jstests/sharding/not_allowed_on_sharded_collection_cmd.js
-  - jstests/sharding/change_stream_metadata_notifications.js
-  - jstests/sharding/autosplit.js
-  - jstests/sharding/tag_auto_split.js
-  - jstests/sharding/covered_shard_key_indexes.js
-  - jstests/sharding/basic_merge.js
-  - jstests/sharding/move_chunk_basic.js
-  - jstests/sharding/shard_key_immutable.js
+  - tests/jstests/sharding/cleanup_orphaned_cmd_hashed.js
+  - tests/jstests/sharding/basic_split.js
+  - tests/jstests/sharding/find_getmore_cmd.js
+  - tests/jstests/sharding/cursor_valid_after_shard_stepdown.js
+  - tests/jstests/sharding/trace_missing_docs_test.js
+  - tests/jstests/sharding/key_string.js
+  - tests/jstests/sharding/index1.js
+  - tests/jstests/sharding/geo_near_sort.js
+  - tests/jstests/sharding/aggregations_in_session.js
+  - tests/jstests/sharding/migration_failure.js
+  - tests/jstests/sharding/mapReduce_outSharded.js
+  - tests/jstests/sharding/multi_mongos2a.js
+  - tests/jstests/sharding/accurate_count_with_predicate.js
+  - tests/jstests/sharding/remove3.js
+  - tests/jstests/sharding/change_streams_establishment_finds_new_shards.js
+  - tests/jstests/sharding/inserts_consistent.js
+  - tests/jstests/sharding/not_allowed_on_sharded_collection_cmd.js
+  - tests/jstests/sharding/change_stream_metadata_notifications.js
+  - tests/jstests/sharding/autosplit.js
+  - tests/jstests/sharding/tag_auto_split.js
+  - tests/jstests/sharding/covered_shard_key_indexes.js
+  - tests/jstests/sharding/basic_merge.js
+  - tests/jstests/sharding/move_chunk_basic.js
+  - tests/jstests/sharding/shard_key_immutable.js
 
 executor:
   config:

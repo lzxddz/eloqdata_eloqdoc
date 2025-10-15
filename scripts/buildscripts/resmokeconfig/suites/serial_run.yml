@@ -2,7 +2,7 @@ test_kind: js_test
 
 selector:
   roots:
-  - jstests/serial_run/*.js
+  - tests/jstests/serial_run/*.js
 
 executor:
   archive:

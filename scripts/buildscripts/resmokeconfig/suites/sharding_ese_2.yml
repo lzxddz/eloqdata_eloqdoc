@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile src/mongo/db/modules/enterprise/jstests/encryptdb/libs/ekf2
+- &keyFile src/mongo/db/modules/enterprise/tests/jstests/encryptdb/libs/ekf2
 
 test_kind: js_test
 
@@ -16,11 +16,11 @@ selector:
   #   13 minutes to run on enterprise-rhel-62-64-bit
   #   18 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/move_chunk_find_and_modify_with_write_retryability.js
-  - jstests/sharding/batch_write_command_sharded.js
-  - jstests/sharding/shard_config_db_collections.js
-  - jstests/sharding/config_rs_no_primary.js
-  - jstests/sharding/read_pref.js
+  - tests/jstests/sharding/move_chunk_find_and_modify_with_write_retryability.js
+  - tests/jstests/sharding/batch_write_command_sharded.js
+  - tests/jstests/sharding/shard_config_db_collections.js
+  - tests/jstests/sharding/config_rs_no_primary.js
+  - tests/jstests/sharding/read_pref.js
 
 executor:
   config:

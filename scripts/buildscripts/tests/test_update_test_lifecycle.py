@@ -337,7 +337,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
         reliable_time_period=datetime.timedelta(days=1), unreliable_min_runs=2,
         unreliable_time_period=datetime.timedelta(days=1))
 
-    ENTRY = test_failures.ReportEntry(test="jstests/core/all.js", task="jsCore_WT",
+    ENTRY = test_failures.ReportEntry(test="tests/jstests/core/all.js", task="jsCore_WT",
                                       variant="linux-64", distro="rhel62", start_date=datetime.date(
                                           2017, 6, 3), end_date=datetime.date(2017, 6, 3),
                                       num_pass=0, num_fail=0)
@@ -369,7 +369,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
         summary_lifecycle = update_test_lifecycle.TagsConfigWithChangelog(lifecycle)
         self.assertEqual(collections.OrderedDict(), self.assert_has_only_js_tests(lifecycle))
 
-        tests = ["jstests/core/all.js"]
+        tests = ["tests/jstests/core/all.js"]
         report = test_failures.Report([
             self.ENTRY._replace(num_pass=0, num_fail=1),
             self.ENTRY._replace(num_pass=0, num_fail=1, task="jsCore"),
@@ -393,7 +393,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
 
         self.transition_from_reliable_to_unreliable(config,
                                                     collections.OrderedDict([
-                                                        ("jstests/core/all.js", ["unreliable"]),
+                                                        ("tests/jstests/core/all.js", ["unreliable"]),
                                                     ]))
 
     def test_transition_task_from_reliable_to_unreliable(self):
@@ -407,7 +407,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
 
         self.transition_from_reliable_to_unreliable(config,
                                                     collections.OrderedDict([
-                                                        ("jstests/core/all.js",
+                                                        ("tests/jstests/core/all.js",
                                                          ["unreliable|jsCore_WT"]),
                                                     ]))
 
@@ -422,7 +422,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
 
         self.transition_from_reliable_to_unreliable(config,
                                                     collections.OrderedDict([
-                                                        ("jstests/core/all.js",
+                                                        ("tests/jstests/core/all.js",
                                                          ["unreliable|jsCore_WT|linux-64"]),
                                                     ]))
 
@@ -437,7 +437,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
 
         self.transition_from_reliable_to_unreliable(config,
                                                     collections.OrderedDict([
-                                                        ("jstests/core/all.js",
+                                                        ("tests/jstests/core/all.js",
                                                          ["unreliable|jsCore_WT|linux-64|rhel62"]),
                                                     ]))
 
@@ -454,7 +454,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
 
         self.transition_from_reliable_to_unreliable(config,
                                                     collections.OrderedDict([
-                                                        ("jstests/core/all.js", [
+                                                        ("tests/jstests/core/all.js", [
                                                             "unreliable",
                                                             "unreliable|jsCore_WT",
                                                             "unreliable|jsCore_WT|linux-64",
@@ -473,7 +473,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
         summary_lifecycle = update_test_lifecycle.TagsConfigWithChangelog(lifecycle)
         self.assertEqual(initial_tags, self.assert_has_only_js_tests(lifecycle))
 
-        tests = ["jstests/core/all.js"]
+        tests = ["tests/jstests/core/all.js"]
         report = test_failures.Report([
             self.ENTRY._replace(num_pass=1, num_fail=0),
             self.ENTRY._replace(num_pass=1, num_fail=0, task="jsCore"),
@@ -502,9 +502,9 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
             distro_fail_rates=self.CONFIG.distro_fail_rates._replace(unacceptable=0.1),
             unreliable_time_period=datetime.timedelta(days=2))
 
-        tests = ["jstests/core/all.js"]
+        tests = ["tests/jstests/core/all.js"]
         initial_tags = collections.OrderedDict([
-            ("jstests/core/all.js", [
+            ("tests/jstests/core/all.js", [
                 "unreliable",
                 "unreliable|jsCore_WT",
                 "unreliable|jsCore_WT|linux-64",
@@ -531,7 +531,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
         updated_tags = self.assert_has_only_js_tests(lifecycle)
         # The tags for variant and distro have been removed.
         self.assertEqual(updated_tags,
-                         collections.OrderedDict([("jstests/core/all.js",
+                         collections.OrderedDict([("tests/jstests/core/all.js",
                                                    ["unreliable", "unreliable|jsCore_WT"])]))
 
     def test_non_running_at_all_is_reliable(self):
@@ -541,9 +541,9 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
         """
         config = self.CONFIG
 
-        tests = ["jstests/core/all.js", "jstests/core/all2.js"]
+        tests = ["tests/jstests/core/all.js", "tests/jstests/core/all2.js"]
         initial_tags = collections.OrderedDict([
-            ("jstests/core/all2.js", [
+            ("tests/jstests/core/all2.js", [
                 "unreliable",
                 "unreliable|jsCore_WT",
                 "unreliable|jsCore_WT|linux-64",
@@ -576,7 +576,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
 
         self.transition_from_unreliable_to_reliable(config,
                                                     collections.OrderedDict([
-                                                        ("jstests/core/all.js", ["unreliable"]),
+                                                        ("tests/jstests/core/all.js", ["unreliable"]),
                                                     ]))
 
     def test_transition_task_from_unreliable_to_reliable(self):
@@ -590,7 +590,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
 
         self.transition_from_unreliable_to_reliable(config,
                                                     collections.OrderedDict([
-                                                        ("jstests/core/all.js",
+                                                        ("tests/jstests/core/all.js",
                                                          ["unreliable|jsCore_WT"]),
                                                     ]))
 
@@ -605,7 +605,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
 
         self.transition_from_unreliable_to_reliable(config,
                                                     collections.OrderedDict([
-                                                        ("jstests/core/all.js",
+                                                        ("tests/jstests/core/all.js",
                                                          ["unreliable|jsCore_WT|linux-64"]),
                                                     ]))
 
@@ -620,7 +620,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
 
         self.transition_from_unreliable_to_reliable(config,
                                                     collections.OrderedDict([
-                                                        ("jstests/core/all.js",
+                                                        ("tests/jstests/core/all.js",
                                                          ["unreliable|jsCore_WT|linux-64|rhel62"]),
                                                     ]))
 
@@ -638,7 +638,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
 
         self.transition_from_unreliable_to_reliable(config,
                                                     collections.OrderedDict([
-                                                        ("jstests/core/all.js", [
+                                                        ("tests/jstests/core/all.js", [
                                                             "unreliable",
                                                             "unreliable|jsCore_WT",
                                                             "unreliable|jsCore_WT|linux-64",
@@ -663,7 +663,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
         summary_lifecycle = update_test_lifecycle.TagsConfigWithChangelog(lifecycle)
         self.assertEqual(initial_tags, self.assert_has_only_js_tests(lifecycle))
 
-        tests = ["jstests/core/all.js"]
+        tests = ["tests/jstests/core/all.js"]
         report = test_failures.Report([
             self.ENTRY._replace(num_pass=1, num_fail=0),
             self.ENTRY._replace(num_pass=1, num_fail=0, task="jsCore"),
@@ -689,7 +689,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
             distro_fail_rates=self.CONFIG.distro_fail_rates._replace(unacceptable=0.1))
 
         initial_tags = collections.OrderedDict([
-            ("jstests/core/all.js", [
+            ("tests/jstests/core/all.js", [
                 "unreliable",
                 "unreliable|jsCore_WT",
                 "unreliable|jsCore_WT|linux-64",
@@ -702,7 +702,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
         summary_lifecycle = update_test_lifecycle.TagsConfigWithChangelog(lifecycle)
         self.assertEqual(initial_tags, self.assert_has_only_js_tests(lifecycle))
 
-        tests = ["jstests/core/all.js"]
+        tests = ["tests/jstests/core/all.js"]
         report = test_failures.Report([
             self.ENTRY._replace(num_pass=0, num_fail=1),
             self.ENTRY._replace(num_pass=0, num_fail=1, task="jsCore"),
@@ -730,7 +730,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
 
         self.transition_from_unreliable_to_reliable(config,
                                                     collections.OrderedDict([
-                                                        ("jstests/core/all.js", [
+                                                        ("tests/jstests/core/all.js", [
                                                             "unreliable",
                                                             "unreliable|jsCore_WT",
                                                             "unreliable|jsCore_WT|linux-64",
@@ -755,7 +755,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
         summary_lifecycle = update_test_lifecycle.TagsConfigWithChangelog(lifecycle)
         self.assertEqual(initial_tags, self.assert_has_only_js_tests(lifecycle))
 
-        tests = ["jstests/core/all.js"]
+        tests = ["tests/jstests/core/all.js"]
         report = test_failures.Report([
             self.ENTRY._replace(
                 start_date=(self.ENTRY.start_date - datetime.timedelta(days=1)),
@@ -777,7 +777,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
         updated_tags = self.assert_has_only_js_tests(lifecycle)
         self.assertEqual(updated_tags,
                          collections.OrderedDict([
-                             ("jstests/core/all.js", [
+                             ("tests/jstests/core/all.js", [
                                  "unreliable",
                                  "unreliable|jsCore_WT",
                                  "unreliable|jsCore_WT|linux-64",
@@ -804,7 +804,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
         summary_lifecycle = update_test_lifecycle.TagsConfigWithChangelog(lifecycle)
         self.assertEqual(initial_tags, self.assert_has_only_js_tests(lifecycle))
 
-        tests = ["jstests/core/all.js"]
+        tests = ["tests/jstests/core/all.js"]
         report = test_failures.Report([
             self.ENTRY._replace(num_pass=0, num_fail=1),
             self.ENTRY._replace(num_pass=0, num_fail=1, task="jsCore"),
@@ -830,7 +830,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
             distro_fail_rates=self.CONFIG.distro_fail_rates._replace(unacceptable=0.1))
 
         initial_tags = collections.OrderedDict([
-            ("jstests/core/all.js", [
+            ("tests/jstests/core/all.js", [
                 "unreliable",
                 "unreliable|jsCore_WT",
                 "unreliable|jsCore_WT|linux-64",
@@ -843,7 +843,7 @@ class TestUpdateTags(unittest.TestCase):  # pylint: disable=too-many-public-meth
         summary_lifecycle = update_test_lifecycle.TagsConfigWithChangelog(lifecycle)
         self.assertEqual(initial_tags, self.assert_has_only_js_tests(lifecycle))
 
-        tests = ["jstests/core/all.js"]
+        tests = ["tests/jstests/core/all.js"]
         report = test_failures.Report([
             self.ENTRY._replace(
                 start_date=(self.ENTRY.start_date - datetime.timedelta(days=1)),

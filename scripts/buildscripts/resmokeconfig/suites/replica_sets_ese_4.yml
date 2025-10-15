@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile src/mongo/db/modules/enterprise/jstests/encryptdb/libs/ekf2
+- &keyFile src/mongo/db/modules/enterprise/tests/jstests/encryptdb/libs/ekf2
 
 test_kind: js_test
 
@@ -16,46 +16,46 @@ selector:
   #   13 minutes to run on enterprise-rhel-62-64-bit
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/replsets/initial_sync4.js
-  - jstests/replsets/noop_writes_wait_for_write_concern.js
-  - jstests/replsets/priority_takeover_one_node_higher_priority.js
-  - jstests/replsets/initial_sync_uuid_not_found.js
-  - jstests/replsets/optime.js
-  - jstests/replsets/maxSyncSourceLagSecs.js
-  - jstests/replsets/priority_takeover_two_nodes_equal_priority.js
-  - jstests/replsets/temp_namespace.js
-  - jstests/replsets/apply_batch_only_goes_forward.js
-  - jstests/replsets/replset3.js
-  - jstests/replsets/read_committed_no_snapshots.js
-  - jstests/replsets/noop_writes_wait_for_write_concern_fcv.js
-  - jstests/replsets/background_index.js
-  - jstests/replsets/recovery_after_clean_shutdown_but_not_all_writes_in_snapshot.js
-  - jstests/replsets/no_flapping_during_network_partition.js
-  - jstests/replsets/initial_sync1.js
-  - jstests/replsets/step_down_during_draining.js
-  - jstests/replsets/drop_collections_two_phase_write_concern.js
-  - jstests/replsets/stepdown_long_wait_time.js
-  - jstests/replsets/apply_ops_wc.js
-  - jstests/replsets/drop_collections_two_phase_step_down.js
-  - jstests/replsets/remove1.js
-  - jstests/replsets/no_chaining.js
-  - jstests/replsets/replset4.js
-  - jstests/replsets/rollback_all_op_types.js
-  - jstests/replsets/initial_sync_oplog_rollover.js
-  - jstests/replsets/rollback_drop_database.js
-  - jstests/replsets/auth_no_pri.js
-  - jstests/replsets/cloneDb.js
-  - jstests/replsets/slave_delay_clean_shutdown.js
-  - jstests/replsets/rollback_drop_index_after_rename.js
-  - jstests/replsets/reconfig.js
-  - jstests/replsets/rollback_collmods.js
-  - jstests/replsets/rollback_rename_collection_on_sync_source.js
-  - jstests/replsets/rollback_waits_for_bgindex_completion.js
-  - jstests/replsets/get_status.js
-  - jstests/replsets/tags2.js
-  - jstests/replsets/step_down_during_draining3.js
-  - jstests/replsets/read_committed.js
-  - jstests/replsets/linearizable_read_concern.js
+  - tests/jstests/replsets/initial_sync4.js
+  - tests/jstests/replsets/noop_writes_wait_for_write_concern.js
+  - tests/jstests/replsets/priority_takeover_one_node_higher_priority.js
+  - tests/jstests/replsets/initial_sync_uuid_not_found.js
+  - tests/jstests/replsets/optime.js
+  - tests/jstests/replsets/maxSyncSourceLagSecs.js
+  - tests/jstests/replsets/priority_takeover_two_nodes_equal_priority.js
+  - tests/jstests/replsets/temp_namespace.js
+  - tests/jstests/replsets/apply_batch_only_goes_forward.js
+  - tests/jstests/replsets/replset3.js
+  - tests/jstests/replsets/read_committed_no_snapshots.js
+  - tests/jstests/replsets/noop_writes_wait_for_write_concern_fcv.js
+  - tests/jstests/replsets/background_index.js
+  - tests/jstests/replsets/recovery_after_clean_shutdown_but_not_all_writes_in_snapshot.js
+  - tests/jstests/replsets/no_flapping_during_network_partition.js
+  - tests/jstests/replsets/initial_sync1.js
+  - tests/jstests/replsets/step_down_during_draining.js
+  - tests/jstests/replsets/drop_collections_two_phase_write_concern.js
+  - tests/jstests/replsets/stepdown_long_wait_time.js
+  - tests/jstests/replsets/apply_ops_wc.js
+  - tests/jstests/replsets/drop_collections_two_phase_step_down.js
+  - tests/jstests/replsets/remove1.js
+  - tests/jstests/replsets/no_chaining.js
+  - tests/jstests/replsets/replset4.js
+  - tests/jstests/replsets/rollback_all_op_types.js
+  - tests/jstests/replsets/initial_sync_oplog_rollover.js
+  - tests/jstests/replsets/rollback_drop_database.js
+  - tests/jstests/replsets/auth_no_pri.js
+  - tests/jstests/replsets/cloneDb.js
+  - tests/jstests/replsets/slave_delay_clean_shutdown.js
+  - tests/jstests/replsets/rollback_drop_index_after_rename.js
+  - tests/jstests/replsets/reconfig.js
+  - tests/jstests/replsets/rollback_collmods.js
+  - tests/jstests/replsets/rollback_rename_collection_on_sync_source.js
+  - tests/jstests/replsets/rollback_waits_for_bgindex_completion.js
+  - tests/jstests/replsets/get_status.js
+  - tests/jstests/replsets/tags2.js
+  - tests/jstests/replsets/step_down_during_draining3.js
+  - tests/jstests/replsets/read_committed.js
+  - tests/jstests/replsets/linearizable_read_concern.js
 
 executor:
   config:

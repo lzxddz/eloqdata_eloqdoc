@@ -2,10 +2,10 @@ test_kind: js_test
 
 selector:
   roots:
-  - jstests/change_streams/**/*.js
+  - tests/jstests/change_streams/**/*.js
   exclude_files:
   # Only relevant for single-collection change streams.
-  - jstests/change_streams/metadata_notifications.js
+  - tests/jstests/change_streams/metadata_notifications.js
   exclude_with_any_tags:
   ##
   # The next three tags correspond to the special errors thrown by the
@@ -35,8 +35,8 @@ executor:
           enableMajorityReadConcern: ''
       eval: >-
         var testingReplication = true;
-        load('jstests/libs/override_methods/set_read_and_write_concerns.js');
-        load('jstests/libs/override_methods/implicit_whole_db_changestreams.js');
+        load('tests/jstests/libs/override_methods/set_read_and_write_concerns.js');
+        load('tests/jstests/libs/override_methods/implicit_whole_db_changestreams.js');
       readMode: commands
   hooks:
   # The CheckReplDBHash hook waits until all operations have replicated to and have been applied

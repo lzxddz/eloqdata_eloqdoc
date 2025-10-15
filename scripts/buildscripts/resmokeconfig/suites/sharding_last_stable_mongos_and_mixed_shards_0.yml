@@ -12,8 +12,8 @@ selector:
   # The following tests take approximately
   #   16 minutes to run on enterprise-rhel-62-64-bit
   roots:
-  - jstests/sharding/mongos_rs_shard_failure_tolerance.js
-  - jstests/sharding/mongos_rs_auth_shard_failure_tolerance.js
+  - tests/jstests/sharding/mongos_rs_shard_failure_tolerance.js
+  - tests/jstests/sharding/mongos_rs_auth_shard_failure_tolerance.js
 
 executor:
   config:

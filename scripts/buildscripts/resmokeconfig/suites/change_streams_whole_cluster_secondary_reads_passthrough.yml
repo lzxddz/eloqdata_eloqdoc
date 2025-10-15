@@ -2,13 +2,13 @@ test_kind: js_test
 
 selector:
   roots:
-  - jstests/change_streams/**/*.js
+  - tests/jstests/change_streams/**/*.js
   exclude_files:
   # This test starts a parallel shell which we want to read from the same node as the change stream,
   # but the parallel shell performs an insert which will not work against the secondary.
-  - jstests/change_streams/only_wake_getmore_for_relevant_changes.js
+  - tests/jstests/change_streams/only_wake_getmore_for_relevant_changes.js
   # This test is not expected to work when run against a mongos.
-  - jstests/change_streams/report_latest_observed_oplog_timestamp.js
+  - tests/jstests/change_streams/report_latest_observed_oplog_timestamp.js
   exclude_with_any_tags:
   ##
   # The next three tags correspond to the special errors thrown by the
@@ -49,9 +49,9 @@ executor:
           defaultReadConcernLevel: majority
       eval: >-
         var testingReplication = true;
-        load('jstests/libs/override_methods/set_read_and_write_concerns.js');
-        load('jstests/libs/override_methods/set_read_preference_secondary.js');
-        load('jstests/libs/override_methods/implicit_whole_cluster_changestreams.js');
+        load('tests/jstests/libs/override_methods/set_read_and_write_concerns.js');
+        load('tests/jstests/libs/override_methods/set_read_preference_secondary.js');
+        load('tests/jstests/libs/override_methods/implicit_whole_cluster_changestreams.js');
   hooks:
   - class: CheckReplDBHash
   - class: ValidateCollections

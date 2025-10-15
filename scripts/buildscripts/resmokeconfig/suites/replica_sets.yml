@@ -2,7 +2,7 @@ test_kind: js_test
 
 selector:
   roots:
-  - jstests/replsets/*.js
+  - tests/jstests/replsets/*.js
 
 executor:
   config:

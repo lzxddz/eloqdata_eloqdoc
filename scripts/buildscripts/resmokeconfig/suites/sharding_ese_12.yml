@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile src/mongo/db/modules/enterprise/jstests/encryptdb/libs/ekf2
+- &keyFile src/mongo/db/modules/enterprise/tests/jstests/encryptdb/libs/ekf2
 
 test_kind: js_test
 
@@ -16,25 +16,25 @@ selector:
   #   8 minutes to run on enterprise-rhel-62-64-bit
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/features2.js
-  - jstests/sharding/names.js
-  - jstests/sharding/cursor_timeout.js
-  - jstests/sharding/mongos_validate_writes.js
-  - jstests/sharding/group_slaveok.js
-  - jstests/sharding/mrShardedOutput.js
-  - jstests/sharding/max_time_ms_sharded.js
-  - jstests/sharding/lookup_change_stream_post_image_compound_shard_key.js
-  - jstests/sharding/session_info_in_oplog.js
-  - jstests/sharding/secondary_shard_version_protocol_with_causal_consistency.js
-  - jstests/sharding/secondary_shard_versioning.js
-  - jstests/sharding/explain_cmd.js
-  - jstests/sharding/coll_epoch_test1.js
-  - jstests/sharding/authConnectionHook.js
-  - jstests/sharding/count1.js
-  - jstests/sharding/shard4.js
-  - jstests/sharding/count2.js
-  - jstests/sharding/movePrimary1.js
-  - jstests/sharding/views.js
+  - tests/jstests/sharding/features2.js
+  - tests/jstests/sharding/names.js
+  - tests/jstests/sharding/cursor_timeout.js
+  - tests/jstests/sharding/mongos_validate_writes.js
+  - tests/jstests/sharding/group_slaveok.js
+  - tests/jstests/sharding/mrShardedOutput.js
+  - tests/jstests/sharding/max_time_ms_sharded.js
+  - tests/jstests/sharding/lookup_change_stream_post_image_compound_shard_key.js
+  - tests/jstests/sharding/session_info_in_oplog.js
+  - tests/jstests/sharding/secondary_shard_version_protocol_with_causal_consistency.js
+  - tests/jstests/sharding/secondary_shard_versioning.js
+  - tests/jstests/sharding/explain_cmd.js
+  - tests/jstests/sharding/coll_epoch_test1.js
+  - tests/jstests/sharding/authConnectionHook.js
+  - tests/jstests/sharding/count1.js
+  - tests/jstests/sharding/shard4.js
+  - tests/jstests/sharding/count2.js
+  - tests/jstests/sharding/movePrimary1.js
+  - tests/jstests/sharding/views.js
 
 executor:
   config:

@@ -32,7 +32,7 @@ class FSMWorkloadTestCase(jsrunnerfile.JSRunnerFileTestCase):
 
         jsrunnerfile.JSRunnerFileTestCase.__init__(
             self, logger, "FSM workload", test_name,
-            test_runner_file="jstests/concurrency/fsm_libs/resmoke_runner.js",
+            test_runner_file="tests/jstests/concurrency/fsm_libs/resmoke_runner.js",
             shell_executable=shell_executable, shell_options=shell_options)
 
     def configure(self, fixture, *args, **kwargs):

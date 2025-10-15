@@ -12,16 +12,16 @@ selector:
   # The following tests take approximately
   #   19 minutes to run on enterprise-rhel-62-64-bit
   roots:
-  - jstests/sharding/config_rs_no_primary.js
-  - jstests/sharding/shard_config_db_collections.js
-  - jstests/sharding/read_pref.js
-  - jstests/sharding/read_pref_cmd.js
-  - jstests/sharding/rs_stepdown_and_pooling.js
-  - jstests/sharding/primary_config_server_blackholed_from_mongos.js
-  - jstests/sharding/enforce_zone_policy.js
-  - jstests/sharding/mr_and_agg_versioning.js
-  - jstests/sharding/sharding_balance3.js
-  - jstests/sharding/startup_with_all_configs_down.js
+  - tests/jstests/sharding/config_rs_no_primary.js
+  - tests/jstests/sharding/shard_config_db_collections.js
+  - tests/jstests/sharding/read_pref.js
+  - tests/jstests/sharding/read_pref_cmd.js
+  - tests/jstests/sharding/rs_stepdown_and_pooling.js
+  - tests/jstests/sharding/primary_config_server_blackholed_from_mongos.js
+  - tests/jstests/sharding/enforce_zone_policy.js
+  - tests/jstests/sharding/mr_and_agg_versioning.js
+  - tests/jstests/sharding/sharding_balance3.js
+  - tests/jstests/sharding/startup_with_all_configs_down.js
 
 executor:
   config:

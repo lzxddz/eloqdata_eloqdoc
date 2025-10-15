@@ -8,7 +8,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile jstests/libs/authTestsKey
+- &keyFile tests/jstests/libs/authTestsKey
 - &keyFileData Thiskeyisonlyforrunningthesuitewithauthenticationdontuseitinanytestsdirectly
 
 test_kind: js_test
@@ -18,15 +18,15 @@ selector:
   #   13 minutes to run on enterprise-rhel-62-64-bit
   #   18 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/mr_and_agg_versioning.js
-  - jstests/sharding/rs_stepdown_and_pooling.js
-  - jstests/sharding/all_config_servers_blackholed_from_mongos.js
-  - jstests/sharding/all_shard_and_config_hosts_brought_down_one_by_one.js
-  - jstests/sharding/sharding_rs2.js
-  - jstests/sharding/resume_change_stream.js
-  - jstests/sharding/commands_that_write_accept_wc_configRS.js
-  - jstests/sharding/shard_kill_and_pooling.js
-  - jstests/sharding/safe_secondary_reads_drop_recreate.js
+  - tests/jstests/sharding/mr_and_agg_versioning.js
+  - tests/jstests/sharding/rs_stepdown_and_pooling.js
+  - tests/jstests/sharding/all_config_servers_blackholed_from_mongos.js
+  - tests/jstests/sharding/all_shard_and_config_hosts_brought_down_one_by_one.js
+  - tests/jstests/sharding/sharding_rs2.js
+  - tests/jstests/sharding/resume_change_stream.js
+  - tests/jstests/sharding/commands_that_write_accept_wc_configRS.js
+  - tests/jstests/sharding/shard_kill_and_pooling.js
+  - tests/jstests/sharding/safe_secondary_reads_drop_recreate.js
 
 executor:
   config:

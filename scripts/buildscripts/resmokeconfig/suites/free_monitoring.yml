@@ -2,7 +2,7 @@ test_kind: js_test
 
 selector:
   roots:
-  - jstests/free_mon/*.js
+  - tests/jstests/free_mon/*.js
 
 executor:
   config:

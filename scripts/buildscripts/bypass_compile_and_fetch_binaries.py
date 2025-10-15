@@ -122,7 +122,7 @@ def should_bypass_compile():
     # Add directories to this list that should not cause compilation.
     bypass_directories = [
         "buildscripts/",
-        "jstests/",
+        "tests/jstests/",
         "pytests/",
     ]
 
@@ -309,11 +309,11 @@ def main():  # pylint: disable=too-many-locals,too-many-statements
                 requests.head(artifact["url"]).raise_for_status()
                 artifacts.append(files)
 
-        # SERVER-21492 related issue where without running scons the jstests/libs/key1
+        # SERVER-21492 related issue where without running scons the tests/jstests/libs/key1
         # and key2 files are not chmod to 0600. Need to change permissions here since we
         # bypass SCons.
-        os.chmod("jstests/libs/key1", 0600)
-        os.chmod("jstests/libs/key2", 0600)
+        os.chmod("tests/jstests/libs/key1", 0600)
+        os.chmod("tests/jstests/libs/key2", 0600)
 
         # This is the artifacts.json file.
         write_out_artifacts(args.jsonArtifact, artifacts)

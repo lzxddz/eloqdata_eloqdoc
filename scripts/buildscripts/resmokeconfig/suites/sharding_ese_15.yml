@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile src/mongo/db/modules/enterprise/jstests/encryptdb/libs/ekf2
+- &keyFile src/mongo/db/modules/enterprise/tests/jstests/encryptdb/libs/ekf2
 
 test_kind: js_test
 
@@ -16,29 +16,29 @@ selector:
   #   10 minutes to run on enterprise-rhel-62-64-bit
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/addshard5.js
-  - jstests/sharding/migration_with_source_ops.js
-  - jstests/sharding/cursor1.js
-  - jstests/sharding/agg_sort.js
-  - jstests/sharding/unowned_doc_filtering.js
-  - jstests/sharding/sharding_system_namespaces.js
-  - jstests/sharding/change_streams_whole_db.js
-  - jstests/sharding/causal_consistency_shell_support.js
-  - jstests/sharding/change_stream_enforce_max_time_ms_on_mongos.js
-  - jstests/sharding/move_chunk_open_cursors.js
-  - jstests/sharding/noUpdateButN1inAnotherCollection.js
-  - jstests/sharding/lagged_config_secondary.js
-  - jstests/sharding/merge_chunks_test_with_md_ops.js
-  - jstests/sharding/cleanup_orphaned_cmd_prereload.js
-  - jstests/sharding/index1.js
-  - jstests/sharding/cleanup_orphaned_cmd_hashed.js
-  - jstests/sharding/find_getmore_cmd.js
-  - jstests/sharding/trace_missing_docs_test.js
-  - jstests/sharding/cursor_cleanup.js
-  - jstests/sharding/basic_split.js
-  - jstests/sharding/cursor_valid_after_shard_stepdown.js
-  - jstests/sharding/key_string.js
-  - jstests/sharding/geo_near_sort.js
+  - tests/jstests/sharding/addshard5.js
+  - tests/jstests/sharding/migration_with_source_ops.js
+  - tests/jstests/sharding/cursor1.js
+  - tests/jstests/sharding/agg_sort.js
+  - tests/jstests/sharding/unowned_doc_filtering.js
+  - tests/jstests/sharding/sharding_system_namespaces.js
+  - tests/jstests/sharding/change_streams_whole_db.js
+  - tests/jstests/sharding/causal_consistency_shell_support.js
+  - tests/jstests/sharding/change_stream_enforce_max_time_ms_on_mongos.js
+  - tests/jstests/sharding/move_chunk_open_cursors.js
+  - tests/jstests/sharding/noUpdateButN1inAnotherCollection.js
+  - tests/jstests/sharding/lagged_config_secondary.js
+  - tests/jstests/sharding/merge_chunks_test_with_md_ops.js
+  - tests/jstests/sharding/cleanup_orphaned_cmd_prereload.js
+  - tests/jstests/sharding/index1.js
+  - tests/jstests/sharding/cleanup_orphaned_cmd_hashed.js
+  - tests/jstests/sharding/find_getmore_cmd.js
+  - tests/jstests/sharding/trace_missing_docs_test.js
+  - tests/jstests/sharding/cursor_cleanup.js
+  - tests/jstests/sharding/basic_split.js
+  - tests/jstests/sharding/cursor_valid_after_shard_stepdown.js
+  - tests/jstests/sharding/key_string.js
+  - tests/jstests/sharding/geo_near_sort.js
 
 executor:
   config:

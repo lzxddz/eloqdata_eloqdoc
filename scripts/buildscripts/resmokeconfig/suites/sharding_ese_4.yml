@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile src/mongo/db/modules/enterprise/jstests/encryptdb/libs/ekf2
+- &keyFile src/mongo/db/modules/enterprise/tests/jstests/encryptdb/libs/ekf2
 
 test_kind: js_test
 
@@ -16,16 +16,16 @@ selector:
   #   12 minutes to run on enterprise-rhel-62-64-bit
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/sharding_rs2.js
-  - jstests/sharding/all_shard_and_config_hosts_brought_down_one_by_one.js
-  - jstests/sharding/commands_that_write_accept_wc_configRS.js
-  - jstests/sharding/resume_change_stream.js
-  - jstests/sharding/aggregation_currentop.js
-  - jstests/sharding/rename.js
-  - jstests/sharding/shard_kill_and_pooling.js
-  - jstests/sharding/safe_secondary_reads_drop_recreate.js
-  - jstests/sharding/auto_rebalance_parallel_replica_sets.js
-  - jstests/sharding/commands_that_write_accept_wc_shards.js
+  - tests/jstests/sharding/sharding_rs2.js
+  - tests/jstests/sharding/all_shard_and_config_hosts_brought_down_one_by_one.js
+  - tests/jstests/sharding/commands_that_write_accept_wc_configRS.js
+  - tests/jstests/sharding/resume_change_stream.js
+  - tests/jstests/sharding/aggregation_currentop.js
+  - tests/jstests/sharding/rename.js
+  - tests/jstests/sharding/shard_kill_and_pooling.js
+  - tests/jstests/sharding/safe_secondary_reads_drop_recreate.js
+  - tests/jstests/sharding/auto_rebalance_parallel_replica_sets.js
+  - tests/jstests/sharding/commands_that_write_accept_wc_shards.js
 
 executor:
   config:

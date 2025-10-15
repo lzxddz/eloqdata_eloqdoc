@@ -17,7 +17,7 @@ class TestReportEntry(unittest.TestCase):
     Tests for the test_failures.ReportEntry class.
     """
 
-    ENTRY = test_failures.ReportEntry(test="jstests/core/all.js", task="jsCore_WT",
+    ENTRY = test_failures.ReportEntry(test="tests/jstests/core/all.js", task="jsCore_WT",
                                       variant="linux-64", distro="rhel62", start_date=datetime.date(
                                           2017, 6, 3), end_date=datetime.date(2017, 6, 3),
                                       num_pass=0, num_fail=0)
@@ -154,20 +154,20 @@ class TestReportEntry(unittest.TestCase):
         attributes are accumulated correctly.
         """
 
-        entry1 = self.ENTRY._replace(test="jstests/core/all.js", task="jsCore_WT",
+        entry1 = self.ENTRY._replace(test="tests/jstests/core/all.js", task="jsCore_WT",
                                      variant="linux-64", distro="rhel62")
 
-        entry2 = self.ENTRY._replace(test="jstests/core/all.js", task="jsCore_WT",
+        entry2 = self.ENTRY._replace(test="tests/jstests/core/all.js", task="jsCore_WT",
                                      variant="linux-64", distro="rhel55")
 
-        entry3 = self.ENTRY._replace(test="jstests/core/all2.js", task="jsCore_WT",
+        entry3 = self.ENTRY._replace(test="tests/jstests/core/all2.js", task="jsCore_WT",
                                      variant="linux-64-debug", distro="rhel62")
 
-        entry4 = self.ENTRY._replace(test="jstests/core/all.js", task="jsCore",
+        entry4 = self.ENTRY._replace(test="tests/jstests/core/all.js", task="jsCore",
                                      variant="linux-64-debug", distro="rhel62")
 
         entry_12 = test_failures.ReportEntry.sum([entry1, entry2])
-        self.assertEqual("jstests/core/all.js", entry_12.test)
+        self.assertEqual("tests/jstests/core/all.js", entry_12.test)
         self.assertEqual("jsCore_WT", entry_12.task)
         self.assertEqual("linux-64", entry_12.variant)
         self.assertIsInstance(entry_12.distro, test_failures.Wildcard)
@@ -196,7 +196,7 @@ class TestReportSummarization(unittest.TestCase):
     Tests for test_failures.Report.summarize_by().
     """
 
-    ENTRY = test_failures.ReportEntry(test="jstests/core/all.js", task="jsCore_WT",
+    ENTRY = test_failures.ReportEntry(test="tests/jstests/core/all.js", task="jsCore_WT",
                                       variant="linux-64", distro="rhel62", start_date=datetime.date(
                                           2017, 6, 3), end_date=datetime.date(2017, 6, 3),
                                       num_pass=0, num_fail=0)
@@ -217,7 +217,7 @@ class TestReportSummarization(unittest.TestCase):
             num_fail=0),
         ENTRY._replace(distro="rhel55", start_date=datetime.date(2017, 6, 10),
                        end_date=datetime.date(2017, 6, 10), num_pass=0, num_fail=1),
-        ENTRY._replace(test="jstests/core/all2.js", start_date=datetime.date(2017, 6, 10),
+        ENTRY._replace(test="tests/jstests/core/all2.js", start_date=datetime.date(2017, 6, 10),
                        end_date=datetime.date(2017, 6, 10), num_pass=1, num_fail=0),
         ENTRY._replace(variant="linux-64-debug", start_date=datetime.date(2017, 6, 17),
                        end_date=datetime.date(2017, 6, 17), num_pass=0, num_fail=1),
@@ -265,7 +265,7 @@ class TestReportSummarization(unittest.TestCase):
                          ))
         self.assertEqual(summed_entries[4],
                          self.ENTRY._replace(
-                             test="jstests/core/all2.js",
+                             test="tests/jstests/core/all2.js",
                              start_date=datetime.date(2017, 6, 10),
                              end_date=datetime.date(2017, 6, 10),
                              num_pass=1,
@@ -307,7 +307,7 @@ class TestReportSummarization(unittest.TestCase):
                          ))
         self.assertEqual(summed_entries[3],
                          self.ENTRY._replace(
-                             test="jstests/core/all2.js",
+                             test="tests/jstests/core/all2.js",
                              start_date=datetime.date(2017, 6, 10),
                              end_date=datetime.date(2017, 6, 10),
                              num_pass=1,
@@ -341,7 +341,7 @@ class TestReportSummarization(unittest.TestCase):
                          ))
         self.assertEqual(summed_entries[2],
                          self.ENTRY._replace(
-                             test="jstests/core/all2.js",
+                             test="tests/jstests/core/all2.js",
                              start_date=datetime.date(2017, 6, 10),
                              end_date=datetime.date(2017, 6, 10),
                              num_pass=1,
@@ -368,7 +368,7 @@ class TestReportSummarization(unittest.TestCase):
                          ))
         self.assertEqual(summed_entries[1],
                          self.ENTRY._replace(
-                             test="jstests/core/all2.js",
+                             test="tests/jstests/core/all2.js",
                              start_date=datetime.date(2017, 6, 10),
                              end_date=datetime.date(2017, 6, 10),
                              num_pass=1,
@@ -447,7 +447,7 @@ class TestReportSummarization(unittest.TestCase):
                          ))
         self.assertEqual(summed_entries[3],
                          self.ENTRY._replace(
-                             test="jstests/core/all2.js",
+                             test="tests/jstests/core/all2.js",
                              start_date=datetime.date(2017, 6, 4),
                              end_date=datetime.date(2017, 6, 10),
                              num_pass=1,
@@ -492,7 +492,7 @@ class TestReportSummarization(unittest.TestCase):
                          ))
         self.assertEqual(summed_entries[3],
                          self.ENTRY._replace(
-                             test="jstests/core/all2.js",
+                             test="tests/jstests/core/all2.js",
                              start_date=datetime.date(2017, 6, 5),
                              end_date=datetime.date(2017, 6, 11),
                              num_pass=1,
@@ -540,7 +540,7 @@ class TestReportSummarization(unittest.TestCase):
                          ))
         self.assertEqual(summed_entries[3],
                          self.ENTRY._replace(
-                             test="jstests/core/all2.js",
+                             test="tests/jstests/core/all2.js",
                              start_date=datetime.date(2017, 6, 7),
                              end_date=datetime.date(2017, 6, 13),
                              num_pass=1,
@@ -597,7 +597,7 @@ class TestReportSummarization(unittest.TestCase):
                          ))
         self.assertEqual(summed_entries[5],
                          self.ENTRY._replace(
-                             test="jstests/core/all2.js",
+                             test="tests/jstests/core/all2.js",
                              start_date=datetime.date(2017, 6, 10),
                              end_date=datetime.date(2017, 6, 10),
                              num_pass=1,
@@ -640,7 +640,7 @@ class TestReportSummarization(unittest.TestCase):
                          ))
         self.assertEqual(summed_entries[3],
                          self.ENTRY._replace(
-                             test="jstests/core/all2.js",
+                             test="tests/jstests/core/all2.js",
                              start_date=datetime.date(2017, 6, 7),
                              end_date=datetime.date(2017, 6, 10),
                              num_pass=1,
@@ -677,7 +677,7 @@ class TestReportSummarization(unittest.TestCase):
                          ))
         self.assertEqual(summed_entries[2],
                          self.ENTRY._replace(
-                             test="jstests/core/all2.js",
+                             test="tests/jstests/core/all2.js",
                              start_date=datetime.date(2017, 6, 3),
                              end_date=datetime.date(2017, 6, 11),
                              num_pass=1,

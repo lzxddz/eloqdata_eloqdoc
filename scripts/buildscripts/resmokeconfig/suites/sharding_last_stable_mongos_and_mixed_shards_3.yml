@@ -12,20 +12,20 @@ selector:
   # The following tests take approximately
   #   19 minutes to run on enterprise-rhel-62-64-bit
   roots:
-  - jstests/sharding/all_shard_and_config_hosts_brought_down_one_by_one.js
-  - jstests/sharding/mongos_no_replica_set_refresh.js
-  - jstests/sharding/repl_monitor_refresh.js
-  - jstests/sharding/auth.js
-  - jstests/sharding/shard_kill_and_pooling.js
-  - jstests/sharding/bulk_shard_insert.js
-  - jstests/sharding/sharding_balance4.js
-  - jstests/sharding/convert_to_and_from_sharded.js
-  - jstests/sharding/shard_identity_config_update.js
-  - jstests/sharding/rename.js
-  - jstests/sharding/index_and_collection_option_propagation.js
-  - jstests/sharding/count_slaveok.js
-  - jstests/sharding/sharding_rs1.js
-  - jstests/sharding/all_config_servers_blackholed_from_mongos.js
+  - tests/jstests/sharding/all_shard_and_config_hosts_brought_down_one_by_one.js
+  - tests/jstests/sharding/mongos_no_replica_set_refresh.js
+  - tests/jstests/sharding/repl_monitor_refresh.js
+  - tests/jstests/sharding/auth.js
+  - tests/jstests/sharding/shard_kill_and_pooling.js
+  - tests/jstests/sharding/bulk_shard_insert.js
+  - tests/jstests/sharding/sharding_balance4.js
+  - tests/jstests/sharding/convert_to_and_from_sharded.js
+  - tests/jstests/sharding/shard_identity_config_update.js
+  - tests/jstests/sharding/rename.js
+  - tests/jstests/sharding/index_and_collection_option_propagation.js
+  - tests/jstests/sharding/count_slaveok.js
+  - tests/jstests/sharding/sharding_rs1.js
+  - tests/jstests/sharding/all_config_servers_blackholed_from_mongos.js
 
 executor:
   config:

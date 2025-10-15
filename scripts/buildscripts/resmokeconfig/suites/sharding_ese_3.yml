@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile src/mongo/db/modules/enterprise/jstests/encryptdb/libs/ekf2
+- &keyFile src/mongo/db/modules/enterprise/tests/jstests/encryptdb/libs/ekf2
 
 test_kind: js_test
 
@@ -16,14 +16,14 @@ selector:
   #   13 minutes to run on enterprise-rhel-62-64-bit
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/read_pref_cmd.js
-  - jstests/sharding/primary_config_server_blackholed_from_mongos.js
-  - jstests/sharding/bulk_shard_insert.js
-  - jstests/sharding/auth.js
-  - jstests/sharding/enforce_zone_policy.js
-  - jstests/sharding/mr_and_agg_versioning.js
-  - jstests/sharding/rs_stepdown_and_pooling.js
-  - jstests/sharding/startup_with_all_configs_down.js
+  - tests/jstests/sharding/read_pref_cmd.js
+  - tests/jstests/sharding/primary_config_server_blackholed_from_mongos.js
+  - tests/jstests/sharding/bulk_shard_insert.js
+  - tests/jstests/sharding/auth.js
+  - tests/jstests/sharding/enforce_zone_policy.js
+  - tests/jstests/sharding/mr_and_agg_versioning.js
+  - tests/jstests/sharding/rs_stepdown_and_pooling.js
+  - tests/jstests/sharding/startup_with_all_configs_down.js
 
 executor:
   config:

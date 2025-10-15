@@ -6,10 +6,10 @@ test_kind: js_test
 
 selector:
   roots:
-  - jstests/core/txns/**/*.js
+  - tests/jstests/core/txns/**/*.js
   exclude_files:
   # The following tests are excluded because they do not use the transactions shell helpers.
-  - jstests/core/txns/non_transactional_operations_on_session_with_transaction.js
+  - tests/jstests/core/txns/non_transactional_operations_on_session_with_transaction.js
 
 executor:
   archive:
@@ -19,7 +19,7 @@ executor:
     shell_options:
       eval: >-
         var testingReplication = true; 
-        load('jstests/libs/override_methods/enable_causal_consistency_without_read_pref.js');
+        load('tests/jstests/libs/override_methods/enable_causal_consistency_without_read_pref.js');
       readMode: commands
   hooks:
   # We don't execute dbHash or oplog consistency checks since there is only a single replica set

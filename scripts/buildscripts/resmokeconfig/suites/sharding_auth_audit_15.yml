@@ -8,7 +8,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile jstests/libs/authTestsKey
+- &keyFile tests/jstests/libs/authTestsKey
 - &keyFileData Thiskeyisonlyforrunningthesuitewithauthenticationdontuseitinanytestsdirectly
 
 test_kind: js_test
@@ -18,32 +18,32 @@ selector:
   #   10 minutes to run on enterprise-rhel-62-64-bit
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/tag_auto_split_partial_key.js
-  - jstests/sharding/shard_keycount.js
-  - jstests/sharding/write_transactions_during_migration.js
-  - jstests/sharding/move_primary_basic.js
-  - jstests/sharding/time_zone_info_mongos.js
-  - jstests/sharding/addshard1.js
-  - jstests/sharding/basic_drop_coll.js
-  - jstests/sharding/enable_sharding_basic.js
-  - jstests/sharding/sharding_balance2.js
-  - jstests/sharding/merge_chunks_compound_shard_key.js
-  - jstests/sharding/remove1.js
-  - jstests/sharding/SERVER-7379.js
-  - jstests/sharding/idhack_sharded.js
-  - jstests/sharding/shard7.js
-  - jstests/sharding/presplit.js
-  - jstests/sharding/implicit_db_creation.js
-  - jstests/sharding/tag_range.js
-  - jstests/sharding/refresh_sessions.js
-  - jstests/sharding/mongos_no_detect_sharding.js
-  - jstests/sharding/mr_noscripting.js
-  - jstests/sharding/conf_server_write_concern_metadata.js
-  - jstests/sharding/fts_score_sort_sharded.js
-  - jstests/sharding/addshard_idempotent.js
-  - jstests/sharding/configsvr_metadata_commands_require_majority_write_concern.js
-  - jstests/sharding/movechunk_with_noMoveParanoia.js
-  - jstests/sharding/movechunk_with_default_paranoia.js
+  - tests/jstests/sharding/tag_auto_split_partial_key.js
+  - tests/jstests/sharding/shard_keycount.js
+  - tests/jstests/sharding/write_transactions_during_migration.js
+  - tests/jstests/sharding/move_primary_basic.js
+  - tests/jstests/sharding/time_zone_info_mongos.js
+  - tests/jstests/sharding/addshard1.js
+  - tests/jstests/sharding/basic_drop_coll.js
+  - tests/jstests/sharding/enable_sharding_basic.js
+  - tests/jstests/sharding/sharding_balance2.js
+  - tests/jstests/sharding/merge_chunks_compound_shard_key.js
+  - tests/jstests/sharding/remove1.js
+  - tests/jstests/sharding/SERVER-7379.js
+  - tests/jstests/sharding/idhack_sharded.js
+  - tests/jstests/sharding/shard7.js
+  - tests/jstests/sharding/presplit.js
+  - tests/jstests/sharding/implicit_db_creation.js
+  - tests/jstests/sharding/tag_range.js
+  - tests/jstests/sharding/refresh_sessions.js
+  - tests/jstests/sharding/mongos_no_detect_sharding.js
+  - tests/jstests/sharding/mr_noscripting.js
+  - tests/jstests/sharding/conf_server_write_concern_metadata.js
+  - tests/jstests/sharding/fts_score_sort_sharded.js
+  - tests/jstests/sharding/addshard_idempotent.js
+  - tests/jstests/sharding/configsvr_metadata_commands_require_majority_write_concern.js
+  - tests/jstests/sharding/movechunk_with_noMoveParanoia.js
+  - tests/jstests/sharding/movechunk_with_default_paranoia.js
 
 executor:
   config:

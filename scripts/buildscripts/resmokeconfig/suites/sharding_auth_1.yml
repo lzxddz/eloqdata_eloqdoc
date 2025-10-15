@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile jstests/libs/authTestsKey
+- &keyFile tests/jstests/libs/authTestsKey
 - &keyFileData Thiskeyisonlyforrunningthesuitewithauthenticationdontuseitinanytestsdirectly
 
 test_kind: js_test
@@ -18,9 +18,9 @@ selector:
   #   14 minutes to run on linux-64-debug
   #   15 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/zbigMapReduce.js
-  - jstests/sharding/remove2.js
-  - jstests/sharding/move_chunk_find_and_modify_with_write_retryability.js
+  - tests/jstests/sharding/zbigMapReduce.js
+  - tests/jstests/sharding/remove2.js
+  - tests/jstests/sharding/move_chunk_find_and_modify_with_write_retryability.js
 
 executor:
   config:

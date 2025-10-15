@@ -299,6 +299,8 @@ cp ${ELOQDOC_SRC}/concourse/artifact/${DATA_STORE_TYPE}/* ${DEST_DIR}/etc
 cd $HOME
 tar -czvf eloqdoc.tar.gz -C $DEST_DIR .
 
+exit
+
 # Tarball naming and upload (align with eloqkv)
 if [ -n "${TAGGED}" ]; then
     DOC_TARBALL="eloqdoc-${TAGGED}-${OS_ID}-${ARCH}.tar.gz"

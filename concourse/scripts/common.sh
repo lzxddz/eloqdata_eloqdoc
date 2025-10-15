@@ -197,18 +197,18 @@ try_connect() {
       for ((i = 1; i < 30; i++)); do
             $PREFIX/bin/eloqdoc-cli --eval "db.runCommand({ping: 1})" &>/dev/null
             if [ $? -eq 0 ]; then
-                  echo "MongoDB is up and running!"
+                  echo "EloqDoc server is up and running!"
                   mongo_ready=1
                   break
             else
-                  echo "MongoDB is not ready. Retrying in 1 second..."
+                  echo "EloqDoc server is not ready. Retrying in 1 second..."
                   sleep 1
             fi
       done
       set -e
 
       if [ $mongo_ready -eq 0 ]; then
-            echo "Failed to connect to MongoDB after 30 seconds."
+            echo "Failed to connect to EloqDoc server after 30 seconds."
             tail -n200 $PREFIX/log/mongod.out
             exit 1
       fi

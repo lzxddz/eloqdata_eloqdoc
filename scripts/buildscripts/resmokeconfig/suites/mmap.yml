@@ -2,7 +2,7 @@ test_kind: js_test
 
 selector:
   roots:
-  - jstests/mmap_v1/*.js
+  - tests/jstests/mmap_v1/*.js
 
 executor:
   archive:

@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile jstests/libs/authTestsKey
+- &keyFile tests/jstests/libs/authTestsKey
 - &keyFileData Thiskeyisonlyforrunningthesuitewithauthenticationdontuseitinanytestsdirectly
 
 test_kind: js_test
@@ -18,8 +18,8 @@ selector:
   #   17 minutes to run on linux-64-debug
   #   16 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/mongos_rs_shard_failure_tolerance.js
-  - jstests/sharding/top_chunk_autosplit.js
+  - tests/jstests/sharding/mongos_rs_shard_failure_tolerance.js
+  - tests/jstests/sharding/top_chunk_autosplit.js
 
 executor:
   config:

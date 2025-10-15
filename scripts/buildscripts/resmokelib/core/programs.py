@@ -253,11 +253,11 @@ def mongo_shell_program(  # pylint: disable=too-many-branches,too-many-locals,to
         eval_sb.append(str(kwargs.pop("eval")))
 
     # Load this file to allow a callback to validate collections before shutting down mongod.
-    eval_sb.append("load('jstests/libs/override_methods/validate_collections_on_shutdown.js');")
+    eval_sb.append("load('tests/jstests/libs/override_methods/validate_collections_on_shutdown.js');")
 
     # Load a callback to check UUID consistency before shutting down a ShardingTest.
     eval_sb.append(
-        "load('jstests/libs/override_methods/check_uuids_consistent_across_cluster.js');")
+        "load('tests/jstests/libs/override_methods/check_uuids_consistent_across_cluster.js');")
 
     eval_str = "; ".join(eval_sb)
     args.append("--eval")

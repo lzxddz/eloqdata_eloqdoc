@@ -67,40 +67,40 @@ Edit data path, log path, and S3 configuration in each file according to your en
 ## 4. Bootstrap
 
 ```bash
-mongod --eloqBootstrap 1 --config $HOME/eloqdoc-cloud-a/etc/eloqdoc.conf
+eloqdoc --eloqBootstrap 1 --config $HOME/eloqdoc-cloud-a/etc/eloqdoc.conf
 ```
 
 ## 5. Launch EloqDoc compute nodes
 
 ```bash
-nohup mongod --pidfilepath $HOME/eloqdoc-cloud-a/db/mongod.pid --config $HOME/eloqdoc-cloud-a/etc/eloqdoc.conf &> $HOME/eloqdoc-cloud-a/logs/mongod.out &
-nohup mongod --pidfilepath $HOME/eloqdoc-cloud-b/db/mongod.pid --config $HOME/eloqdoc-cloud-b/etc/eloqdoc.conf &> $HOME/eloqdoc-cloud-b/logs/mongod.out &
-nohup mongod --pidfilepath $HOME/eloqdoc-cloud-c/db/mongod.pid --config $HOME/eloqdoc-cloud-c/etc/eloqdoc.conf &> $HOME/eloqdoc-cloud-c/logs/mongod.out &
+nohup eloqdoc --pidfilepath $HOME/eloqdoc-cloud-a/db/eloqdoc.pid --config $HOME/eloqdoc-cloud-a/etc/eloqdoc.conf &> $HOME/eloqdoc-cloud-a/logs/eloqdoc.out &
+nohup eloqdoc --pidfilepath $HOME/eloqdoc-cloud-b/db/eloqdoc.pid --config $HOME/eloqdoc-cloud-b/etc/eloqdoc.conf &> $HOME/eloqdoc-cloud-b/logs/eloqdoc.out &
+nohup eloqdoc --pidfilepath $HOME/eloqdoc-cloud-c/db/eloqdoc.pid --config $HOME/eloqdoc-cloud-c/etc/eloqdoc.conf &> $HOME/eloqdoc-cloud-c/logs/eloqdoc.out &
 ```
 
 ## 6. Configure an L4 proxy
 
-Provide a unified entry point for Mongo clients. Any L4 proxy such as Linux LVS, AWS NLB, or HAProxy is acceptable. Using HAProxy as an example, configure it as follows:
+Provide a unified entry point for EloqDoc clients. Any L4 proxy such as Linux LVS, AWS NLB, or HAProxy is acceptable. Using HAProxy as an example, configure it as follows:
 
 ```bash
 # frontend: Listen for client connections
-frontend mongo_front
+frontend eloqdoc_front
     bind *:27017
     mode tcp
-    default_backend mongo_back
+    default_backend eloqdoc_back
 
 # backend: EloqDoc backend servers
-backend mongo_back
+backend eloqdoc_back
     mode tcp
     option tcp-check
     balance roundrobin
-    server mongo1 127.0.0.1:17000 maxconn 10240 check
-    server mongo2 127.0.0.1:17001 maxconn 10240 check
-    server mongo3 127.0.0.1:17002 maxconn 10240 check
+    server eloqdoc1 127.0.0.1:17000 maxconn 10240 check
+    server eloqdoc2 127.0.0.1:17001 maxconn 10240 check
+    server eloqdoc3 127.0.0.1:17002 maxconn 10240 check
 ```
 
 ## 7. Connect to EloqDoc Cluster
 
 ```bash
-mongo --eval "db.t1.save({k: 1}); db.t1.find();"
+eloqdoc-cli --eval "db.t1.save({k: 1}); db.t1.find();"
 ```

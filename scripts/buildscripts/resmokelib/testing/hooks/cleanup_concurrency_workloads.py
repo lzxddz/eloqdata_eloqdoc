@@ -31,10 +31,10 @@ class CleanupConcurrencyWorkloads(interface.Hook):
         self.same_collection_name = None
         self.same_db_name = None
         if same_db or same_collection:
-            # The db name is defined in jstests/concurrency/fsm_utils/name_utils.js.
+            # The db name is defined in tests/jstests/concurrency/fsm_utils/name_utils.js.
             self.same_db_name = "fsmdb0"
         if same_collection:
-            # The collection name is defined in jstests/concurrency/fsm_utils/name_utils.js.
+            # The collection name is defined in tests/jstests/concurrency/fsm_utils/name_utils.js.
             self.same_collection_name = "fsmcoll0"
 
     def after_test(self, test, test_report):

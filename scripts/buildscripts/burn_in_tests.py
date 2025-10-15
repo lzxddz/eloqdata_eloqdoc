@@ -210,7 +210,7 @@ def find_exclude_tests(selector_file):
 def filter_tests(tests, exclude_tests):
     """Exclude tests which have been blacklisted.
 
-    A test is in the tests list, i.e., ['jstests/core/a.js']
+    A test is in the tests list, i.e., ['tests/jstests/core/a.js']
     The tests paths must be in normalized form (see os.path.normpath(path)).
     """
 
@@ -263,7 +263,7 @@ def create_task_list(evergreen_conf, buildvariant, suites, exclude_tasks):
     Returns a dict keyed by task_name, with executor, resmoke_args & tests, i.e.,
     {'jsCore_small_oplog':
         {'resmoke_args': '--suites=core_small_oplog --storageEngine=mmapv1',
-         'tests': ['jstests/core/all2.js', 'jstests/core/all3.js']}
+         'tests': ['tests/jstests/core/all2.js', 'tests/jstests/core/all3.js']}
     }
     """
 

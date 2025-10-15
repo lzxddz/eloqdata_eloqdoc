@@ -11,9 +11,9 @@ selector:
   #   16 minutes to run on enterprise-rhel-62-64-bit
   #   18 minutes to run on linux-64-debug
   roots:
-  - jstests/sharding/mongos_rs_auth_shard_failure_tolerance.js
-  - jstests/sharding/zbigMapReduce.js
-  - jstests/sharding/remove2.js
+  - tests/jstests/sharding/mongos_rs_auth_shard_failure_tolerance.js
+  - tests/jstests/sharding/zbigMapReduce.js
+  - tests/jstests/sharding/remove2.js
 
 executor:
   config:

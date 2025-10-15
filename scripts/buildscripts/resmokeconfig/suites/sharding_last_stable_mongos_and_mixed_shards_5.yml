@@ -12,28 +12,28 @@ selector:
   # The following tests take approximately
   #   19 minutes to run on enterprise-rhel-62-64-bit
   roots:
-  - jstests/sharding/sharding_multiple_ns_rs.js
-  - jstests/sharding/shard_aware_init.js
-  - jstests/sharding/balance_repl.js
-  - jstests/sharding/authCommands.js
-  - jstests/sharding/test_stacked_migration_cleanup.js
-  - jstests/sharding/shard_aware_primary_failover.js
-  - jstests/sharding/sharding_migrate_cursor1.js
-  - jstests/sharding/mongod_returns_no_cluster_time_without_keys.js
-  - jstests/sharding/delete_during_migrate.js
-  - jstests/sharding/parallel.js
-  - jstests/sharding/diffservers1.js
-  - jstests/sharding/mongos_does_not_gossip_logical_time_without_keys.js
-  - jstests/sharding/group_slaveok.js
-  - jstests/sharding/shard_existing_coll_chunk_count.js
-  - jstests/sharding/explain_read_pref.js
-  - jstests/sharding/auto_rebalance_parallel.js
-  - jstests/sharding/bouncing_count.js
-  - jstests/sharding/balancer_window.js
-  - jstests/sharding/shard_insert_getlasterror_w2.js
-  - jstests/sharding/read_pref_multi_mongos_stale_config.js
-  - jstests/sharding/write_commands_sharding_state.js
-  - jstests/sharding/names.js
+  - tests/jstests/sharding/sharding_multiple_ns_rs.js
+  - tests/jstests/sharding/shard_aware_init.js
+  - tests/jstests/sharding/balance_repl.js
+  - tests/jstests/sharding/authCommands.js
+  - tests/jstests/sharding/test_stacked_migration_cleanup.js
+  - tests/jstests/sharding/shard_aware_primary_failover.js
+  - tests/jstests/sharding/sharding_migrate_cursor1.js
+  - tests/jstests/sharding/mongod_returns_no_cluster_time_without_keys.js
+  - tests/jstests/sharding/delete_during_migrate.js
+  - tests/jstests/sharding/parallel.js
+  - tests/jstests/sharding/diffservers1.js
+  - tests/jstests/sharding/mongos_does_not_gossip_logical_time_without_keys.js
+  - tests/jstests/sharding/group_slaveok.js
+  - tests/jstests/sharding/shard_existing_coll_chunk_count.js
+  - tests/jstests/sharding/explain_read_pref.js
+  - tests/jstests/sharding/auto_rebalance_parallel.js
+  - tests/jstests/sharding/bouncing_count.js
+  - tests/jstests/sharding/balancer_window.js
+  - tests/jstests/sharding/shard_insert_getlasterror_w2.js
+  - tests/jstests/sharding/read_pref_multi_mongos_stale_config.js
+  - tests/jstests/sharding/write_commands_sharding_state.js
+  - tests/jstests/sharding/names.js
 
 executor:
   config:

@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile src/mongo/db/modules/enterprise/jstests/encryptdb/libs/ekf2
+- &keyFile src/mongo/db/modules/enterprise/tests/jstests/encryptdb/libs/ekf2
 
 test_kind: js_test
 
@@ -16,21 +16,21 @@ selector:
   #   11 minutes to run on enterprise-rhel-62-64-bit
   #   20 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/shard_identity_rollback.js
-  - jstests/sharding/auth_slaveok_routing.js
-  - jstests/sharding/sharding_multiple_ns_rs.js
-  - jstests/sharding/key_rotation.js
-  - jstests/sharding/mongod_returns_no_cluster_time_without_keys.js
-  - jstests/sharding/replmonitor_bad_seed.js
-  - jstests/sharding/shard_aware_init.js
-  - jstests/sharding/shard_aware_primary_failover.js
-  - jstests/sharding/error_during_agg_getmore.js
-  - jstests/sharding/move_chunk_wc.js
-  - jstests/sharding/autosplit_heuristics.js
-  - jstests/sharding/view_rewrite.js
-  - jstests/sharding/change_streams_primary_shard_unaware.js
-  - jstests/sharding/test_stacked_migration_cleanup.js
-  - jstests/sharding/sharding_balance1.js
+  - tests/jstests/sharding/shard_identity_rollback.js
+  - tests/jstests/sharding/auth_slaveok_routing.js
+  - tests/jstests/sharding/sharding_multiple_ns_rs.js
+  - tests/jstests/sharding/key_rotation.js
+  - tests/jstests/sharding/mongod_returns_no_cluster_time_without_keys.js
+  - tests/jstests/sharding/replmonitor_bad_seed.js
+  - tests/jstests/sharding/shard_aware_init.js
+  - tests/jstests/sharding/shard_aware_primary_failover.js
+  - tests/jstests/sharding/error_during_agg_getmore.js
+  - tests/jstests/sharding/move_chunk_wc.js
+  - tests/jstests/sharding/autosplit_heuristics.js
+  - tests/jstests/sharding/view_rewrite.js
+  - tests/jstests/sharding/change_streams_primary_shard_unaware.js
+  - tests/jstests/sharding/test_stacked_migration_cleanup.js
+  - tests/jstests/sharding/sharding_balance1.js
 
 executor:
   config:

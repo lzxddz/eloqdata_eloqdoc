@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile src/mongo/db/modules/enterprise/jstests/encryptdb/libs/ekf2
+- &keyFile src/mongo/db/modules/enterprise/tests/jstests/encryptdb/libs/ekf2
 
 test_kind: js_test
 
@@ -16,19 +16,19 @@ selector:
   #   11 minutes to run on enterprise-rhel-62-64-bit
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/move_chunk_remove_with_write_retryability.js
-  - jstests/sharding/change_stream_update_lookup_read_concern.js
-  - jstests/sharding/move_chunk_insert_with_write_retryability.js
-  - jstests/sharding/balance_repl.js
-  - jstests/sharding/addshard2.js
-  - jstests/sharding/jumbo1.js
-  - jstests/sharding/delete_during_migrate.js
-  - jstests/sharding/safe_secondary_reads_single_migration_waitForDelete.js
-  - jstests/sharding/hash_shard1.js
-  - jstests/sharding/count_slaveok.js
-  - jstests/sharding/shard_identity_config_update.js
-  - jstests/sharding/return_partial_shards_down.js
-  - jstests/sharding/linearizable_read_concern.js
+  - tests/jstests/sharding/move_chunk_remove_with_write_retryability.js
+  - tests/jstests/sharding/change_stream_update_lookup_read_concern.js
+  - tests/jstests/sharding/move_chunk_insert_with_write_retryability.js
+  - tests/jstests/sharding/balance_repl.js
+  - tests/jstests/sharding/addshard2.js
+  - tests/jstests/sharding/jumbo1.js
+  - tests/jstests/sharding/delete_during_migrate.js
+  - tests/jstests/sharding/safe_secondary_reads_single_migration_waitForDelete.js
+  - tests/jstests/sharding/hash_shard1.js
+  - tests/jstests/sharding/count_slaveok.js
+  - tests/jstests/sharding/shard_identity_config_update.js
+  - tests/jstests/sharding/return_partial_shards_down.js
+  - tests/jstests/sharding/linearizable_read_concern.js
 
 executor:
   config:

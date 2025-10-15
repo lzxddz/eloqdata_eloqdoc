@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile src/mongo/db/modules/enterprise/jstests/encryptdb/libs/ekf2
+- &keyFile src/mongo/db/modules/enterprise/tests/jstests/encryptdb/libs/ekf2
 
 test_kind: js_test
 
@@ -16,9 +16,9 @@ selector:
   #   13 minutes to run on enterprise-rhel-62-64-bit
   #   17 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/remove2.js
-  - jstests/sharding/zbigMapReduce.js
-  - jstests/sharding/top_chunk_autosplit.js
+  - tests/jstests/sharding/remove2.js
+  - tests/jstests/sharding/zbigMapReduce.js
+  - tests/jstests/sharding/top_chunk_autosplit.js
 
 executor:
   config:

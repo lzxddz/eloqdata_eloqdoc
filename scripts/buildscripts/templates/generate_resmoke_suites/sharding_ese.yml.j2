@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile src/mongo/db/modules/enterprise/jstests/encryptdb/libs/ekf2
+- &keyFile src/mongo/db/modules/enterprise/tests/jstests/encryptdb/libs/ekf2
 
 test_kind: js_test
 
@@ -23,10 +23,10 @@ selector:
   - {{ test }}
 {% endfor %}
 {% if is_misc is defined %}
-  - jstests/sharding/*.js
+  - tests/jstests/sharding/*.js
   exclude_files:
   # Enable when SERVER-36634 is fixed.
-  - jstests/sharding/shard_collection_existing_zones.js
+  - tests/jstests/sharding/shard_collection_existing_zones.js
 {% if excluded_tests is defined %}
 {% for test in excluded_tests %}
   - {{ test }}

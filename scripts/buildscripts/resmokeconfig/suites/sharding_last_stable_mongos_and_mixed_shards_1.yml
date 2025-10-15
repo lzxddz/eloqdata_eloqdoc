@@ -12,11 +12,11 @@ selector:
   # The following tests take approximately
   #   19 minutes to run on enterprise-rhel-62-64-bit
   roots:
-  - jstests/sharding/zbigMapReduce.js
-  - jstests/sharding/remove2.js
-  - jstests/sharding/top_chunk_autosplit.js
-  - jstests/sharding/move_chunk_find_and_modify_with_write_retryability.js
-  - jstests/sharding/batch_write_command_sharded.js
+  - tests/jstests/sharding/zbigMapReduce.js
+  - tests/jstests/sharding/remove2.js
+  - tests/jstests/sharding/top_chunk_autosplit.js
+  - tests/jstests/sharding/move_chunk_find_and_modify_with_write_retryability.js
+  - tests/jstests/sharding/batch_write_command_sharded.js
 
 executor:
   config:

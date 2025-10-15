@@ -2,278 +2,278 @@ test_kind: multi_stmt_txn_passthrough
 
 selector:
   roots:
-  - jstests/core/**/*.js
+  - tests/jstests/core/**/*.js
   # TODO: SERVER-35089
-  # - jstests/libs/txns/txn_passthrough_runner_selftest.js
+  # - tests/jstests/libs/txns/txn_passthrough_runner_selftest.js
   exclude_files:
   # TODO: SERVER-35089
-  - jstests/core/geo_allowedcomparisons.js
-  - jstests/core/geo_big_polygon2.js
-  - jstests/core/in.js
-  - jstests/core/orj.js
-  - jstests/core/insert1.js
+  - tests/jstests/core/geo_allowedcomparisons.js
+  - tests/jstests/core/geo_big_polygon2.js
+  - tests/jstests/core/in.js
+  - tests/jstests/core/orj.js
+  - tests/jstests/core/insert1.js
 
   # These tests already run with transactions.
-  - jstests/core/txns/*.js
+  - tests/jstests/core/txns/*.js
 
   # These tests are not expected to pass with replica-sets:
-  - jstests/core/capped_update.js
-  - jstests/core/dbadmin.js
-  - jstests/core/opcounters_write_cmd.js
-  - jstests/core/read_after_optime.js
+  - tests/jstests/core/capped_update.js
+  - tests/jstests/core/dbadmin.js
+  - tests/jstests/core/opcounters_write_cmd.js
+  - tests/jstests/core/read_after_optime.js
 
   ##
   ## Limitations with the way the runner file injects transactions.
   ##
   
   # These tests expects some statements to error, which will cause txns to abort entirely.
-  - jstests/core/bulk_api_ordered.js
-  - jstests/core/bulk_api_unordered.js
-  - jstests/core/bulk_legacy_enforce_gle.js
-  - jstests/core/capped5.js
-  - jstests/core/commands_with_uuid.js
-  - jstests/core/explain_execution_error.js
-  - jstests/core/expr.js
-  - jstests/core/find_getmore_bsonsize.js
-  - jstests/core/find_getmore_cmd.js
-  - jstests/core/find9.js
-  - jstests/core/index_big1.js
-  - jstests/core/index_bigkeys.js
-  - jstests/core/index_decimal.js
-  - jstests/core/index_multiple_compatibility.js
-  - jstests/core/index_partial_write_ops.js
-  - jstests/core/index8.js # No explicit check for failed command.
-  - jstests/core/indexa.js # No explicit check for failed command.
-  - jstests/core/indexes_multiple_commands.js
-  - jstests/core/insert_long_index_key.js
-  - jstests/core/js2.js
-  - jstests/core/json_schema/json_schema.js
-  - jstests/core/mr_bigobject.js
-  - jstests/core/not2.js
-  - jstests/core/notablescan.js
-  - jstests/core/or1.js
-  - jstests/core/or2.js
-  - jstests/core/or3.js
-  - jstests/core/ork.js
-  - jstests/core/ref4.js
-  - jstests/core/regex_limit.js
-  - jstests/core/remove_undefined.js
-  - jstests/core/set7.js 
-  - jstests/core/sortb.js
-  - jstests/core/sortf.js
-  - jstests/core/sortg.js
-  - jstests/core/sortj.js
-  - jstests/core/tailable_skip_limit.js
-  - jstests/core/type_array.js
-  - jstests/core/uniqueness.js
-  - jstests/core/unset2.js
-  - jstests/core/update_addToSet.js
-  - jstests/core/update_arrayFilters.js
-  - jstests/core/update_find_and_modify_id.js
-  - jstests/core/update_modifier_pop.js
-  - jstests/core/updateh.js
-  - jstests/core/updatej.js
-  - jstests/core/ref.js
+  - tests/jstests/core/bulk_api_ordered.js
+  - tests/jstests/core/bulk_api_unordered.js
+  - tests/jstests/core/bulk_legacy_enforce_gle.js
+  - tests/jstests/core/capped5.js
+  - tests/jstests/core/commands_with_uuid.js
+  - tests/jstests/core/explain_execution_error.js
+  - tests/jstests/core/expr.js
+  - tests/jstests/core/find_getmore_bsonsize.js
+  - tests/jstests/core/find_getmore_cmd.js
+  - tests/jstests/core/find9.js
+  - tests/jstests/core/index_big1.js
+  - tests/jstests/core/index_bigkeys.js
+  - tests/jstests/core/index_decimal.js
+  - tests/jstests/core/index_multiple_compatibility.js
+  - tests/jstests/core/index_partial_write_ops.js
+  - tests/jstests/core/index8.js # No explicit check for failed command.
+  - tests/jstests/core/indexa.js # No explicit check for failed command.
+  - tests/jstests/core/indexes_multiple_commands.js
+  - tests/jstests/core/insert_long_index_key.js
+  - tests/jstests/core/js2.js
+  - tests/jstests/core/json_schema/json_schema.js
+  - tests/jstests/core/mr_bigobject.js
+  - tests/jstests/core/not2.js
+  - tests/jstests/core/notablescan.js
+  - tests/jstests/core/or1.js
+  - tests/jstests/core/or2.js
+  - tests/jstests/core/or3.js
+  - tests/jstests/core/ork.js
+  - tests/jstests/core/ref4.js
+  - tests/jstests/core/regex_limit.js
+  - tests/jstests/core/remove_undefined.js
+  - tests/jstests/core/set7.js 
+  - tests/jstests/core/sortb.js
+  - tests/jstests/core/sortf.js
+  - tests/jstests/core/sortg.js
+  - tests/jstests/core/sortj.js
+  - tests/jstests/core/tailable_skip_limit.js
+  - tests/jstests/core/type_array.js
+  - tests/jstests/core/uniqueness.js
+  - tests/jstests/core/unset2.js
+  - tests/jstests/core/update_addToSet.js
+  - tests/jstests/core/update_arrayFilters.js
+  - tests/jstests/core/update_find_and_modify_id.js
+  - tests/jstests/core/update_modifier_pop.js
+  - tests/jstests/core/updateh.js
+  - tests/jstests/core/updatej.js
+  - tests/jstests/core/ref.js
 
   # Consecutive writes totalling more than 16MB will cause the txn to abort with
   # a TransactionTooLarge error.
-  - jstests/core/batch_size.js
-  - jstests/core/single_batch.js
+  - tests/jstests/core/batch_size.js
+  - tests/jstests/core/single_batch.js
 
   ##
   ## Some aggregation stages don't support snapshot readconcern.
   ##
 
   # $explain (requires read concern local)
-  - jstests/core/agg_hint.js
-  - jstests/core/and.js
-  - jstests/core/collation.js
-  - jstests/core/explain_shell_helpers.js
-  - jstests/core/index_partial_read_ops.js
-  - jstests/core/optimized_match_explain.js
-  - jstests/core/sort_array.js
-  - jstests/core/views/views_collation.js
+  - tests/jstests/core/agg_hint.js
+  - tests/jstests/core/and.js
+  - tests/jstests/core/collation.js
+  - tests/jstests/core/explain_shell_helpers.js
+  - tests/jstests/core/index_partial_read_ops.js
+  - tests/jstests/core/optimized_match_explain.js
+  - tests/jstests/core/sort_array.js
+  - tests/jstests/core/views/views_collation.js
 
   # $out
-  - jstests/core/bypass_doc_validation.js
-  - jstests/core/views/views_aggregation.js
+  - tests/jstests/core/bypass_doc_validation.js
+  - tests/jstests/core/views/views_aggregation.js
 
   # $listSessions
-  - jstests/core/list_all_local_sessions.js
-  - jstests/core/list_all_sessions.js
-  - jstests/core/list_local_sessions.js
-  - jstests/core/list_sessions.js
+  - tests/jstests/core/list_all_local_sessions.js
+  - tests/jstests/core/list_all_sessions.js
+  - tests/jstests/core/list_local_sessions.js
+  - tests/jstests/core/list_sessions.js
 
   # $indexStats
-  - jstests/core/index_stats.js
+  - tests/jstests/core/index_stats.js
 
   # $collStats
-  - jstests/core/operation_latency_histogram.js
-  - jstests/core/views/views_coll_stats.js
-  - jstests/core/views/views_stats.js
+  - tests/jstests/core/operation_latency_histogram.js
+  - tests/jstests/core/views/views_coll_stats.js
+  - tests/jstests/core/views/views_stats.js
 
   ##
   ## WriteErrors get converted to WriteCommandErrors if part of a txn.
   ##
 
   # The same error code, but with ok:0.
-  - jstests/core/json_schema/additional_items.js
-  - jstests/core/json_schema/additional_properties.js
-  - jstests/core/json_schema/bsontype.js
-  - jstests/core/json_schema/dependencies.js
-  - jstests/core/json_schema/items.js
-  - jstests/core/json_schema/logical_keywords.js
-  - jstests/core/json_schema/min_max_items.js
-  - jstests/core/json_schema/min_max_properties.js
-  - jstests/core/json_schema/pattern_properties.js
-  - jstests/core/json_schema/required.js
-  - jstests/core/json_schema/unique_items.js
+  - tests/jstests/core/json_schema/additional_items.js
+  - tests/jstests/core/json_schema/additional_properties.js
+  - tests/jstests/core/json_schema/bsontype.js
+  - tests/jstests/core/json_schema/dependencies.js
+  - tests/jstests/core/json_schema/items.js
+  - tests/jstests/core/json_schema/logical_keywords.js
+  - tests/jstests/core/json_schema/min_max_items.js
+  - tests/jstests/core/json_schema/min_max_properties.js
+  - tests/jstests/core/json_schema/pattern_properties.js
+  - tests/jstests/core/json_schema/required.js
+  - tests/jstests/core/json_schema/unique_items.js
 
-  - jstests/core/field_name_validation.js
-  - jstests/core/fts_array.js
-  - jstests/core/inc-SERVER-7446.js
-  - jstests/core/invalid_db_name.js
-  - jstests/core/push_sort.js
+  - tests/jstests/core/field_name_validation.js
+  - tests/jstests/core/fts_array.js
+  - tests/jstests/core/inc-SERVER-7446.js
+  - tests/jstests/core/invalid_db_name.js
+  - tests/jstests/core/push_sort.js
 
   # Checks for "WriteErrors" explicitly from the response of db.runCommand()
-  - jstests/core/max_doc_size.js
+  - tests/jstests/core/max_doc_size.js
 
   # Calls res.getWriteError() or res.hasWriteError().
-  - jstests/core/bulk_api_ordered.js
-  - jstests/core/bulk_api_unordered.js
-  - jstests/core/bulk_legacy_enforce_gle.js
-  - jstests/core/cappeda.js
-  - jstests/core/doc_validation.js
-  - jstests/core/doc_validation_options.js
-  - jstests/core/geo_multinest0.js
-  - jstests/core/insert_illegal_doc.js
-  - jstests/core/ns_length.js
-  - jstests/core/push2.js
-  - jstests/core/remove6.js
-  - jstests/core/removeb.js
-  - jstests/core/rename4.js
-  - jstests/core/shell_writeconcern.js
-  - jstests/core/storefunc.js
-  - jstests/core/update_arrayFilters.js
-  - jstests/core/update_dbref.js
-  - jstests/core/updatel.js
-  - jstests/core/write_result.js
+  - tests/jstests/core/bulk_api_ordered.js
+  - tests/jstests/core/bulk_api_unordered.js
+  - tests/jstests/core/bulk_legacy_enforce_gle.js
+  - tests/jstests/core/cappeda.js
+  - tests/jstests/core/doc_validation.js
+  - tests/jstests/core/doc_validation_options.js
+  - tests/jstests/core/geo_multinest0.js
+  - tests/jstests/core/insert_illegal_doc.js
+  - tests/jstests/core/ns_length.js
+  - tests/jstests/core/push2.js
+  - tests/jstests/core/remove6.js
+  - tests/jstests/core/removeb.js
+  - tests/jstests/core/rename4.js
+  - tests/jstests/core/shell_writeconcern.js
+  - tests/jstests/core/storefunc.js
+  - tests/jstests/core/update_arrayFilters.js
+  - tests/jstests/core/update_dbref.js
+  - tests/jstests/core/updatel.js
+  - tests/jstests/core/write_result.js
 
   # Multiple writes in a txn, some of which fail because the collection doesn't exist.
   # We create the collection and retry the last write, but previous writes would have
   # still failed.
-  - jstests/core/dbref1.js
-  - jstests/core/dbref2.js
-  - jstests/core/ref3.js
-  - jstests/core/repair_database.js
-  - jstests/core/update3.js
-  - jstests/core/rename3.js
+  - tests/jstests/core/dbref1.js
+  - tests/jstests/core/dbref2.js
+  - tests/jstests/core/ref3.js
+  - tests/jstests/core/repair_database.js
+  - tests/jstests/core/update3.js
+  - tests/jstests/core/rename3.js
 
   ##
   ## Error: Unable to acquire lock within a max lock request timeout of '0ms' milliseconds
   ##
 
   # Collection drops done through applyOps are not converted to w:majority
-  - jstests/core/views/invalid_system_views.js
+  - tests/jstests/core/views/invalid_system_views.js
 
   # Operations run on the "out" collection of a MapReduce call, which is not always
   # immediately available to a transaction as it is still being replicated. Transactions
   # fail with "Unable to acquire lock" errors.
-  - jstests/core/function_string_representations.js
-  - jstests/core/mr_errorhandling.js
-  - jstests/core/mr_merge.js
-  - jstests/core/mr_merge2.js
-  - jstests/core/mr_replaceIntoDB.js
-  - jstests/core/mr_outreduce.js
-  - jstests/core/mr_outreduce2.js
+  - tests/jstests/core/function_string_representations.js
+  - tests/jstests/core/mr_errorhandling.js
+  - tests/jstests/core/mr_merge.js
+  - tests/jstests/core/mr_merge2.js
+  - tests/jstests/core/mr_replaceIntoDB.js
+  - tests/jstests/core/mr_outreduce.js
+  - tests/jstests/core/mr_outreduce2.js
 
   ##
   ## Misc. reasons.
   ##
 
   # SERVER-34868 Cannot run a legacy query on a session.
-  - jstests/core/exhaust.js
-  - jstests/core/validate_cmd_ns.js
+  - tests/jstests/core/exhaust.js
+  - tests/jstests/core/validate_cmd_ns.js
 
   # SERVER-34772 Tailable Cursors are not allowed with snapshot readconcern.
-  - jstests/core/awaitdata_getmore_cmd.js
-  - jstests/core/getmore_cmd_maxtimems.js
-  - jstests/core/tailable_cursor_invalidation.js
-  - jstests/core/tailable_getmore_batch_size.js
+  - tests/jstests/core/awaitdata_getmore_cmd.js
+  - tests/jstests/core/getmore_cmd_maxtimems.js
+  - tests/jstests/core/tailable_cursor_invalidation.js
+  - tests/jstests/core/tailable_getmore_batch_size.js
 
   # SERVER-34918 The "max" option of a capped collection can be exceeded until the next insert.
   # The reason is that we don't update the count of a collection until a transaction commits,
   # by which point it is too late to complain that "max" has been exceeded.
-  - jstests/core/capped_max1.js
+  - tests/jstests/core/capped_max1.js
 
   # The "max" option of a capped collection can be temporarily exceeded before a
   # txn is committed.
-  - jstests/core/bulk_insert_capped.js
+  - tests/jstests/core/bulk_insert_capped.js
 
   # Wrong count for top info (WriteLock)
-  - jstests/core/top.js
+  - tests/jstests/core/top.js
 
   # Expects collection to not have been created
-  - jstests/core/insert_id_undefined.js
+  - tests/jstests/core/insert_id_undefined.js
 
   # Creates sessions explicitly, resulting in txns being run through different sessions
   # using a single txnNumber.
-  - jstests/core/list_all_local_cursors.js
-  - jstests/core/json_schema/misc_validation.js
-  - jstests/core/views/views_all_commands.js
+  - tests/jstests/core/list_all_local_cursors.js
+  - tests/jstests/core/json_schema/misc_validation.js
+  - tests/jstests/core/views/views_all_commands.js
 
   # Fails with implicit sessions because it will use multiple sessions on the same Mongo connection.
-  - jstests/core/dropdb.js
+  - tests/jstests/core/dropdb.js
 
   # Committing a transaction when the server is fsync locked fails.
-  - jstests/core/fsync.js
+  - tests/jstests/core/fsync.js
 
   # Expects legacy errors ($err).
-  - jstests/core/constructors.js
+  - tests/jstests/core/constructors.js
 
   # txn interrupted by command outside of txn before getMore runs.
-  - jstests/core/commands_namespace_parsing.js
-  - jstests/core/drop3.js
-  - jstests/core/ensure_sorted.js
-  - jstests/core/geo_s2cursorlimitskip.js
-  - jstests/core/getmore_invalidated_cursors.js
-  - jstests/core/getmore_invalidated_documents.js
-  - jstests/core/kill_cursors.js
-  - jstests/core/list_collections1.js
-  - jstests/core/list_indexes.js
-  - jstests/core/max_time_ms.js
-  - jstests/core/oro.js
+  - tests/jstests/core/commands_namespace_parsing.js
+  - tests/jstests/core/drop3.js
+  - tests/jstests/core/ensure_sorted.js
+  - tests/jstests/core/geo_s2cursorlimitskip.js
+  - tests/jstests/core/getmore_invalidated_cursors.js
+  - tests/jstests/core/getmore_invalidated_documents.js
+  - tests/jstests/core/kill_cursors.js
+  - tests/jstests/core/list_collections1.js
+  - tests/jstests/core/list_indexes.js
+  - tests/jstests/core/max_time_ms.js
+  - tests/jstests/core/oro.js
 
   # Expects certain number of operations in the system.profile collection.
-  - jstests/core/profile*.js
+  - tests/jstests/core/profile*.js
 
   # Parallel Shell - we do not signal the override to end a txn when a parallel shell closes.
-  - jstests/core/awaitdata_getmore_cmd.js
-  - jstests/core/compact_keeps_indexes.js
-  - jstests/core/count10.js
-  - jstests/core/count_plan_summary.js
-  - jstests/core/coveredIndex3.js
-  - jstests/core/currentop.js
-  - jstests/core/distinct3.js
-  - jstests/core/evald.js
-  - jstests/core/find_and_modify_concurrent_update.js
-  - jstests/core/fsync.js
-  - jstests/core/geo_update_btree.js
-  - jstests/core/killop_drop_collection.js
-  - jstests/core/loadserverscripts.js
-  - jstests/core/mr_killop.js
-  - jstests/core/queryoptimizer3.js
-  - jstests/core/remove9.js
-  - jstests/core/removeb.js
-  - jstests/core/removec.js
-  - jstests/core/shellstartparallel.js
-  - jstests/core/updatef.js
+  - tests/jstests/core/awaitdata_getmore_cmd.js
+  - tests/jstests/core/compact_keeps_indexes.js
+  - tests/jstests/core/count10.js
+  - tests/jstests/core/count_plan_summary.js
+  - tests/jstests/core/coveredIndex3.js
+  - tests/jstests/core/currentop.js
+  - tests/jstests/core/distinct3.js
+  - tests/jstests/core/evald.js
+  - tests/jstests/core/find_and_modify_concurrent_update.js
+  - tests/jstests/core/fsync.js
+  - tests/jstests/core/geo_update_btree.js
+  - tests/jstests/core/killop_drop_collection.js
+  - tests/jstests/core/loadserverscripts.js
+  - tests/jstests/core/mr_killop.js
+  - tests/jstests/core/queryoptimizer3.js
+  - tests/jstests/core/remove9.js
+  - tests/jstests/core/removeb.js
+  - tests/jstests/core/removec.js
+  - tests/jstests/core/shellstartparallel.js
+  - tests/jstests/core/updatef.js
 
   # Command expects to see result from parallel operation.
   # E.g. Suppose the following sequence of events: op1, join() op2 in parallel shell, op3.
   # op3 will still be using the snapshot from op1, and not see op2 at all.
-  - jstests/core/cursora.js
-  - jstests/core/bench_test1.js
+  - tests/jstests/core/cursora.js
+  - tests/jstests/core/bench_test1.js
 
   exclude_with_any_tags:
   # "Cowardly refusing to override read concern of command: ..."

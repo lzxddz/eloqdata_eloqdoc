@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile src/mongo/db/modules/enterprise/jstests/encryptdb/libs/ekf2
+- &keyFile src/mongo/db/modules/enterprise/tests/jstests/encryptdb/libs/ekf2
 
 test_kind: js_test
 
@@ -16,62 +16,62 @@ selector:
   #   5 minutes to run on enterprise-rhel-62-64-bit
   #   8 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/replsets/plan_cache_slaveok.js
-  - jstests/replsets/rename_collection_temp.js
-  - jstests/replsets/dbhash_system_collections.js
-  - jstests/replsets/transaction_commit_abort_on_secondaries.js
-  - jstests/replsets/capped_insert_order.js
-  - jstests/replsets/system_profile.js
-  - jstests/replsets/explain_slaveok.js
-  - jstests/replsets/reindex_secondary.js
-  - jstests/replsets/pipelineout.js
-  - jstests/replsets/system_profile_secondary.js
-  - jstests/replsets/initial_sync_rename_collection.js
-  - jstests/replsets/id_index_replication.js
-  - jstests/replsets/server_status_metrics.js
-  - jstests/replsets/shutdown.js
-  - jstests/replsets/initial_sync_visibility.js
-  - jstests/replsets/initial_sync_invalid_views.js
-  - jstests/replsets/initial_sync_views.js
-  - jstests/replsets/reconfig_tags.js
-  - jstests/replsets/oplog_replay_on_startup_with_bad_op.js
-  - jstests/replsets/read_majority_two_arbs.js
-  - jstests/replsets/apply_ops_idempotency.js
-  - jstests/replsets/initial_sync_invalid_index_spec.js
-  - jstests/replsets/retryable_commit_transaction_after_restart.js
-  - jstests/replsets/disallow_adding_initialized_node1.js
-  - jstests/replsets/repl_options.js
-  - jstests/replsets/apply_ops_insert_write_conflict_nonatomic.js
-  - jstests/replsets/apply_ops_insert_write_conflict_atomic.js
-  - jstests/replsets/localhost2.js
-  - jstests/replsets/rollback_time_limit_param.js
-  - jstests/replsets/localhost3.js
-  - jstests/replsets/oplog_note_cmd.js
-  - jstests/replsets/oplog_format_create_indexes.js
-  - jstests/replsets/localhost1.js
-  - jstests/replsets/apply_ops_concurrent_non_atomic_different_db.js
-  - jstests/replsets/drop_oplog.js
-  - jstests/replsets/apply_ops_concurrent_non_atomic_same_collection.js
-  - jstests/replsets/reconfig_prohibits_w0.js
-  - jstests/replsets/oplog_format.js
-  - jstests/replsets/oplog_term.js
-  - jstests/replsets/apply_ops_concurrent_non_atomic_same_db.js
-  - jstests/replsets/apply_ops_create_view.js
-  - jstests/replsets/apply_ops_create_with_uuid.js
-  - jstests/replsets/replsethostnametrim.js
-  - jstests/replsets/oplog_wallclock.js
-  - jstests/replsets/lastop.js
-  - jstests/replsets/initiate.js
-  - jstests/replsets/initiate_prohibits_w0.js
-  - jstests/replsets/mmap_disallows_rc_majority.js
-  - jstests/replsets/single_server_majority.js
-  - jstests/replsets/rslib.js
-  - jstests/replsets/two_nodes_priority_take_over.js
-  - jstests/replsets/initial_sync_cloner_dups.js
-  - jstests/replsets/find_and_modify_wc.js
-  - jstests/replsets/bulk_api_wc.js
-  - jstests/replsets/dbcheck.js
-  - jstests/replsets/batch_write_command_wc.js
+  - tests/jstests/replsets/plan_cache_slaveok.js
+  - tests/jstests/replsets/rename_collection_temp.js
+  - tests/jstests/replsets/dbhash_system_collections.js
+  - tests/jstests/replsets/transaction_commit_abort_on_secondaries.js
+  - tests/jstests/replsets/capped_insert_order.js
+  - tests/jstests/replsets/system_profile.js
+  - tests/jstests/replsets/explain_slaveok.js
+  - tests/jstests/replsets/reindex_secondary.js
+  - tests/jstests/replsets/pipelineout.js
+  - tests/jstests/replsets/system_profile_secondary.js
+  - tests/jstests/replsets/initial_sync_rename_collection.js
+  - tests/jstests/replsets/id_index_replication.js
+  - tests/jstests/replsets/server_status_metrics.js
+  - tests/jstests/replsets/shutdown.js
+  - tests/jstests/replsets/initial_sync_visibility.js
+  - tests/jstests/replsets/initial_sync_invalid_views.js
+  - tests/jstests/replsets/initial_sync_views.js
+  - tests/jstests/replsets/reconfig_tags.js
+  - tests/jstests/replsets/oplog_replay_on_startup_with_bad_op.js
+  - tests/jstests/replsets/read_majority_two_arbs.js
+  - tests/jstests/replsets/apply_ops_idempotency.js
+  - tests/jstests/replsets/initial_sync_invalid_index_spec.js
+  - tests/jstests/replsets/retryable_commit_transaction_after_restart.js
+  - tests/jstests/replsets/disallow_adding_initialized_node1.js
+  - tests/jstests/replsets/repl_options.js
+  - tests/jstests/replsets/apply_ops_insert_write_conflict_nonatomic.js
+  - tests/jstests/replsets/apply_ops_insert_write_conflict_atomic.js
+  - tests/jstests/replsets/localhost2.js
+  - tests/jstests/replsets/rollback_time_limit_param.js
+  - tests/jstests/replsets/localhost3.js
+  - tests/jstests/replsets/oplog_note_cmd.js
+  - tests/jstests/replsets/oplog_format_create_indexes.js
+  - tests/jstests/replsets/localhost1.js
+  - tests/jstests/replsets/apply_ops_concurrent_non_atomic_different_db.js
+  - tests/jstests/replsets/drop_oplog.js
+  - tests/jstests/replsets/apply_ops_concurrent_non_atomic_same_collection.js
+  - tests/jstests/replsets/reconfig_prohibits_w0.js
+  - tests/jstests/replsets/oplog_format.js
+  - tests/jstests/replsets/oplog_term.js
+  - tests/jstests/replsets/apply_ops_concurrent_non_atomic_same_db.js
+  - tests/jstests/replsets/apply_ops_create_view.js
+  - tests/jstests/replsets/apply_ops_create_with_uuid.js
+  - tests/jstests/replsets/replsethostnametrim.js
+  - tests/jstests/replsets/oplog_wallclock.js
+  - tests/jstests/replsets/lastop.js
+  - tests/jstests/replsets/initiate.js
+  - tests/jstests/replsets/initiate_prohibits_w0.js
+  - tests/jstests/replsets/mmap_disallows_rc_majority.js
+  - tests/jstests/replsets/single_server_majority.js
+  - tests/jstests/replsets/rslib.js
+  - tests/jstests/replsets/two_nodes_priority_take_over.js
+  - tests/jstests/replsets/initial_sync_cloner_dups.js
+  - tests/jstests/replsets/find_and_modify_wc.js
+  - tests/jstests/replsets/bulk_api_wc.js
+  - tests/jstests/replsets/dbcheck.js
+  - tests/jstests/replsets/batch_write_command_wc.js
 
 executor:
   config:

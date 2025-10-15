@@ -66,7 +66,7 @@ class ContinuousStepdown(interface.Hook):  # pylint: disable=too-many-instance-a
         self._kill = kill
 
         # The stepdown file names need to match the same construction as found in
-        # jstests/concurrency/fsm_libs/resmoke_runner.js.
+        # tests/jstests/concurrency/fsm_libs/resmoke_runner.js.
         dbpath_prefix = fixture.get_dbpath_prefix()
 
         if use_stepdown_permitted_file:

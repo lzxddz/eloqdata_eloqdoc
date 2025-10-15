@@ -8,7 +8,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile jstests/libs/authTestsKey
+- &keyFile tests/jstests/libs/authTestsKey
 - &keyFileData Thiskeyisonlyforrunningthesuitewithauthenticationdontuseitinanytestsdirectly
 
 test_kind: js_test
@@ -18,27 +18,27 @@ selector:
   #   9 minutes to run on enterprise-rhel-62-64-bit
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/sharded_limit_batchsize.js
-  - jstests/sharding/allow_partial_results.js
-  - jstests/sharding/multi_write_target.js
-  - jstests/sharding/balancer_window.js
-  - jstests/sharding/query_config.js
-  - jstests/sharding/resume_change_stream_from_stale_mongos.js
-  - jstests/sharding/update_sharded.js
-  - jstests/sharding/stats.js
-  - jstests/sharding/change_streams.js
-  - jstests/sharding/findandmodify1.js
-  - jstests/sharding/agg_project_limit_pipe_split.js
-  - jstests/sharding/multi_mongos2.js
-  - jstests/sharding/shard5.js
-  - jstests/sharding/mapReduce_nonSharded.js
-  - jstests/sharding/retryable_writes.js
-  - jstests/sharding/hash_shard_non_empty.js
-  - jstests/sharding/cleanup_orphaned_basic.js
-  - jstests/sharding/lookup_change_stream_post_image_id_shard_key.js
-  - jstests/sharding/basic_sharding_params.js
-  - jstests/sharding/write_cmd_auto_split.js
-  - jstests/sharding/shard6.js
+  - tests/jstests/sharding/sharded_limit_batchsize.js
+  - tests/jstests/sharding/allow_partial_results.js
+  - tests/jstests/sharding/multi_write_target.js
+  - tests/jstests/sharding/balancer_window.js
+  - tests/jstests/sharding/query_config.js
+  - tests/jstests/sharding/resume_change_stream_from_stale_mongos.js
+  - tests/jstests/sharding/update_sharded.js
+  - tests/jstests/sharding/stats.js
+  - tests/jstests/sharding/change_streams.js
+  - tests/jstests/sharding/findandmodify1.js
+  - tests/jstests/sharding/agg_project_limit_pipe_split.js
+  - tests/jstests/sharding/multi_mongos2.js
+  - tests/jstests/sharding/shard5.js
+  - tests/jstests/sharding/mapReduce_nonSharded.js
+  - tests/jstests/sharding/retryable_writes.js
+  - tests/jstests/sharding/hash_shard_non_empty.js
+  - tests/jstests/sharding/cleanup_orphaned_basic.js
+  - tests/jstests/sharding/lookup_change_stream_post_image_id_shard_key.js
+  - tests/jstests/sharding/basic_sharding_params.js
+  - tests/jstests/sharding/write_cmd_auto_split.js
+  - tests/jstests/sharding/shard6.js
 
 executor:
   config:

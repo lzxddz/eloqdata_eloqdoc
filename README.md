@@ -12,8 +12,6 @@ EloqDoc is a high-performance, elastic, distributed transactional document datab
 
 EloqDoc eliminates the need for sharding components like `mongos` in MongoDB, offering a simpler, more powerful distributed database experience. It’s ideal for workloads requiring rapid scaling, high write throughput, and flexible resource management.
 
-EloqDoc is a fork of MongoDB 4.0.3 that replaces the WiredTiger storage engine with the Eloq storage engine. It is distributed under the GNU Affero General Public License (AGPL).
-
 Explore [EloqDoc](https://www.eloqdata.com/product/eloqdoc) website for more details.
 
 👉 **Use Cases**: web applications, ducument store, content management systems — anywhere you need MongoDB API compatibility **but** demand distributed performance and elasticity.

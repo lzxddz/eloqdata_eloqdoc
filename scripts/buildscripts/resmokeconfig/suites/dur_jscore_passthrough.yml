@@ -2,12 +2,12 @@ test_kind: js_test
 
 selector:
   roots:
-  - jstests/core/**/*.js
+  - tests/jstests/core/**/*.js
   exclude_files:
   # Transactions are not supported on MongoDB standalone nodes.
-  - jstests/core/txns/**/*.js
-  - jstests/core/repair*.js  # Fails on recovery.
-  - jstests/core/shellkillop.js  # Takes forever and doesn't test anything new.
+  - tests/jstests/core/txns/**/*.js
+  - tests/jstests/core/repair*.js  # Fails on recovery.
+  - tests/jstests/core/shellkillop.js  # Takes forever and doesn't test anything new.
 
 executor:
   archive:

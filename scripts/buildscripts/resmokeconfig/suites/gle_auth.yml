@@ -1,16 +1,16 @@
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile jstests/libs/authTestsKey
+- &keyFile tests/jstests/libs/authTestsKey
 - &keyFileData Thiskeyisonlyforrunningthesuitewithauthenticationdontuseitinanytestsdirectly
 
 test_kind: js_test
 
 selector:
   roots:
-  - jstests/gle/*.js
+  - tests/jstests/gle/*.js
   exclude_files:
   # Skip any tests that run with auth explicitly.
-  - jstests/gle/*[aA]uth*.js
+  - tests/jstests/gle/*[aA]uth*.js
 
 executor:
   config:

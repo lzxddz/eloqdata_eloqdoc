@@ -8,7 +8,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile jstests/libs/authTestsKey
+- &keyFile tests/jstests/libs/authTestsKey
 - &keyFileData Thiskeyisonlyforrunningthesuitewithauthenticationdontuseitinanytestsdirectly
 
 test_kind: js_test
@@ -18,16 +18,16 @@ selector:
   #   11 minutes to run on enterprise-rhel-62-64-bit
   #   18 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/rename.js
-  - jstests/sharding/commands_that_write_accept_wc_shards.js
-  - jstests/sharding/auto_rebalance_parallel_replica_sets.js
-  - jstests/sharding/sharding_rs1.js
-  - jstests/sharding/recovering_slaveok.js
-  - jstests/sharding/sharding_balance3.js
-  - jstests/sharding/stale_mongos_updates_and_removes.js
-  - jstests/sharding/sharding_balance4.js
-  - jstests/sharding/convert_to_and_from_sharded.js
-  - jstests/sharding/mongos_shard_failure_tolerance.js
+  - tests/jstests/sharding/rename.js
+  - tests/jstests/sharding/commands_that_write_accept_wc_shards.js
+  - tests/jstests/sharding/auto_rebalance_parallel_replica_sets.js
+  - tests/jstests/sharding/sharding_rs1.js
+  - tests/jstests/sharding/recovering_slaveok.js
+  - tests/jstests/sharding/sharding_balance3.js
+  - tests/jstests/sharding/stale_mongos_updates_and_removes.js
+  - tests/jstests/sharding/sharding_balance4.js
+  - tests/jstests/sharding/convert_to_and_from_sharded.js
+  - tests/jstests/sharding/mongos_shard_failure_tolerance.js
 
 executor:
   config:

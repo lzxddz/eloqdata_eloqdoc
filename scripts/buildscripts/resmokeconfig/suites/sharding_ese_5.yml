@@ -7,7 +7,7 @@
 
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile src/mongo/db/modules/enterprise/jstests/encryptdb/libs/ekf2
+- &keyFile src/mongo/db/modules/enterprise/tests/jstests/encryptdb/libs/ekf2
 
 test_kind: js_test
 
@@ -16,16 +16,16 @@ selector:
   #   11 minutes to run on enterprise-rhel-62-64-bit
   #   19 minutes to run on enterprise-windows-64-2k8
   roots:
-  - jstests/sharding/sharding_rs1.js
-  - jstests/sharding/recovering_slaveok.js
-  - jstests/sharding/sharding_balance3.js
-  - jstests/sharding/sharding_balance4.js
-  - jstests/sharding/stale_mongos_updates_and_removes.js
-  - jstests/sharding/convert_to_and_from_sharded.js
-  - jstests/sharding/mongos_shard_failure_tolerance.js
-  - jstests/sharding/drop_sharded_db.js
-  - jstests/sharding/bouncing_count.js
-  - jstests/sharding/find_and_modify_after_multi_write.js
+  - tests/jstests/sharding/sharding_rs1.js
+  - tests/jstests/sharding/recovering_slaveok.js
+  - tests/jstests/sharding/sharding_balance3.js
+  - tests/jstests/sharding/sharding_balance4.js
+  - tests/jstests/sharding/stale_mongos_updates_and_removes.js
+  - tests/jstests/sharding/convert_to_and_from_sharded.js
+  - tests/jstests/sharding/mongos_shard_failure_tolerance.js
+  - tests/jstests/sharding/drop_sharded_db.js
+  - tests/jstests/sharding/bouncing_count.js
+  - tests/jstests/sharding/find_and_modify_after_multi_write.js
 
 executor:
   config:

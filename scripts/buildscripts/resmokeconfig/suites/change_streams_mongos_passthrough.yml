@@ -2,11 +2,11 @@ test_kind: js_test
 
 selector:
   roots:
-  - jstests/change_streams/**/*.js
+  - tests/jstests/change_streams/**/*.js
   exclude_files:
   # This test exercises an internal detail of mongos<->mongod communication and is not expected
   # to work against a mongos.
-  - jstests/change_streams/report_latest_observed_oplog_timestamp.js
+  - tests/jstests/change_streams/report_latest_observed_oplog_timestamp.js
   exclude_with_any_tags:
   ##
   # The next three tags correspond to the special errors thrown by the
@@ -35,7 +35,7 @@ executor:
         TestData:
           defaultReadConcernLevel: majority
           enableMajorityReadConcern: ''
-      eval: "var testingReplication = true; load('jstests/libs/override_methods/set_read_and_write_concerns.js');"
+      eval: "var testingReplication = true; load('tests/jstests/libs/override_methods/set_read_and_write_concerns.js');"
       readMode: commands
   hooks:
   - class: CheckReplDBHash

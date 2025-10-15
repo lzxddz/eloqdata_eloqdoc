@@ -1,6 +1,6 @@
 # Section that is ignored by resmoke.py.
 config_variables:
-- &keyFile jstests/libs/authTestsKey
+- &keyFile tests/jstests/libs/authTestsKey
 - &keyFileData Thiskeyisonlyforrunningthesuitewithauthenticationdontuseitinanytestsdirectly
 - &authOptions
   authenticationDatabase: admin
@@ -12,11 +12,11 @@ test_kind: js_test
 
 selector:
   roots:
-  - jstests/gle/core/*.js
+  - tests/jstests/gle/core/*.js
   exclude_files:
-  - jstests/gle/core/error1.js  # The getPrevError command is not supported under sharding.
-  - jstests/gle/core/remove5.js
-  - jstests/gle/core/update4.js
+  - tests/jstests/gle/core/error1.js  # The getPrevError command is not supported under sharding.
+  - tests/jstests/gle/core/remove5.js
+  - tests/jstests/gle/core/update4.js
 
 executor:
   archive:

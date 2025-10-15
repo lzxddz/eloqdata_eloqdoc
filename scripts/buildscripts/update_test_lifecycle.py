@@ -104,7 +104,7 @@ def get_tests_from_tasks(tasks, test_tasks_membership):
 
 
 def create_test_groups(tests):
-    """Return groups of tests by their directory, i.e., jstests/core."""
+    """Return groups of tests by their directory, i.e., tests/jstests/core."""
     test_groups = collections.defaultdict(list)
     for test in tests:
         test_split = test.split("/")

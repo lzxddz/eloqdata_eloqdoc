@@ -2,7 +2,7 @@ test_kind: js_test
 
 selector:
   roots:
-  - jstests/decimal/*.js
+  - tests/jstests/decimal/*.js
   exclude_with_any_tags:
   - assumes_superuser_permissions
   - requires_eval_command

@@ -2,44 +2,44 @@ test_kind: js_test
 
 selector:
   roots:
-  # - jstests/core/add_skip_stage_before_fetch.js
-  # - jstests/core/agg_hint.js
-  # - jstests/core/aggregation_getmore_batchsize.js
-  # - jstests/core/all.js
-  # - jstests/core/all2.js
-  # - jstests/core/basic1.js
-  # - jstests/core/basic3.js
-  # - jstests/core/basic4.js
-  # - jstests/core/basic5.js
-  # - jstests/core/basic6.js
-  # - jstests/core/basic7.js
-  # - jstests/core/basic8.js
-  # - jstests/core/batch_size.js
-  # - jstests/core/capped.js
-  # - jstests/core/capped1.js
-  # - jstests/core/find2.js
-  # - jstests/core/find3.js
-  # - jstests/core/find4.js
-  # - jstests/core/find5.js
-  # - jstests/core/find6.js
-  # - jstests/core/find7.js
-  # - jstests/core/find8.js
-  # - jstests/core/find9.js
-  # - jstests/core/fm1.js
-  # - jstests/core/fm2.js
-  # - jstests/core/fm3.js
-  # - jstests/core/fm4.js
-  # - jstests/core/cursor3.js
-  # - jstests/core/cursor4.js
-  # - jstests/core/cursor5.js
-  # - jstests/core/cursor6.js
-  # - jstests/core/cursor7.js
-  # - jstests/core/find_and_modify*.js
-  # - jstests/core/count2.js
-  # - jstests/core/count3.js
-  # - jstests/core/count7.js
-  - jstests/core/insert1.js
-  - jstests/core/insert2.js
+  # - tests/jstests/core/add_skip_stage_before_fetch.js
+  # - tests/jstests/core/agg_hint.js
+  # - tests/jstests/core/aggregation_getmore_batchsize.js
+  # - tests/jstests/core/all.js
+  # - tests/jstests/core/all2.js
+  # - tests/jstests/core/basic1.js
+  # - tests/jstests/core/basic3.js
+  # - tests/jstests/core/basic4.js
+  # - tests/jstests/core/basic5.js
+  # - tests/jstests/core/basic6.js
+  # - tests/jstests/core/basic7.js
+  # - tests/jstests/core/basic8.js
+  # - tests/jstests/core/batch_size.js
+  # - tests/jstests/core/capped.js
+  # - tests/jstests/core/capped1.js
+  # - tests/jstests/core/find2.js
+  # - tests/jstests/core/find3.js
+  # - tests/jstests/core/find4.js
+  # - tests/jstests/core/find5.js
+  # - tests/jstests/core/find6.js
+  # - tests/jstests/core/find7.js
+  # - tests/jstests/core/find8.js
+  # - tests/jstests/core/find9.js
+  # - tests/jstests/core/fm1.js
+  # - tests/jstests/core/fm2.js
+  # - tests/jstests/core/fm3.js
+  # - tests/jstests/core/fm4.js
+  # - tests/jstests/core/cursor3.js
+  # - tests/jstests/core/cursor4.js
+  # - tests/jstests/core/cursor5.js
+  # - tests/jstests/core/cursor6.js
+  # - tests/jstests/core/cursor7.js
+  # - tests/jstests/core/find_and_modify*.js
+  # - tests/jstests/core/count2.js
+  # - tests/jstests/core/count3.js
+  # - tests/jstests/core/count7.js
+  - tests/jstests/core/insert1.js
+  - tests/jstests/core/insert2.js
 
 executor:
   archive:
