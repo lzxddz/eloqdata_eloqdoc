@@ -195,7 +195,7 @@ add_option('js-engine',
 add_option('server-js',
     choices=['on', 'off'],
     default='on',
-    help='Build mongod without JavaScript support',
+    help='Build eloqdoc without JavaScript support',
     type='choice',
 )
 
@@ -902,7 +902,7 @@ printLocalInfo()
 
 boostLibs = [ "filesystem", "program_options", "system", "iostreams" ]
 
-onlyServer = len( COMMAND_LINE_TARGETS ) == 0 or ( len( COMMAND_LINE_TARGETS ) == 1 and str( COMMAND_LINE_TARGETS[0] ) in [ "mongod" , "mongos" , "test" ] )
+onlyServer = len( COMMAND_LINE_TARGETS ) == 0 or ( len( COMMAND_LINE_TARGETS ) == 1 and str( COMMAND_LINE_TARGETS[0] ) in [ "eloqdoc", "mongod" , "mongos" , "test" ] )
 
 releaseBuild = has_option("release")
 

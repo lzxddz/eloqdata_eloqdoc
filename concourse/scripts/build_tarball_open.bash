@@ -169,7 +169,7 @@ cmake -G "Unix Makefiles" \
 cmake --build "$ELOQDOC_SRC/src/mongo/db/modules/eloq/build" -j${NCORE}
 cmake --install "$ELOQDOC_SRC/src/mongo/db/modules/eloq/build"
 
-echo "Building MongoDB via scons (OPEN_LOG_SERVICE=1)"
+echo "Building EloqDoc via scons (OPEN_LOG_SERVICE=1)"
 export WITH_DATA_STORE=${DATA_STORE_TYPE}
 SCONS_VARIANT=${BUILD_TYPE}
 python2 scripts/buildscripts/scons.py \

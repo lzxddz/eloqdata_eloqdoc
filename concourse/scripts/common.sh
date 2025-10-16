@@ -142,15 +142,15 @@ compile_and_install_ent() {
             install-core
 }
 
-launch_mongod() {
+launch_eloqdoc() {
       if [ $# -lt 2 ]; then
             echo "Error: bucket_name and bucket_prefix parameters are required"
-            echo "Usage: launch_mongod <bucket_name> <bucket_prefix>"
+            echo "Usage: launch_eloqdoc <bucket_name> <bucket_prefix>"
             exit 1
       fi
       local bucket_name="$1"
       local bucket_prefix="$2"
-      echo "launch mongod with bucket name: $bucket_name, bucket prefix: $bucket_prefix"
+      echo "launch eloqdoc with bucket name: $bucket_name, bucket prefix: $bucket_prefix"
       export LD_PRELOAD=/usr/local/lib/libmimalloc.so
       mkdir -p "$PREFIX/log" "$PREFIX/data"
       sed -i "s|rocksdbCloudEndpointUrl: \"http://[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+:[0-9]\+\"|rocksdbCloudEndpointUrl: \"${MINIO_ENDPOINT}\"|g" /home/eloq/workspace/mongo/concourse/scripts/store_rocksdb_cloud.yaml
@@ -161,18 +161,18 @@ launch_mongod() {
             --eloqRocksdbCloudBucketPrefix="$bucket_prefix" \
             --eloqTxlogRocksDBCloudBucketName="$bucket_name" \
             --eloqTxlogRocksDBCloudBucketPrefix="$bucket_prefix" \
-            &>$PREFIX/log/mongod.out &
+            &>$PREFIX/log/eloqdoc.out &
 }
 
-launch_mongod_fast() {
+launch_eloqdoc_fast() {
       if [ $# -lt 2 ]; then
             echo "Error: bucket_name and bucket_prefix parameters are required"
-            echo "Usage: launch_mongod_fast <bucket_name> <bucket_prefix>"
+            echo "Usage: launch_eloqdoc_fast <bucket_name> <bucket_prefix>"
             exit 1
       fi
       local bucket_name="$1"
       local bucket_prefix="$2"
-      echo "launch mongod fast with bucket name: $bucket_name, bucket prefix: $bucket_prefix"
+      echo "launch eloqdoc fast with bucket name: $bucket_name, bucket prefix: $bucket_prefix"
       export LD_PRELOAD=/usr/local/lib/libmimalloc.so
       mkdir -p "$PREFIX/log" "$PREFIX/data"
       sed -i "s|rocksdbCloudEndpointUrl: \"http://[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+:[0-9]\+\"|rocksdbCloudEndpointUrl: \"${MINIO_ENDPOINT}\"|g" /home/eloq/workspace/mongo/concourse/scripts/store_rocksdb_cloud.yaml
@@ -184,10 +184,10 @@ launch_mongod_fast() {
             --eloqRocksdbCloudBucketPrefix="$bucket_prefix" \
             --eloqTxlogRocksDBCloudBucketName="$bucket_name" \
             --eloqTxlogRocksDBCloudBucketPrefix="$bucket_prefix" \
-            &>$PREFIX/log/mongod.out &
+            &>$PREFIX/log/eloqdoc.out &
 }
 
-shutdown_mongod() {
+shutdown_eloqdoc() {
       $PREFIX/bin/eloqdoc-cli admin --eval "db.shutdownServer()"
 }
 
@@ -209,7 +209,7 @@ try_connect() {
 
       if [ $mongo_ready -eq 0 ]; then
             echo "Failed to connect to EloqDoc server after 30 seconds."
-            tail -n200 $PREFIX/log/mongod.out
+            tail -n200 $PREFIX/log/eloqdoc.out
             exit 1
       fi
 }
