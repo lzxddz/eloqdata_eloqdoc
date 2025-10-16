@@ -18,6 +18,6 @@ class ValidateCollections(jsfile.DataConsistencyHook):
             self, hook_logger, fixture, shell_options=None):
         """Initialize ValidateCollections."""
         description = "Full collection validation"
-        js_filename = os.path.join("jstests", "hooks", "run_validate_collections.js")
+        js_filename = os.path.join("tests","jstests", "hooks", "run_validate_collections.js")
         jsfile.JSHook.__init__(  # pylint: disable=non-parent-init-called
             self, hook_logger, fixture, js_filename, description, shell_options=shell_options)

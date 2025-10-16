@@ -2387,7 +2387,7 @@ Examples:
             validation_test_data = {"skipValidationOnNamespaceNotFound": True}
             new_resmoke_config(with_external_server, new_config_file, validation_test_data)
             ret, output = resmoke_client(mongo_repo_root_dir, mongo_path, host_port,
-                                         "jstests/hooks/run_validate_collections.js",
+                                         "tests/jstests/hooks/run_validate_collections.js",
                                          new_config_file)
             LOGGER.info("Local collection validation: %d %s", ret, output)
             if ret:
