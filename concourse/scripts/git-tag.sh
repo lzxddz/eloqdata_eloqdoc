@@ -45,7 +45,15 @@ if git show-ref --verify --quiet "refs/heads/$REL_BRANCH" || \
   exit 1
 fi
 git checkout -b "$REL_BRANCH" main
-git push origin "$REL_BRANCH"
+# git push origin "$REL_BRANCH"
+# Update version string in source
+sed -i "s/constexpr char ELOQDOC_VERSION\[\] = \".*\";/constexpr char ELOQDOC_VERSION[] = \"${TAG}\";/" src/mongo/util/version.cpp
+
+if [ -n "$(git diff --name-only src/mongo/util/version.cpp)" ]; then
+  git add src/mongo/util/version.cpp
+  git commit -m "New tag ${TAG}"
+  git push origin "$REL_BRANCH"
+fi
 
 # Create release branches for submodules if present
 create_and_push_release_branch "src/mongo/db/modules/eloq/eloq_log_service" "$REL_BRANCH"
