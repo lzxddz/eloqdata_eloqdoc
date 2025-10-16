@@ -104,10 +104,9 @@ mkdir db logs
 It should output
 
 ```bash
-EloqDoc shell version vx.x.x (compatible with MongoDB shell version v4.0.3)
 connecting to: mongodb://127.0.0.1:27017
 Implicit session: session { "id" : UUID("288393c1-aff6-4a84-ad46-dee6691b361d") }
-MongoDB server version: 4.0.3
+
 { "_id" : ObjectId("68493ec41cc981ea926ec094"), "k" : 1 }
 ```
 
@@ -177,10 +176,9 @@ cd $HOME/eloqdoc-rocksdbcloud
 It should output
 
 ```bash
-EloqDoc shell version vx.x.x (compatible with MongoDB shell version v4.0.3)
 connecting to: mongodb://127.0.0.1:27017
 Implicit session: session { "id" : UUID("288393c1-aff6-4a84-ad46-dee6691b361d") }
-MongoDB server version: 4.0.3
+
 { "_id" : ObjectId("68493ec41cc981ea926ec094"), "k" : 1 }
 ```
 

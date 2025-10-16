@@ -223,7 +223,7 @@ void VersionInfoInterface::logBuildInfo() const {
     }
 }
 
-constexpr char ELOQDOC_VERSION[] = "0.2.7";
+constexpr char ELOQDOC_VERSION[] = "0.2.6";
 
 std::string mongoShellVersion(const VersionInfoInterface& provider) {
     std::stringstream ss;
