@@ -7,7 +7,7 @@
     const port = mongod.port;
 
     function testConnect(ok, ...args) {
-        const exitCode = runMongoProgram('mongo', '--eval', ';', ...args);
+        const exitCode = runMongoProgram('eloqdoc-cli', '--eval', ';', ...args);
         if (ok) {
             assert.eq(exitCode, 0, "failed to connect with `" + args.join(' ') + "`");
         } else {
