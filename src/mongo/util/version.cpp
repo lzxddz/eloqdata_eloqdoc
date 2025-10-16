@@ -223,9 +223,14 @@ void VersionInfoInterface::logBuildInfo() const {
     }
 }
 
+constexpr char ELOQDOC_VERSION[] = "0.2.7";
+
 std::string mongoShellVersion(const VersionInfoInterface& provider) {
     std::stringstream ss;
-    ss << "MongoDB shell version v" << provider.version();
+    // ss << "MongoDB shell version v" << provider.version();
+    ss << "EloqDoc shell version v" << ELOQDOC_VERSION
+       << " (compatible with MongoDB shell version v" << provider.version() << ")";
+
     return ss.str();
 }
 
@@ -238,7 +243,8 @@ std::string mongosVersion(const VersionInfoInterface& provider) {
 std::string mongodVersion(const VersionInfoInterface& provider) {
     std::stringstream ss;
     // ss << "db version v" << provider.version();
-    ss << "db version v" << "0.2.7";
+    ss << "db version v" << ELOQDOC_VERSION << " (compatible with MongoDB version v"
+       << provider.version() << ")";
     return ss.str();
 }
 
