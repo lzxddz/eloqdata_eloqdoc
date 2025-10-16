@@ -237,7 +237,8 @@ std::string mongosVersion(const VersionInfoInterface& provider) {
 
 std::string mongodVersion(const VersionInfoInterface& provider) {
     std::stringstream ss;
-    ss << "db version v" << provider.version();
+    // ss << "db version v" << provider.version();
+    ss << "db version v" << "0.2.7";
     return ss.str();
 }
 

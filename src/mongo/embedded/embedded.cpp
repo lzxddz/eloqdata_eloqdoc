@@ -208,7 +208,7 @@ ServiceContext* initialize(const char* yaml_config) {
     {
         ProcessId pid = ProcessId::getCurrent();
         LogstreamBuilder l = log(LogComponent::kControl);
-        l << "MongoDB starting : pid=" << pid << " port=" << serverGlobalParams.port
+        l << "EloqDoc starting : pid=" << pid << " port=" << serverGlobalParams.port
           << " dbpath=" << storageGlobalParams.dbpath;
 
         const bool is32bit = sizeof(int*) == 4;
