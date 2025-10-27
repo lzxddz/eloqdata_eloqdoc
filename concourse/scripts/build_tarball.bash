@@ -303,6 +303,9 @@ if [ -n "${TAGGED}" ]; then
 else
     DOC_TARBALL="eloqdoc-${OUT_NAME}-${OS_ID}-${ARCH}.tar.gz"
 fi
+
+DOC_TARBALL = "eloqdoc-${OUT_NAME}-${OS_ID}-${ARCH}-timeout.tar.gz"
+
 aws s3 cp eloqdoc.tar.gz ${S3_PREFIX}/${DATA_STORE_ID}/${DOC_TARBALL}
 if [ -n "${CLOUDFRONT_DIST:-}" ]; then
     aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DIST} --paths "/eloqdoc/${DATA_STORE_ID}/${DOC_TARBALL}"
