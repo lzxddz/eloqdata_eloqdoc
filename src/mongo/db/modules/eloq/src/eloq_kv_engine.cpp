@@ -726,18 +726,19 @@ void EloqKVEngine::initDataStoreService(
                                                                         _dbPath + "/DSMigrateLog",
                                                                         std::move(ds_factory));
     std::unordered_map<uint32_t, uint32_t> init_ng_leaders;
+
+    if (ngConfigs.size() == 1 && ngConfigs.at(0).size() == 1) {
+        is_single_node = true;
+    } else {
+        is_single_node = false;
+    }
+
     std::vector<uint32_t> bootstrap_shards;
     if ((opt_bootstrap || is_single_node)) {
         for (const auto& ng_config : ngConfigs) {
             init_ng_leaders.try_emplace(ng_config.first, nodeId);
             bootstrap_shards.emplace_back(ng_config.first);
         }
-    }
-
-    if (ngConfigs.size() == 1 && ngConfigs.at(0).size() == 1) {
-        is_single_node = true;
-    } else {
-        is_single_node = false;
     }
 
     // setup local data store service, the data store will start data store if needed.
