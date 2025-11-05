@@ -442,6 +442,8 @@ public:
      */
     void notifyStartupComplete();
 
+    bool isStartupComplete();
+
     /**
      * Set the OpObserver.
      */

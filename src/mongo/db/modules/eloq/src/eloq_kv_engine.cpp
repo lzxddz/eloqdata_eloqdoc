@@ -329,12 +329,13 @@ EloqKVEngine::EloqKVEngine(const std::string& path) : _dbPath(path) {
     bool forkHostManager = false;
 #endif
 
-    initDataStoreService();
+    // initDataStoreService();
 
     std::unordered_map<uint32_t, std::vector<txservice::NodeConfig>> ngConfigs;
     std::string clusterConfigPath = path + "/tx_service/cluster_config";
     uint64_t clusterConfigVersion = 2;
 
+    // TODO: fixme of ngConfigs on bootstrap mode.
     if (bootstrap) {
         std::vector<txservice::NodeConfig> soloConfig;
         soloConfig.emplace_back(
@@ -382,6 +383,29 @@ EloqKVEngine::EloqKVEngine(const std::string& path) : _dbPath(path) {
         error() << "Current node does not belong to any node group.";
         uasserted(ErrorCodes::InternalError, "Current node does not belong to any node group.");
     }
+
+    if (bootstrap) {
+        // Parse all node group for generate data store service config.
+        std::unordered_map<uint32_t, std::vector<txservice::NodeConfig>> ngConfigs0;
+        if (!txservice::ReadClusterConfigFile(
+                clusterConfigPath, ngConfigs0, clusterConfigVersion)) {
+            bool parse_res = txservice::ParseNgConfig(eloqGlobalOptions.ipList,
+                                                      "",
+                                                      "",
+                                                      ngConfigs0,
+                                                      eloqGlobalOptions.nodeGroupReplicaNum,
+                                                      0);
+            if (!parse_res) {
+                error() << "Failed to extract cluster configs from ip_port_list.";
+                uasserted(ErrorCodes::InvalidOptions,
+                          "Failed to extract cluster configs from ip_port_list.");
+            }
+        }
+        initDataStoreService(nodeId, ngConfigs0);
+    } else {
+        initDataStoreService(nodeId, ngConfigs);
+    }
+
 
     std::vector<std::string> txlogIPs;
     std::vector<uint16_t> txlogPorts;
@@ -587,7 +611,9 @@ EloqKVEngine::EloqKVEngine(const std::string& path) : _dbPath(path) {
 #endif
 }
 
-void EloqKVEngine::initDataStoreService() {
+void EloqKVEngine::initDataStoreService(
+    uint32_t nodeId,
+    const std::unordered_map<uint32_t, std::vector<txservice::NodeConfig>>& ngConfigs) {
     auto localIp = eloqGlobalOptions.localAddr.host();
     auto localPort = eloqGlobalOptions.localAddr.port();
     txservice::CatalogFactory* catalog_factories[3] = {nullptr, nullptr, &_catalogFactory};
@@ -692,11 +718,31 @@ void EloqKVEngine::initDataStoreService() {
         std::make_unique<EloqDS::EloqStoreDataStoreFactory>(std::move(eloq_store_config));
 #endif
 
-    Eloq::dataStoreService = std::make_unique<EloqDS::DataStoreService>(
-        ds_config, dss_config_file_path, _dbPath + "/DSMigrateLog", std::move(ds_factory));
+    Eloq::dataStoreService = std::make_unique<EloqDS::DataStoreService>(nodeId,
+                                                                        localIp,
+                                                                        localPort + 7,
+                                                                        ds_config,
+                                                                        dss_config_file_path,
+                                                                        _dbPath + "/DSMigrateLog",
+                                                                        std::move(ds_factory));
+    std::unordered_map<uint32_t, uint32_t> init_ng_leaders;
+    std::vector<uint32_t> bootstrap_shards;
+    if ((opt_bootstrap || is_single_node)) {
+        for (const auto& ng_config : ngConfigs) {
+            init_ng_leaders.try_emplace(ng_config.first, nodeId);
+            bootstrap_shards.emplace_back(ng_config.first);
+        }
+    }
+
+    if (ngConfigs.size() == 1 && ngConfigs.at(0).size() == 1) {
+        is_single_node = true;
+    } else {
+        is_single_node = false;
+    }
 
     // setup local data store service, the data store will start data store if needed.
-    bool ret = Eloq::dataStoreService->StartService((opt_bootstrap || is_single_node));
+    bool ret =
+        Eloq::dataStoreService->StartService((opt_bootstrap || is_single_node), bootstrap_shards);
     if (!ret) {
         error() << "Failed to start data store service";
         uasserted(ErrorCodes::InternalError, "DataStoreService failed to start service");
@@ -704,7 +750,7 @@ void EloqKVEngine::initDataStoreService() {
 
     // setup data store service client
     Eloq::storeHandler = std::make_unique<EloqDS::DataStoreServiceClient>(
-        catalog_factories, ds_config, Eloq::dataStoreService.get());
+        catalog_factories, ngConfigs, init_ng_leaders, /*ds_config,*/ Eloq::dataStoreService.get());
 
     if (!Eloq::storeHandler->Connect()) {
         error() << "!!!!!!!! Failed to connect ELOQ_DS server, EloqDB "
@@ -1292,6 +1338,11 @@ void MongoSystemHandler::ReloadCache(std::function<void(bool)> done) {
         mongo::Status status = mongo::Status::OK();
 
         auto serviceContext = mongo::getGlobalServiceContext();
+        if (serviceContext == nullptr || !serviceContext->isStartupComplete()) {
+            done(true);
+            return true;
+        }
+
         auto client = mongo::getGlobalServiceContext()->makeClient("eloq_table_schema");
         auto opCtx = serviceContext->makeOperationContext(client.get());
         auto const globalAuthzManager = mongo::AuthorizationManager::get(serviceContext);
