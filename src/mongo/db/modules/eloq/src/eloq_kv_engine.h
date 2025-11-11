@@ -62,9 +62,7 @@ class EloqKVEngine final : public KVEngine {
 public:
     explicit EloqKVEngine(const std::string& path);
     void initDataStoreService(
-        bool isSingleNode,
         uint32_t nodeId,
-        uint32_t nativeNgId,
         const std::unordered_map<uint32_t, std::vector<txservice::NodeConfig>>& ng_configs);
 
     ~EloqKVEngine() override;

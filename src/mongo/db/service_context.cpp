@@ -391,6 +391,12 @@ void ServiceContext::notifyStartupComplete() {
     _startupCompleteCondVar.notify_all();
 }
 
+bool ServiceContext::isStartupComplete() {
+    stdx::unique_lock lk(_mutex);
+    return _startupComplete;
+}
+
+
 namespace {
 
 /**
