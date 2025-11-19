@@ -645,6 +645,14 @@ Status EloqGlobalOptions::add(moe::OptionSection* options) {
                            "Enable remote request metrics.")
         .setDefault(moe::Value(true));
 
+    eloqOptions
+        .addOptionChaining("storage.eloq.metrics.enableLogServiceMetrics",
+                           "eloqEnableLogServiceMetrics",
+                           moe::Bool,
+                           "Enable log service metrics.")
+        .setDefault(moe::Value(true));
+
+
     return options->addSection(eloqOptions);
 }
 
@@ -1117,6 +1125,11 @@ Status EloqGlobalOptions::store(const moe::Environment& params,
     if (params.count("storage.eloq.metrics.enableRemoteRequestMetrics")) {
         enableRemoteRequestMetrics =
             enableMetrics && params["storage.eloq.metrics.enableRemoteRequestMetrics"].as<bool>();
+    }
+
+    if (params.count("storage.eloq.metrics.enableLogServiceMetrics")) {
+        enableLogServiceMetrics =
+            enableMetrics && params["storage.eloq.metrics.enableLogServiceMetrics"].as<bool>();
     }
 
 

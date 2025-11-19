@@ -121,6 +121,12 @@
 #include "mongo/db/modules/eloq/eloq_log_service/include/rocksdb_cloud_config.h"
 #endif
 
+#ifdef OPEN_LOG_SERVICE
+#include "mongo/db/modules/eloq/log_service/include/log_service_metrics.h"
+#else
+#include "mongo/db/modules/eloq/eloq_log_service/include/log_service_metrics.h"
+#endif
+
 namespace Eloq {
 std::unique_ptr<txservice::store::DataStoreHandler> storeHandler;
 #if ELOQDS
@@ -522,6 +528,7 @@ EloqKVEngine::EloqKVEngine(const std::string& path) : _dbPath(path) {
     // config metrics
     metrics::enable_metrics = eloqGlobalOptions.enableMetrics;
     setenv("ELOQ_METRICS_PORT", eloqGlobalOptions.metricsPortString.data(), false);
+    metrics::enable_log_service_metrics = eloqGlobalOptions.enableLogServiceMetrics;
     metrics::enable_memory_usage = eloqGlobalOptions.enableMemoryUsage;
     metrics::collect_memory_usage_round = eloqGlobalOptions.collectMemoryUsageRound;
     metrics::enable_cache_hit_rate = eloqGlobalOptions.enableCacheHitRate;
